@@ -315,7 +315,7 @@
 
   <!-- Country selector button -->
   <div class="country-btn-wrap">
-    <button class="country-current-btn" onclick="openCountryModal()" id="country-current-btn">
+    <button class="country-current-btn" id="open-country-btn" id="country-current-btn">
       <span id="country-current-flag">🇯🇵</span>
       <span id="country-current-name">日本語</span>
       <span style="color:var(--muted);font-size:11px;">▼</span>
@@ -327,7 +327,7 @@
     <div class="country-modal-box">
       <div class="country-modal-head">
         <div class="country-modal-title" id="country-modal-title">🌍 言語・地域を選択</div>
-        <button class="country-modal-close" onclick="closeCountryModal()">✕</button>
+        <button class="country-modal-close" id="close-country-btn">✕</button>
       </div>
       <div class="country-grid" id="country-grid"></div>
     </div>
@@ -340,8 +340,8 @@
       <div class="location-card-title">現在地の天気を表示しますか？</div>
       <div class="location-card-desc">位置情報を使うと、今いる場所のリアルタイム天気をもとにおでかけ先を提案できます。情報は天気取得のみに使用し、保存はしません。</div>
       <div class="location-card-btns">
-        <button class="btn-allow" onclick="requestLocation()">📍 現在地を使う</button>
-        <button class="btn-skip"  onclick="skipLocation()">スキップ</button>
+        <button class="btn-allow" id="btn-allow-loc">📍 現在地を使う</button>
+        <button class="btn-skip"  id="btn-skip-loc">スキップ</button>
       </div>
     </div>
   </div>
@@ -362,12 +362,12 @@
   <div class="step active" id="step-date">
     <h2>いつ行く？</h2>
     <div class="grid grid-3" id="grid-date">
-      <div class="card" data-val="今日"   onclick="selectCard(this,'date')"><span class="label" style="font-size:15px;font-weight:900">今日</span><span class="badge" id="badge-today"></span></div>
-      <div class="card" data-val="明日"   onclick="selectCard(this,'date')"><span class="label" style="font-size:15px;font-weight:900">明日</span><span class="badge" id="badge-tomorrow"></span></div>
-      <div class="card" data-val="今週末" onclick="selectCard(this,'date')"><span class="label" style="font-size:15px;font-weight:900">今週末</span><span class="badge" id="badge-weekend"></span></div>
+      <div class="card" data-val="今日"   data-type="date"><span class="label" style="font-size:15px;font-weight:900">今日</span><span class="badge" id="badge-today"></span></div>
+      <div class="card" data-val="明日"   data-type="date"><span class="label" style="font-size:15px;font-weight:900">明日</span><span class="badge" id="badge-tomorrow"></span></div>
+      <div class="card" data-val="今週末" data-type="date"><span class="label" style="font-size:15px;font-weight:900">今週末</span><span class="badge" id="badge-weekend"></span></div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-primary" id="btn-date" disabled onclick="goStep(1)">次へ →</button>
+      <button class="btn btn-primary" id="btn-date" disabled data-goto="1">次へ →</button>
     </div>
   </div>
 
@@ -375,16 +375,16 @@
   <div class="step" id="step-group">
     <h2>だれと行く？</h2>
     <div class="grid grid-3" id="grid-group">
-      <div class="card" data-key="solo"    onclick="selectCard(this,'group')"><span class="emoji">🧍</span><span class="label" id="g_solo">ひとりで</span><span class="sub" id="g_solo_sub">自分のペースで</span></div>
-      <div class="card" data-key="couple"  onclick="selectCard(this,'group')"><span class="emoji">💑</span><span class="label" id="g_couple">カップル</span><span class="sub" id="g_couple_sub">ふたりで</span></div>
-      <div class="card" data-key="family"  onclick="selectCard(this,'group')"><span class="emoji">👨‍👩‍👧</span><span class="label" id="g_family">家族・子連れ</span><span class="sub" id="g_family_sub">みんなで</span></div>
-      <div class="card" data-key="friends" onclick="selectCard(this,'group')"><span class="emoji">👫</span><span class="label" id="g_friends">友達グループ</span><span class="sub" id="g_friends_sub">わいわい</span></div>
-      <div class="card" data-key="dad"     onclick="selectCard(this,'group')"><span class="emoji">👨</span><span class="label" id="g_dad">お父さんと</span><span class="sub" id="g_dad_sub">子ども目線で</span></div>
-      <div class="card" data-key="mom"     onclick="selectCard(this,'group')"><span class="emoji">👩</span><span class="label" id="g_mom">お母さんと</span><span class="sub" id="g_mom_sub">子ども目線で</span></div>
+      <div class="card" data-key="solo"    data-type="group"><span class="emoji">🧍</span><span class="label" id="g_solo">ひとりで</span><span class="sub" id="g_solo_sub">自分のペースで</span></div>
+      <div class="card" data-key="couple"  data-type="group"><span class="emoji">💑</span><span class="label" id="g_couple">カップル</span><span class="sub" id="g_couple_sub">ふたりで</span></div>
+      <div class="card" data-key="family"  data-type="group"><span class="emoji">👨‍👩‍👧</span><span class="label" id="g_family">家族・子連れ</span><span class="sub" id="g_family_sub">みんなで</span></div>
+      <div class="card" data-key="friends" data-type="group"><span class="emoji">👫</span><span class="label" id="g_friends">友達グループ</span><span class="sub" id="g_friends_sub">わいわい</span></div>
+      <div class="card" data-key="dad"     data-type="group"><span class="emoji">👨</span><span class="label" id="g_dad">お父さんと</span><span class="sub" id="g_dad_sub">子ども目線で</span></div>
+      <div class="card" data-key="mom"     data-type="group"><span class="emoji">👩</span><span class="label" id="g_mom">お母さんと</span><span class="sub" id="g_mom_sub">子ども目線で</span></div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-ghost" onclick="goStep(0)">← 戻る</button>
-      <button class="btn btn-primary" id="btn-group" disabled onclick="goStep(2)">次へ →</button>
+      <button class="btn btn-ghost" data-goto="0">← 戻る</button>
+      <button class="btn btn-primary" id="btn-group" disabled data-goto="2">次へ →</button>
     </div>
   </div>
 
@@ -392,19 +392,19 @@
   <div class="step" id="step-mood">
     <h2>どんなおでかけがしたい？</h2>
     <div class="grid grid-3" id="grid-mood">
-      <div class="card" data-key="refresh"  onclick="selectCard(this,'mood')"><span class="emoji">🌿</span><span class="label" id="m_refresh">リフレッシュ</span></div>
-      <div class="card" data-key="sightseeing" onclick="selectCard(this,'mood')"><span class="emoji">🏯</span><span class="label" id="m_sightseeing">観光・名所</span></div>
-      <div class="card" data-key="hidden"   onclick="selectCard(this,'mood')"><span class="emoji">🌾</span><span class="label" id="m_hidden">人が少ない穴場</span></div>
-      <div class="card" data-key="culture"  onclick="selectCard(this,'mood')"><span class="emoji">🎨</span><span class="label" id="m_culture">文化・芸術</span></div>
-      <div class="card" data-key="food"     onclick="selectCard(this,'mood')"><span class="emoji">🍜</span><span class="label" id="m_food">グルメ</span></div>
-      <div class="card" data-key="active"   onclick="selectCard(this,'mood')"><span class="emoji">🏃</span><span class="label" id="m_active">アクティブ</span></div>
-      <div class="card" data-key="relax"    onclick="selectCard(this,'mood')"><span class="emoji">📚</span><span class="label" id="m_relax">のんびり</span></div>
-      <div class="card" data-key="adventure" onclick="selectCard(this,'mood')"><span class="emoji">⚡</span><span class="label" id="m_adventure">冒険・非日常</span></div>
-      <div class="card" data-key="event"    onclick="selectCard(this,'mood')"><span class="emoji">🎪</span><span class="label" id="m_event">イベント・フェス</span></div>
+      <div class="card" data-key="refresh"  data-type="mood"><span class="emoji">🌿</span><span class="label" id="m_refresh">リフレッシュ</span></div>
+      <div class="card" data-key="sightseeing" data-type="mood"><span class="emoji">🏯</span><span class="label" id="m_sightseeing">観光・名所</span></div>
+      <div class="card" data-key="hidden"   data-type="mood"><span class="emoji">🌾</span><span class="label" id="m_hidden">人が少ない穴場</span></div>
+      <div class="card" data-key="culture"  data-type="mood"><span class="emoji">🎨</span><span class="label" id="m_culture">文化・芸術</span></div>
+      <div class="card" data-key="food"     data-type="mood"><span class="emoji">🍜</span><span class="label" id="m_food">グルメ</span></div>
+      <div class="card" data-key="active"   data-type="mood"><span class="emoji">🏃</span><span class="label" id="m_active">アクティブ</span></div>
+      <div class="card" data-key="relax"    data-type="mood"><span class="emoji">📚</span><span class="label" id="m_relax">のんびり</span></div>
+      <div class="card" data-key="adventure" data-type="mood"><span class="emoji">⚡</span><span class="label" id="m_adventure">冒険・非日常</span></div>
+      <div class="card" data-key="event"    data-type="mood"><span class="emoji">🎪</span><span class="label" id="m_event">イベント・フェス</span></div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-ghost" onclick="goStep(1)">← 戻る</button>
-      <button class="btn btn-primary" id="btn-mood" disabled onclick="goStep(3)">次へ →</button>
+      <button class="btn btn-ghost" data-goto="1">← 戻る</button>
+      <button class="btn btn-primary" id="btn-mood" disabled data-goto="3">次へ →</button>
     </div>
   </div>
 
@@ -412,14 +412,14 @@
   <div class="step" id="step-time">
     <h2>どの時間帯に？</h2>
     <div class="grid" id="grid-time">
-      <div class="card" data-val="午前中"   onclick="selectCard(this,'time')"><span class="emoji">🌅</span><span class="label">午前中</span></div>
-      <div class="card" data-val="午後"     onclick="selectCard(this,'time')"><span class="emoji">☀️</span><span class="label">午後</span></div>
-      <div class="card" data-val="夕方〜夜" onclick="selectCard(this,'time')"><span class="emoji">🌆</span><span class="label">夕方〜夜</span></div>
-      <div class="card" data-val="一日中"   onclick="selectCard(this,'time')"><span class="emoji">🌙</span><span class="label">一日中</span></div>
+      <div class="card" data-val="午前中"   data-type="time"><span class="emoji">🌅</span><span class="label">午前中</span></div>
+      <div class="card" data-val="午後"     data-type="time"><span class="emoji">☀️</span><span class="label">午後</span></div>
+      <div class="card" data-val="夕方〜夜" data-type="time"><span class="emoji">🌆</span><span class="label">夕方〜夜</span></div>
+      <div class="card" data-val="一日中"   data-type="time"><span class="emoji">🌙</span><span class="label">一日中</span></div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-ghost" onclick="goStep(2)">← 戻る</button>
-      <button class="btn btn-primary" id="btn-time" disabled onclick="goStep(4)">次へ →</button>
+      <button class="btn btn-ghost" data-goto="2">← 戻る</button>
+      <button class="btn btn-primary" id="btn-time" disabled data-goto="4">次へ →</button>
     </div>
   </div>
 
@@ -427,19 +427,19 @@
   <div class="step" id="step-budget">
     <h2>ひとりあたりの予算は？</h2>
     <div class="grid grid-3" id="grid-budget">
-      <div class="card" data-key="b_free"  onclick="selectCard(this,'budget')"><span class="emoji">🆓</span><span class="label" id="b_free">無料</span><span class="sub" id="b_free_sub">0円</span></div>
-      <div class="card" data-key="b_2k"    onclick="selectCard(this,'budget')"><span class="emoji">💴</span><span class="label" id="b_2k">2,000円以下</span><span class="sub" id="b_2k_sub">カジュアルに</span></div>
-      <div class="card" data-key="b_5k"    onclick="selectCard(this,'budget')"><span class="emoji">💵</span><span class="label" id="b_5k">5,000円以下</span><span class="sub" id="b_5k_sub">満足に</span></div>
-      <div class="card" data-key="b_10k"   onclick="selectCard(this,'budget')"><span class="emoji">💳</span><span class="label" id="b_10k">10,000円以下</span><span class="sub" id="b_10k_sub">贅沢に</span></div>
-      <div class="card" data-key="b_over"  onclick="selectCard(this,'budget')"><span class="emoji">✨</span><span class="label" id="b_over">10,000円以上</span><span class="sub" id="b_over_sub">大奮発！</span></div>
+      <div class="card" data-key="b_free"  data-type="budget"><span class="emoji">🆓</span><span class="label" id="b_free">無料</span><span class="sub" id="b_free_sub">0円</span></div>
+      <div class="card" data-key="b_2k"    data-type="budget"><span class="emoji">💴</span><span class="label" id="b_2k">2,000円以下</span><span class="sub" id="b_2k_sub">カジュアルに</span></div>
+      <div class="card" data-key="b_5k"    data-type="budget"><span class="emoji">💵</span><span class="label" id="b_5k">5,000円以下</span><span class="sub" id="b_5k_sub">満足に</span></div>
+      <div class="card" data-key="b_10k"   data-type="budget"><span class="emoji">💳</span><span class="label" id="b_10k">10,000円以下</span><span class="sub" id="b_10k_sub">贅沢に</span></div>
+      <div class="card" data-key="b_over"  data-type="budget"><span class="emoji">✨</span><span class="label" id="b_over">10,000円以上</span><span class="sub" id="b_over_sub">大奮発！</span></div>
     </div>
     <div class="input-wrap">
       <label>📍 エリアのヒント（任意）</label>
       <input type="text" id="location" placeholder="例：大阪、渋谷、海の近く…">
     </div>
     <div class="btn-row">
-      <button class="btn btn-ghost" onclick="goStep(3)">← 戻る</button>
-      <button class="btn btn-primary" id="btn-budget" disabled onclick="fetchSuggestions()">提案してもらう ✨</button>
+      <button class="btn btn-ghost" data-goto="3">← 戻る</button>
+      <button class="btn btn-primary" id="btn-budget" disabled id="fetch-btn">提案してもらう ✨</button>
     </div>
     <div id="error-msg"></div>
   </div>
@@ -461,7 +461,7 @@
     </div>
     <div id="suggestions-list"></div>
     <div class="btn-row" style="margin-top:20px">
-      <button class="btn btn-primary" id="reset-btn" onclick="resetApp()">🔄 もう一度探す</button>
+      <button class="btn btn-primary" id="reset-btn" id="reset-btn">🔄 もう一度探す</button>
     </div>
 
     <!-- Share section -->
@@ -472,7 +472,7 @@
         <a class="share-btn share-x" id="share-x" href="#" target="_blank" rel="noopener">𝕏 Xでシェア</a>
         <a class="share-btn share-line" id="share-line" href="#" target="_blank" rel="noopener">💬 LINEで送る</a>
         <a class="share-btn share-fb" id="share-fb" href="#" target="_blank" rel="noopener">📘 Facebookで</a>
-        <button class="share-btn share-copy" onclick="copyShareText()">📋 テキストをコピー</button>
+        <button class="share-btn share-copy" id="copy-share-btn">📋 テキストをコピー</button>
       </div>
     </div>
     <div id="saved-section" class="saved-section" style="display:none">
@@ -489,10 +489,10 @@
     <input type="hidden" id="modal-idx" value="0">
     <div class="modal-head">
       <div class="modal-ttl" id="modal-ttl"></div>
-      <button class="modal-close" onclick="closeQ()">✕</button>
+      <button class="modal-close" id="close-q-btn">✕</button>
     </div>
     <textarea class="modal-ta" id="modal-ta" placeholder="例：雨でも楽しめますか？　子どもと行けますか？　近くにご飯屋さんはありますか？"></textarea>
-    <button class="modal-send" id="modal-send" onclick="sendQ()">質問する →</button>
+    <button class="modal-send" id="modal-send" id="modal-send">質問する →</button>
     <div id="modal-ans"></div>
   </div>
 </div>
@@ -742,14 +742,14 @@ function renderResults(list) {
     d.innerHTML=
       '<div class="sug-head">'+
         '<div><div class="sug-name">'+esc(s.name)+'</div><div class="sug-type">📌 '+esc(s.type)+'</div></div>'+
-        '<button class="save-btn" id="save-'+i+'" onclick="toggleSave('+i+',\''+esc(s.name)+'\')">🤍</button>'+
+        '<button class="save-btn" id="save-'+i+'" data-save-idx="'+i+'" data-save-name="'+esc(s.name)+'">🤍</button>'+
       '</div>'+
       '<div class="sug-desc">'+esc(s.description)+'</div>'+
       '<div class="sug-tip">💡 '+esc(s.tip)+'</div>'+
       '<div class="vibes">'+(s.vibes||[]).map(v=>'<span class="vibe">'+esc(v)+'</span>').join('')+'</div>'+
       '<div class="sug-time">⏰ '+esc(s.bestTime)+'</div>'+
       '<a class="map-btn" href="https://www.google.com/maps/search/'+encodeURIComponent(s.name)+'" target="_blank" rel="noopener">'+T('mapBtn')+'</a>'+
-      '<button class="question-btn" onclick="openQ('+i+')">'+T('questionBtn')+'</button>';
+      '<button class="question-btn" data-openq="'+i+'">'+T('questionBtn')+'</button>';
     c.appendChild(d);
   });
   document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
@@ -1025,9 +1025,6 @@ function applyLang(){
   });
 
   document.documentElement.dir=(currentLang==='ar')?'rtl':'ltr';
-}
-// Initialize language on page load
-document.addEventListener("DOMContentLoaded", function(){ applyLang(); });
-</script>
+}</script>
 </body>
 </html>
