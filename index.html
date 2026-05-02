@@ -269,13 +269,16 @@
   }
   .country-current-btn:hover { border-color: rgba(240,165,0,0.4); }
   .country-modal-overlay {
-    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 300;
-    background: rgba(0,0,0,0.8); align-items: flex-end; justify-content: center;
+    display: none; max-height: 0; overflow: hidden;
+    transition: max-height 0.3s ease;
+    margin-bottom: 12px;
   }
-  .country-modal-overlay.open { display: flex !important; }
+  .country-modal-overlay.open { display: block; max-height: 400px; overflow-y: auto; }
   .country-modal-box {
-    background: #1a1f2e; border-radius: 20px 20px 0 0;
-    padding: 20px 16px 40px; width: 100%; max-width: 480px; max-height: 75vh; overflow-y: auto;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
   }
   .country-modal-head {
     display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
@@ -969,10 +972,24 @@ function buildCountryGrid(){
     g.appendChild(div);
   });
 }
-function openCountryModal(){buildCountryGrid();document.getElementById('country-modal').classList.add('open');}
+function openCountryModal(){
+  var modal = document.getElementById('country-modal');
+  if(modal.classList.contains('open')){
+    modal.classList.remove('open');
+  } else {
+    buildCountryGrid();
+    modal.classList.add('open');
+  }
+}
 function closeCountryModal(){document.getElementById('country-modal').classList.remove('open');}
 document.getElementById('country-modal').addEventListener('click',function(e){if(e.target===this)closeCountryModal();});
-function selectCountry(code){currentLang=code;closeCountryModal();applyLang();}
+function selectCountry(code){
+  currentLang=code;
+  closeCountryModal();
+  var arrow=document.getElementById('country-arrow');
+  if(arrow) arrow.style.transform='rotate(0deg)';
+  applyLang();
+}
 
 function applyLang(){
   const t=LTXT[currentLang]||LTXT.ja;
@@ -1025,6 +1042,49 @@ function applyLang(){
   });
 
   document.documentElement.dir=(currentLang==='ar')?'rtl':'ltr';
-}</script>
+}
+
+// ── Event bindings ────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function(){
+  applyLang();
+
+  // Country
+  var e; 
+  e=document.getElementById('open-country-btn'); if(e) e.addEventListener('click',openCountryModal);
+  e=document.getElementById('close-country-btn'); if(e) e.addEventListener('click',closeCountryModal);
+
+  // Location
+  e=document.getElementById('btn-allow-loc'); if(e) e.addEventListener('click',requestLocation);
+  e=document.getElementById('btn-skip-loc');  if(e) e.addEventListener('click',skipLocation);
+
+  // Step navigation
+  document.querySelectorAll('[data-goto]').forEach(function(btn){
+    btn.addEventListener('click',function(){goStep(parseInt(this.dataset.goto));});
+  });
+
+  // Fetch & Reset
+  e=document.getElementById('fetch-btn');  if(e) e.addEventListener('click',fetchSuggestions);
+  e=document.getElementById('reset-btn');  if(e) e.addEventListener('click',resetApp);
+  e=document.getElementById('copy-share-btn'); if(e) e.addEventListener('click',copyShareText);
+
+  // Cards
+  document.querySelectorAll('.card[data-type]').forEach(function(card){
+    card.addEventListener('click',function(){selectCard(this,this.dataset.type);});
+  });
+
+  // Delegated events in results
+  document.getElementById('suggestions-list').addEventListener('click',function(e){
+    var s=e.target.closest('[data-save-idx]');
+    if(s) toggleSave(parseInt(s.dataset.saveIdx),s.dataset.saveName);
+    var q=e.target.closest('[data-openq]');
+    if(q) openQ(parseInt(q.dataset.openq));
+  });
+
+  // Modals
+  document.getElementById('q-modal').addEventListener('click',function(e){if(e.target===this)closeQ();});
+  e=document.getElementById('modal-send');  if(e) e.addEventListener('click',sendQ);
+  e=document.getElementById('close-q-btn'); if(e) e.addEventListener('click',closeQ);
+});
+</script>
 </body>
 </html>
