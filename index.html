@@ -269,10 +269,10 @@
   }
   .country-current-btn:hover { border-color: rgba(240,165,0,0.4); }
   .country-modal-overlay {
-    display: none; position: fixed; inset: 0; z-index: 300;
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 300;
     background: rgba(0,0,0,0.8); align-items: flex-end; justify-content: center;
   }
-  .country-modal-overlay.open { display: flex; }
+  .country-modal-overlay.open { display: flex !important; }
   .country-modal-box {
     background: #1a1f2e; border-radius: 20px 20px 0 0;
     padding: 20px 16px 40px; width: 100%; max-width: 480px; max-height: 75vh; overflow-y: auto;
