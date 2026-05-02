@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         messages: messages,
-        max_tokens: 4000,
+        max_tokens: 8000,
         stream: stream || false,
       }),
     });
