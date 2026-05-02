@@ -7,352 +7,192 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0822883607725147" crossorigin="anonymous"></script>
 <style>
-  :root {
-    --bg: #0d1117;
-    --surface: rgba(255,255,255,0.04);
-    --border: rgba(255,255,255,0.09);
-    --accent: #f0a500;
-    --accent2: #ff6b35;
-    --text: #f0ece4;
-    --muted: #8a8070;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans JP', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(240,165,0,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(240,165,0,0.03) 1px, transparent 1px);
-    background-size: 48px 48px;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .wrap { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 32px 20px 120px; }
-
-  /* Header */
-  .header { text-align: center; margin-bottom: 24px; }
-  .header-top { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 4px; }
-  .header-icon { font-size: 32px; display: block; animation: bob 3s ease-in-out infinite; flex-shrink: 0; }
-  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
-  .header h1 { font-size: 21px; font-weight: 900; letter-spacing: 0.05em; color: var(--accent); line-height: 1.3; }
-  .header p  { font-size: 11px; color: var(--muted); margin-top: 5px; letter-spacing: 0.12em; }
-
-  /* Weather card */
-  .weather-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 14px 18px;
-    margin-bottom: 22px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    min-height: 68px;
-  }
-  .wx-icon { font-size: 34px; flex-shrink: 0; }
-  .wx-info { flex: 1; }
-  .wx-date { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
-  .wx-main { font-size: 14px; font-weight: 700; color: var(--text); }
-  .wx-sub  { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .wx-temp { font-size: 26px; font-weight: 900; color: var(--accent); flex-shrink: 0; }
-  .wx-msg  { color: var(--muted); font-size: 12px; }
-
-  /* Progress */
-  .progress { display: flex; justify-content: center; gap: 7px; margin-bottom: 26px; }
-  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
-  .dot.active { background: var(--accent); transform: scale(1.3); }
-  .dot.done   { background: var(--accent2); }
-
-  /* Steps */
-  .step { display: none; animation: fadeUp 0.35s ease; }
-  .step.active { display: block; }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-  .step h2 { font-size: 17px; font-weight: 700; text-align: center; margin-bottom: 18px; color: var(--text); }
-
-  /* Grid */
-  .grid   { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
-  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 15px 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
-  }
-  .card:hover { border-color: rgba(240,165,0,0.4); background: rgba(240,165,0,0.06); transform: translateY(-2px); }
-  .card.selected { border-color: var(--accent); background: rgba(240,165,0,0.12); box-shadow: 0 0 0 1px var(--accent); }
-  .card .emoji  { font-size: 26px; display: block; margin-bottom: 6px; }
-  .card .label  { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1.3; }
-  .card .sub    { font-size: 10px; color: var(--muted); margin-top: 3px; display: block; }
-  .card .badge  { font-size: 11px; color: var(--accent); margin-top: 4px; display: block; }
-
-  /* Buttons */
-  .btn-row { display: flex; gap: 10px; justify-content: center; }
-  .btn { border: none; border-radius: 50px; padding: 12px 26px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: inherit; }
-  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
-  .btn-primary:hover:not(:disabled) { transform: scale(1.04); box-shadow: 0 6px 24px rgba(240,165,0,0.35); }
-  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
-  .btn-ghost { background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
-  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
-
-  /* Input */
-  .input-wrap { margin-bottom: 20px; }
-  .input-wrap label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 7px; }
-  .input-wrap input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 11px 14px; color: var(--text); font-size: 14px; outline: none; font-family: inherit; transition: border-color 0.2s; }
-  .input-wrap input:focus { border-color: rgba(240,165,0,0.5); }
-  .input-wrap input::placeholder { color: var(--muted); }
-
-  /* Loading */
-  .loading-wrap { text-align: center; padding: 48px 0; }
-  .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px; }
-  @keyframes spin { to{transform:rotate(360deg)} }
-  .loading-wrap p { color: var(--muted); font-size: 14px; }
-
-  /* Error */
-  .error-msg { color: #ff6b6b; font-size: 13px; text-align: center; margin-top: 12px; padding: 10px 14px; background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.2); border-radius: 8px; }
-
-  /* Results */
-  .result-meta { text-align: center; margin-bottom: 18px; }
-  .result-meta .tags { font-size: 11px; color: var(--muted); margin-bottom: 6px; line-height: 1.8; }
-  .result-meta h2 { font-size: 18px; color: var(--accent); }
-
-  .suggestion { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 12px; animation: fadeUp 0.4s ease both; }
-  .suggestion:nth-child(2){animation-delay:.1s} .suggestion:nth-child(3){animation-delay:.2s}
-  .sug-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-  .sug-name { font-size: 16px; font-weight: 700; color: var(--text); }
-  .sug-type { font-size: 11px; color: var(--accent); margin-top: 2px; }
-  .save-btn { background: none; border: none; font-size: 20px; cursor: pointer; padding: 2px 4px; transition: transform 0.15s; flex-shrink: 0; }
-  .save-btn:hover { transform: scale(1.2); }
-  .sug-desc { font-size: 13px; color: #b0a898; line-height: 1.7; margin-bottom: 10px; }
-  .sug-tip  { background: rgba(240,165,0,0.07); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 7px 11px; font-size: 12px; color: #d4b060; margin-bottom: 10px; }
-  .vibes    { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
-  .vibe     { font-size: 11px; padding: 2px 9px; border-radius: 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); }
-  .sug-time { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
-
-  .map-btn {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    padding: 9px 16px; background: rgba(240,165,0,0.1); border: 1px solid rgba(240,165,0,0.35);
-    border-radius: 10px; color: var(--accent); font-size: 13px; font-weight: 700;
-    font-family: inherit; cursor: pointer; text-decoration: none; transition: all 0.2s;
-    width: 100%; margin-bottom: 8px;
-  }
-  .map-btn:hover { background: rgba(240,165,0,0.2); transform: translateY(-1px); }
-
-  .question-btn {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    padding: 9px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 10px; color: var(--muted); font-size: 13px; font-weight: 700;
-    font-family: inherit; cursor: pointer; transition: all 0.2s; width: 100%;
-  }
-  .question-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
-
-  /* Saved */
-  .saved-section { margin-top: 18px; background: rgba(240,165,0,0.05); border: 1px solid rgba(240,165,0,0.2); border-radius: 14px; padding: 14px; }
-  .saved-section h3 { font-size: 13px; color: var(--accent); margin-bottom: 8px; }
-  .saved-item { font-size: 13px; color: var(--text); padding: 3px 0; }
-
-  /* Location permission card */
-  .location-card {
-    background: linear-gradient(135deg, rgba(240,165,0,0.1), rgba(255,107,53,0.08));
-    border: 1px solid rgba(240,165,0,0.35);
-    border-radius: 16px;
-    padding: 18px;
-    margin-bottom: 22px;
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-  }
-  .location-card-icon { font-size: 32px; flex-shrink: 0; margin-top: 2px; }
-  .location-card-body { flex: 1; }
-  .location-card-title { font-size: 14px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
-  .location-card-desc  { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
-  .location-card-btns  { display: flex; gap: 8px; }
-  .btn-allow {
-    flex: 1; padding: 9px 12px; background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border: none; border-radius: 10px; color: #fff; font-size: 13px; font-weight: 700;
-    font-family: inherit; cursor: pointer; transition: all 0.2s;
-  }
-  .btn-allow:hover { transform: scale(1.03); }
-  .btn-skip {
-    padding: 9px 14px; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
-    border-radius: 10px; color: var(--muted); font-size: 13px; font-family: inherit; cursor: pointer;
-    transition: all 0.2s;
-  }
-  .btn-skip:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
-
-  /* Streaming cards */
-  .stream-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 18px;
-    margin-bottom: 12px;
-    animation: fadeUp 0.4s ease both;
-  }
-  .stream-card-name { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-  .stream-card-type { font-size: 11px; color: var(--accent); margin-bottom: 8px; }
-  .stream-card-desc { font-size: 13px; color: #b0a898; line-height: 1.7; }
-  .stream-card-skeleton {
-    height: 12px; background: rgba(255,255,255,0.06);
-    border-radius: 6px; margin: 6px 0;
-    animation: shimmer 1.2s ease-in-out infinite;
-  }
-  @keyframes shimmer {
-    0%,100% { opacity:0.4; } 50% { opacity:0.8; }
-  }
-
-  /* Modal */
-  .modal-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.75); align-items: flex-end; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal-box { background: #1a1f2e; border-radius: 20px 20px 0 0; padding: 22px 20px 40px; width: 100%; max-width: 480px; max-height: 80vh; overflow-y: auto; }
-  .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  .modal-ttl  { font-size: 14px; font-weight: 700; color: var(--text); flex: 1; margin-right: 10px; }
-  .modal-close { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; }
-  .modal-ta { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 11px 13px; color: var(--text); font-size: 14px; font-family: inherit; resize: none; height: 86px; outline: none; }
-  .modal-ta:focus { border-color: rgba(240,165,0,0.5); }
-  .modal-send { margin-top: 10px; width: 100%; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 10px; padding: 12px; color: #fff; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; }
-  .modal-send:disabled { opacity: 0.4; cursor: not-allowed; }
-  .modal-answer { margin-top: 14px; background: rgba(240,165,0,0.07); border: 1px solid rgba(240,165,0,0.2); border-radius: 10px; padding: 14px; font-size: 14px; color: #d4b060; line-height: 1.75; white-space: pre-wrap; }
-
-  /* Search links */
-  .disclaimer { font-size: 11px; color: var(--muted); background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; margin-top: 10px; line-height: 1.6; }
-  .search-links { margin-top: 12px; }
-  .search-links-title { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
-  .search-link { display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 6px; text-decoration: none; transition: border-color 0.2s; }
-  .search-link:hover { border-color: rgba(240,165,0,0.4); background: rgba(240,165,0,0.05); }
-  .search-link-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-  .search-link-body { flex: 1; overflow: hidden; }
-  .search-link-name { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .search-link-url  { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
-
-  /* Share buttons */
-  .share-section {
-    margin-top: 20px;
-    background: rgba(240,165,0,0.05);
-    border: 1px solid rgba(240,165,0,0.2);
-    border-radius: 16px;
-    padding: 18px;
-  }
-  .share-title { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
-  .share-desc  { font-size: 12px; color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
-  .share-btns  { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .share-btn {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    padding: 10px 8px; border-radius: 10px; border: none;
-    font-size: 13px; font-weight: 700; font-family: inherit;
-    cursor: pointer; text-decoration: none; transition: all 0.2s;
-  }
-  .share-btn:hover { transform: translateY(-2px); opacity: 0.9; }
-  .share-x    { background: #000; color: #fff; }
-  .share-line { background: #06C755; color: #fff; }
-  .share-fb   { background: #1877F2; color: #fff; }
-  .share-copy { background: var(--surface); border: 1px solid var(--border) !important; color: var(--text); }
-
-  /* Country selector modal */
-  .country-btn-wrap { text-align: center; margin-bottom: 16px; }
-  .country-current-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 7px 16px; background: var(--surface); border: 1px solid var(--border);
-    border-radius: 50px; color: var(--text); font-size: 13px; cursor: pointer;
-    font-family: inherit; transition: all 0.2s;
-  }
-  .country-current-btn:hover { border-color: rgba(240,165,0,0.4); }
-  .country-modal-overlay {
-    display: none; max-height: 0; overflow: hidden;
-    transition: max-height 0.3s ease;
-    margin-bottom: 12px;
-  }
-  .country-modal-overlay.open { display: block; max-height: 400px; overflow-y: auto; }
-  .country-modal-box {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px;
-  }
-  .country-modal-head {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
-  }
-  .country-modal-title { font-size: 15px; font-weight: 700; color: var(--text); }
-  .country-modal-close { background: none; border: none; color: var(--muted); font-size: 22px; cursor: pointer; }
-  .country-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
-  }
-  .country-item {
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    padding: 10px 4px; background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; cursor: pointer; transition: all 0.2s; text-align: center;
-  }
-  .country-item:hover { border-color: rgba(240,165,0,0.4); background: rgba(240,165,0,0.06); }
-  .country-item.active { border-color: var(--accent); background: rgba(240,165,0,0.12); }
-  .country-flag { font-size: 24px; line-height: 1; }
-  .country-name { font-size: 10px; color: var(--muted); line-height: 1.2; }
-
-  /* Ad */
-  .ad-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: var(--bg); border-top: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 6px 0 10px; }
-  .ad-label  { font-size: 9px; color: var(--muted); letter-spacing: 0.15em; margin-bottom: 4px; }
-  .ad-frame  { width: 320px; height: 50px; border: none; border-radius: 6px; background: rgba(255,255,255,0.03); display: block; }
+:root{--bg:#0d1117;--sur:rgba(255,255,255,0.04);--bor:rgba(255,255,255,0.09);--acc:#f0a500;--ac2:#ff6b35;--txt:#f0ece4;--mut:#8a8070;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(240,165,0,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(240,165,0,0.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0;}
+.wrap{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:28px 18px 110px;}
+/* Header */
+.header{text-align:center;margin-bottom:20px;}
+.header-top{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:4px;}
+.header-icon{font-size:30px;animation:bob 3s ease-in-out infinite;}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.header h1{font-size:20px;font-weight:900;color:var(--acc);letter-spacing:0.05em;}
+.header p{font-size:11px;color:var(--mut);margin-top:4px;}
+/* Lang selector */
+.lang-wrap{text-align:center;margin-bottom:14px;}
+.lang-btn{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;background:var(--sur);border:1px solid var(--bor);border-radius:50px;color:var(--txt);font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.lang-btn:hover{border-color:rgba(240,165,0,0.4);}
+.lang-arrow{color:var(--mut);font-size:11px;transition:transform 0.2s;}
+.lang-btn.open .lang-arrow{transform:rotate(180deg);}
+.lang-accordion{display:none;background:var(--sur);border:1px solid var(--bor);border-radius:14px;padding:12px;margin-bottom:14px;animation:fadeUp 0.2s ease;}
+.lang-accordion.open{display:block;}
+.lang-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.lang-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;background:rgba(255,255,255,0.03);border:1px solid var(--bor);border-radius:10px;cursor:pointer;transition:all 0.2s;text-align:center;}
+.lang-item:hover{border-color:rgba(240,165,0,0.4);background:rgba(240,165,0,0.06);}
+.lang-item.active{border-color:var(--acc);background:rgba(240,165,0,0.12);}
+.lang-flag{font-size:22px;line-height:1;}
+.lang-name{font-size:9px;color:var(--mut);line-height:1.2;}
+/* Location card */
+.loc-card{background:linear-gradient(135deg,rgba(240,165,0,0.1),rgba(255,107,53,0.08));border:1px solid rgba(240,165,0,0.35);border-radius:16px;padding:16px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start;}
+.loc-card-icon{font-size:28px;flex-shrink:0;margin-top:2px;}
+.loc-card-body{flex:1;}
+.loc-card-title{font-size:13px;font-weight:700;color:var(--acc);margin-bottom:3px;}
+.loc-card-desc{font-size:11px;color:var(--mut);line-height:1.6;margin-bottom:10px;}
+.loc-card-btns{display:flex;gap:8px;}
+.btn-allow{flex:1;padding:8px 10px;background:linear-gradient(135deg,var(--acc),var(--ac2));border:none;border-radius:10px;color:#fff;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;}
+.btn-skip{padding:8px 12px;background:var(--sur);border:1px solid var(--bor);border-radius:10px;color:var(--mut);font-size:12px;font-family:inherit;cursor:pointer;}
+/* Weather */
+.wx-card{background:var(--sur);border:1px solid var(--bor);border-radius:14px;padding:13px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;min-height:64px;}
+.wx-icon{font-size:32px;flex-shrink:0;}
+.wx-info{flex:1;}
+.wx-date{font-size:10px;color:var(--mut);margin-bottom:2px;}
+.wx-main{font-size:13px;font-weight:700;color:var(--txt);}
+.wx-sub{font-size:10px;color:var(--mut);margin-top:2px;}
+.wx-temp{font-size:24px;font-weight:900;color:var(--acc);flex-shrink:0;}
+.wx-msg{color:var(--mut);font-size:12px;}
+/* Progress */
+.progress{display:flex;justify-content:center;gap:7px;margin-bottom:22px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--bor);transition:all 0.3s;}
+.dot.active{background:var(--acc);transform:scale(1.3);}
+.dot.done{background:var(--ac2);}
+/* Steps */
+.step{display:none;animation:fadeUp 0.35s ease;}
+.step.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.step h2{font-size:16px;font-weight:700;text-align:center;margin-bottom:16px;color:var(--txt);}
+/* Grid */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:20px;}
+.grid-3{grid-template-columns:1fr 1fr 1fr;}
+.card{background:var(--sur);border:1px solid var(--bor);border-radius:13px;padding:13px 9px;text-align:center;cursor:pointer;transition:all 0.2s;user-select:none;}
+.card:hover{border-color:rgba(240,165,0,0.4);background:rgba(240,165,0,0.06);transform:translateY(-2px);}
+.card.selected{border-color:var(--acc);background:rgba(240,165,0,0.12);box-shadow:0 0 0 1px var(--acc);}
+.card .emoji{font-size:24px;display:block;margin-bottom:5px;}
+.card .label{font-size:11px;font-weight:700;color:var(--txt);line-height:1.3;display:block;}
+.card .sub{font-size:10px;color:var(--mut);margin-top:3px;display:block;}
+.card .badge{font-size:10px;color:var(--acc);margin-top:3px;display:block;}
+/* Buttons */
+.btn-row{display:flex;gap:9px;justify-content:center;}
+.btn{border:none;border-radius:50px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;font-family:inherit;}
+.btn-primary{background:linear-gradient(135deg,var(--acc),var(--ac2));color:#fff;}
+.btn-primary:hover:not(:disabled){transform:scale(1.04);box-shadow:0 6px 20px rgba(240,165,0,0.35);}
+.btn-primary:disabled{opacity:0.35;cursor:not-allowed;}
+.btn-ghost{background:var(--sur);border:1px solid var(--bor);color:var(--mut);}
+.btn-ghost:hover{border-color:rgba(255,255,255,0.2);color:var(--txt);}
+/* Input */
+.input-wrap{margin-bottom:18px;}
+.input-wrap label{display:block;font-size:11px;color:var(--mut);margin-bottom:6px;}
+.input-wrap input{width:100%;background:var(--sur);border:1px solid var(--bor);border-radius:10px;padding:10px 13px;color:var(--txt);font-size:13px;outline:none;font-family:inherit;}
+.input-wrap input:focus{border-color:rgba(240,165,0,0.5);}
+.input-wrap input::placeholder{color:var(--mut);}
+/* Loading */
+.loading-wrap{text-align:center;padding:44px 0;}
+.spinner{width:34px;height:34px;border:3px solid var(--bor);border-top-color:var(--acc);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-wrap p{color:var(--mut);font-size:13px;}
+/* Error */
+.error-msg{color:#ff6b6b;font-size:12px;text-align:center;margin-top:10px;padding:9px 13px;background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.2);border-radius:8px;}
+/* Results */
+.result-meta{text-align:center;margin-bottom:16px;}
+.result-meta .tags{font-size:11px;color:var(--mut);margin-bottom:6px;line-height:1.8;}
+.result-meta h2{font-size:17px;color:var(--acc);}
+.suggestion{background:var(--sur);border:1px solid var(--bor);border-radius:15px;padding:16px;margin-bottom:11px;animation:fadeUp 0.4s ease both;}
+.sug-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;}
+.sug-name{font-size:15px;font-weight:700;color:var(--txt);}
+.sug-type{font-size:10px;color:var(--acc);margin-top:2px;}
+.save-btn{background:none;border:none;font-size:19px;cursor:pointer;padding:2px 4px;flex-shrink:0;}
+.sug-desc{font-size:12px;color:#b0a898;line-height:1.7;margin-bottom:9px;}
+.sug-tip{background:rgba(240,165,0,0.07);border-left:3px solid var(--acc);border-radius:0 7px 7px 0;padding:6px 10px;font-size:11px;color:#d4b060;margin-bottom:9px;}
+.vibes{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px;}
+.vibe{font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.05);border:1px solid var(--bor);color:var(--mut);}
+.sug-time{font-size:10px;color:var(--mut);margin-bottom:9px;}
+.map-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:8px 14px;background:rgba(240,165,0,0.1);border:1px solid rgba(240,165,0,0.35);border-radius:9px;color:var(--acc);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;text-decoration:none;transition:all 0.2s;width:100%;margin-bottom:7px;}
+.map-btn:hover{background:rgba(240,165,0,0.2);}
+.question-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:8px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:9px;color:var(--mut);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:all 0.2s;width:100%;}
+.question-btn:hover{background:rgba(255,255,255,0.08);color:var(--txt);}
+/* Saved */
+.saved-section{margin-top:16px;background:rgba(240,165,0,0.05);border:1px solid rgba(240,165,0,0.2);border-radius:13px;padding:13px;}
+.saved-section h3{font-size:12px;color:var(--acc);margin-bottom:7px;}
+.saved-item{font-size:12px;color:var(--txt);padding:3px 0;}
+/* Share */
+.share-section{margin-top:18px;background:rgba(240,165,0,0.05);border:1px solid rgba(240,165,0,0.2);border-radius:15px;padding:16px;}
+.share-title{font-size:13px;font-weight:700;color:var(--acc);margin-bottom:5px;}
+.share-desc{font-size:11px;color:var(--mut);margin-bottom:12px;line-height:1.6;}
+.share-btns{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.share-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:9px 7px;border-radius:9px;border:none;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+.share-btn:hover{transform:translateY(-2px);opacity:0.9;}
+.share-x{background:#000;color:#fff;}
+.share-line{background:#06C755;color:#fff;}
+.share-fb{background:#1877F2;color:#fff;}
+.share-copy{background:var(--sur);border:1px solid var(--bor)!important;color:var(--txt);}
+/* Q modal */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.75);align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:#1a1f2e;border-radius:20px 20px 0 0;padding:20px 18px 40px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto;}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.modal-ttl{font-size:13px;font-weight:700;color:var(--txt);flex:1;margin-right:10px;}
+.modal-close{background:none;border:none;color:var(--mut);font-size:20px;cursor:pointer;}
+.modal-ta{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:9px;padding:10px 12px;color:var(--txt);font-size:13px;font-family:inherit;resize:none;height:80px;outline:none;}
+.modal-send{margin-top:9px;width:100%;background:linear-gradient(135deg,var(--acc),var(--ac2));border:none;border-radius:9px;padding:11px;color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;}
+.modal-send:disabled{opacity:0.4;cursor:not-allowed;}
+.modal-answer{margin-top:12px;background:rgba(240,165,0,0.07);border:1px solid rgba(240,165,0,0.2);border-radius:9px;padding:12px;font-size:13px;color:#d4b060;line-height:1.75;white-space:pre-wrap;}
+.disclaimer{font-size:10px;color:var(--mut);background:rgba(255,255,255,0.03);border:1px solid var(--bor);border-radius:7px;padding:7px 11px;margin-top:9px;line-height:1.6;}
+.search-links{margin-top:10px;}
+.search-links-title{font-size:11px;color:var(--mut);margin-bottom:7px;}
+.search-link{display:flex;align-items:flex-start;gap:7px;padding:9px 11px;background:rgba(255,255,255,0.03);border:1px solid var(--bor);border-radius:9px;margin-bottom:5px;text-decoration:none;}
+.search-link:hover{border-color:rgba(240,165,0,0.4);}
+.search-link-icon{font-size:13px;flex-shrink:0;}
+.search-link-body{flex:1;overflow:hidden;}
+.search-link-name{font-size:12px;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
+.search-link-url{font-size:10px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;margin-top:2px;}
+/* Ad */
+.ad-banner{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--bg);border-top:1px solid var(--bor);display:flex;flex-direction:column;align-items:center;padding:5px 0 8px;}
+.ad-label{font-size:9px;color:var(--mut);letter-spacing:0.15em;margin-bottom:3px;}
+.ad-frame{width:320px;height:50px;border:none;border-radius:5px;background:rgba(255,255,255,0.03);display:block;}
+.privacy-link{font-size:10px;color:var(--mut);text-decoration:none;margin-top:4px;}
 </style>
 </head>
 <body>
 <div class="wrap">
-
   <div class="header">
     <div class="header-top">
       <span class="header-icon">🗺️</span>
-      <h1>今日、明日、どこいこう？</h1>
+      <h1 id="h-title">今日、明日、どこいこう？</h1>
     </div>
-    <p>暇だけどやることない…を解決するアプリ</p>
-
+    <p id="h-sub">暇だけどやることない…を解決するアプリ</p>
   </div>
 
-  <!-- Country selector button -->
-  <div class="country-btn-wrap">
-    <button class="country-current-btn" id="open-country-btn" id="country-current-btn">
-      <span id="country-current-flag">🇯🇵</span>
-      <span id="country-current-name">日本語</span>
-      <span style="color:var(--muted);font-size:11px;">▼</span>
+  <!-- Language selector -->
+  <div class="lang-wrap">
+    <button class="lang-btn" id="lang-toggle-btn">
+      <span id="lang-flag">🇯🇵</span>
+      <span id="lang-name">日本語</span>
+      <span class="lang-arrow" id="lang-arrow">▼</span>
     </button>
   </div>
-
-  <!-- Country modal -->
-  <div class="country-modal-overlay" id="country-modal">
-    <div class="country-modal-box">
-      <div class="country-modal-head">
-        <div class="country-modal-title" id="country-modal-title">🌍 言語・地域を選択</div>
-        <button class="country-modal-close" id="close-country-btn">✕</button>
-      </div>
-      <div class="country-grid" id="country-grid"></div>
-    </div>
+  <div class="lang-accordion" id="lang-accordion">
+    <div class="lang-grid" id="lang-grid"></div>
   </div>
 
-  <!-- Location permission card (shown before weather) -->
-  <div id="location-card" class="location-card">
-    <div class="location-card-icon">📍</div>
-    <div class="location-card-body">
-      <div class="location-card-title">現在地の天気を表示しますか？</div>
-      <div class="location-card-desc">位置情報を使うと、今いる場所のリアルタイム天気をもとにおでかけ先を提案できます。情報は天気取得のみに使用し、保存はしません。</div>
-      <div class="location-card-btns">
-        <button class="btn-allow" id="btn-allow-loc">📍 現在地を使う</button>
-        <button class="btn-skip"  id="btn-skip-loc">スキップ</button>
+  <!-- Location card -->
+  <div id="loc-card" class="loc-card">
+    <div class="loc-card-icon">📍</div>
+    <div class="loc-card-body">
+      <div class="loc-card-title" id="loc-title">現在地の天気を表示しますか？</div>
+      <div class="loc-card-desc" id="loc-desc">位置情報を使うと、今いる場所のリアルタイム天気をもとにおでかけ先を提案できます。情報は天気取得のみに使用し、保存はしません。</div>
+      <div class="loc-card-btns">
+        <button class="btn-allow" id="btn-allow">📍 現在地を使う</button>
+        <button class="btn-skip" id="btn-skip">スキップ</button>
       </div>
     </div>
   </div>
 
-  <div class="weather-card" id="weather-card" style="display:none">
+  <!-- Weather card -->
+  <div class="wx-card" id="wx-card" style="display:none">
     <div class="wx-msg">📍 取得中…</div>
   </div>
 
+  <!-- Progress -->
   <div class="progress">
     <div class="dot active" id="dot0"></div>
     <div class="dot" id="dot1"></div>
@@ -363,11 +203,11 @@
 
   <!-- Step 0: Date -->
   <div class="step active" id="step-date">
-    <h2>いつ行く？</h2>
+    <h2 id="s-date-title">いつ行く？</h2>
     <div class="grid grid-3" id="grid-date">
-      <div class="card" data-val="今日"   data-type="date"><span class="label" style="font-size:15px;font-weight:900">今日</span><span class="badge" id="badge-today"></span></div>
-      <div class="card" data-val="明日"   data-type="date"><span class="label" style="font-size:15px;font-weight:900">明日</span><span class="badge" id="badge-tomorrow"></span></div>
-      <div class="card" data-val="今週末" data-type="date"><span class="label" style="font-size:15px;font-weight:900">今週末</span><span class="badge" id="badge-weekend"></span></div>
+      <div class="card" data-type="date" data-key="today"><span class="label" id="lbl-today">今日</span><span class="badge" id="badge-today"></span></div>
+      <div class="card" data-type="date" data-key="tomorrow"><span class="label" id="lbl-tomorrow">明日</span><span class="badge" id="badge-tomorrow"></span></div>
+      <div class="card" data-type="date" data-key="weekend"><span class="label" id="lbl-weekend">今週末</span><span class="badge" id="badge-weekend"></span></div>
     </div>
     <div class="btn-row">
       <button class="btn btn-primary" id="btn-date" disabled data-goto="1">次へ →</button>
@@ -376,715 +216,569 @@
 
   <!-- Step 1: Group -->
   <div class="step" id="step-group">
-    <h2>だれと行く？</h2>
+    <h2 id="s-group-title">だれと行く？</h2>
     <div class="grid grid-3" id="grid-group">
-      <div class="card" data-key="solo"    data-type="group"><span class="emoji">🧍</span><span class="label" id="g_solo">ひとりで</span><span class="sub" id="g_solo_sub">自分のペースで</span></div>
-      <div class="card" data-key="couple"  data-type="group"><span class="emoji">💑</span><span class="label" id="g_couple">カップル</span><span class="sub" id="g_couple_sub">ふたりで</span></div>
-      <div class="card" data-key="family"  data-type="group"><span class="emoji">👨‍👩‍👧</span><span class="label" id="g_family">家族・子連れ</span><span class="sub" id="g_family_sub">みんなで</span></div>
-      <div class="card" data-key="friends" data-type="group"><span class="emoji">👫</span><span class="label" id="g_friends">友達グループ</span><span class="sub" id="g_friends_sub">わいわい</span></div>
-      <div class="card" data-key="dad"     data-type="group"><span class="emoji">👨</span><span class="label" id="g_dad">お父さんと</span><span class="sub" id="g_dad_sub">子ども目線で</span></div>
-      <div class="card" data-key="mom"     data-type="group"><span class="emoji">👩</span><span class="label" id="g_mom">お母さんと</span><span class="sub" id="g_mom_sub">子ども目線で</span></div>
+      <div class="card" data-type="group" data-key="solo"><span class="emoji">🧍</span><span class="label" id="g-solo">ひとりで</span><span class="sub" id="g-solo-s">自分のペースで</span></div>
+      <div class="card" data-type="group" data-key="couple"><span class="emoji">💑</span><span class="label" id="g-couple">カップル</span><span class="sub" id="g-couple-s">ふたりで</span></div>
+      <div class="card" data-type="group" data-key="family"><span class="emoji">👨‍👩‍👧</span><span class="label" id="g-family">家族・子連れ</span><span class="sub" id="g-family-s">みんなで</span></div>
+      <div class="card" data-type="group" data-key="friends"><span class="emoji">👫</span><span class="label" id="g-friends">友達グループ</span><span class="sub" id="g-friends-s">わいわい</span></div>
+      <div class="card" data-type="group" data-key="dad"><span class="emoji">👨</span><span class="label" id="g-dad">お父さんと</span><span class="sub" id="g-dad-s">子ども目線で</span></div>
+      <div class="card" data-type="group" data-key="mom"><span class="emoji">👩</span><span class="label" id="g-mom">お母さんと</span><span class="sub" id="g-mom-s">子ども目線で</span></div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-ghost" data-goto="0">← 戻る</button>
+      <button class="btn btn-ghost" data-goto="0" id="back-1">← 戻る</button>
       <button class="btn btn-primary" id="btn-group" disabled data-goto="2">次へ →</button>
     </div>
   </div>
 
   <!-- Step 2: Mood -->
   <div class="step" id="step-mood">
-    <h2>どんなおでかけがしたい？</h2>
+    <h2 id="s-mood-title">どんなおでかけがしたい？</h2>
     <div class="grid grid-3" id="grid-mood">
-      <div class="card" data-key="refresh"  data-type="mood"><span class="emoji">🌿</span><span class="label" id="m_refresh">リフレッシュ</span></div>
-      <div class="card" data-key="sightseeing" data-type="mood"><span class="emoji">🏯</span><span class="label" id="m_sightseeing">観光・名所</span></div>
-      <div class="card" data-key="hidden"   data-type="mood"><span class="emoji">🌾</span><span class="label" id="m_hidden">人が少ない穴場</span></div>
-      <div class="card" data-key="culture"  data-type="mood"><span class="emoji">🎨</span><span class="label" id="m_culture">文化・芸術</span></div>
-      <div class="card" data-key="food"     data-type="mood"><span class="emoji">🍜</span><span class="label" id="m_food">グルメ</span></div>
-      <div class="card" data-key="active"   data-type="mood"><span class="emoji">🏃</span><span class="label" id="m_active">アクティブ</span></div>
-      <div class="card" data-key="relax"    data-type="mood"><span class="emoji">📚</span><span class="label" id="m_relax">のんびり</span></div>
-      <div class="card" data-key="adventure" data-type="mood"><span class="emoji">⚡</span><span class="label" id="m_adventure">冒険・非日常</span></div>
-      <div class="card" data-key="event"    data-type="mood"><span class="emoji">🎪</span><span class="label" id="m_event">イベント・フェス</span></div>
+      <div class="card" data-type="mood" data-key="refresh"><span class="emoji">🌿</span><span class="label" id="m-refresh">リフレッシュ</span></div>
+      <div class="card" data-type="mood" data-key="sightseeing"><span class="emoji">🏯</span><span class="label" id="m-sightseeing">観光・名所</span></div>
+      <div class="card" data-type="mood" data-key="hidden"><span class="emoji">🌾</span><span class="label" id="m-hidden">人が少ない穴場</span></div>
+      <div class="card" data-type="mood" data-key="culture"><span class="emoji">🎨</span><span class="label" id="m-culture">文化・芸術</span></div>
+      <div class="card" data-type="mood" data-key="food"><span class="emoji">🍜</span><span class="label" id="m-food">グルメ</span></div>
+      <div class="card" data-type="mood" data-key="active"><span class="emoji">🏃</span><span class="label" id="m-active">アクティブ</span></div>
+      <div class="card" data-type="mood" data-key="relax"><span class="emoji">📚</span><span class="label" id="m-relax">のんびり</span></div>
+      <div class="card" data-type="mood" data-key="adventure"><span class="emoji">⚡</span><span class="label" id="m-adventure">冒険・非日常</span></div>
+      <div class="card" data-type="mood" data-key="event"><span class="emoji">🎪</span><span class="label" id="m-event">イベント・フェス</span></div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-ghost" data-goto="1">← 戻る</button>
+      <button class="btn btn-ghost" data-goto="1" id="back-2">← 戻る</button>
       <button class="btn btn-primary" id="btn-mood" disabled data-goto="3">次へ →</button>
     </div>
   </div>
 
   <!-- Step 3: Time -->
   <div class="step" id="step-time">
-    <h2>どの時間帯に？</h2>
+    <h2 id="s-time-title">どの時間帯に？</h2>
     <div class="grid" id="grid-time">
-      <div class="card" data-val="午前中"   data-type="time"><span class="emoji">🌅</span><span class="label">午前中</span></div>
-      <div class="card" data-val="午後"     data-type="time"><span class="emoji">☀️</span><span class="label">午後</span></div>
-      <div class="card" data-val="夕方〜夜" data-type="time"><span class="emoji">🌆</span><span class="label">夕方〜夜</span></div>
-      <div class="card" data-val="一日中"   data-type="time"><span class="emoji">🌙</span><span class="label">一日中</span></div>
+      <div class="card" data-type="time" data-key="morning"><span class="emoji">🌅</span><span class="label" id="t-morning">午前中</span></div>
+      <div class="card" data-type="time" data-key="afternoon"><span class="emoji">☀️</span><span class="label" id="t-afternoon">午後</span></div>
+      <div class="card" data-type="time" data-key="evening"><span class="emoji">🌆</span><span class="label" id="t-evening">夕方〜夜</span></div>
+      <div class="card" data-type="time" data-key="allday"><span class="emoji">🌙</span><span class="label" id="t-allday">一日中</span></div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-ghost" data-goto="2">← 戻る</button>
+      <button class="btn btn-ghost" data-goto="2" id="back-3">← 戻る</button>
       <button class="btn btn-primary" id="btn-time" disabled data-goto="4">次へ →</button>
     </div>
   </div>
 
-  <!-- Step 4: Budget + Location -->
+  <!-- Step 4: Budget -->
   <div class="step" id="step-budget">
-    <h2>ひとりあたりの予算は？</h2>
+    <h2 id="s-budget-title">ひとりあたりの予算は？</h2>
     <div class="grid grid-3" id="grid-budget">
-      <div class="card" data-key="b_free"  data-type="budget"><span class="emoji">🆓</span><span class="label" id="b_free">無料</span><span class="sub" id="b_free_sub">0円</span></div>
-      <div class="card" data-key="b_2k"    data-type="budget"><span class="emoji">💴</span><span class="label" id="b_2k">2,000円以下</span><span class="sub" id="b_2k_sub">カジュアルに</span></div>
-      <div class="card" data-key="b_5k"    data-type="budget"><span class="emoji">💵</span><span class="label" id="b_5k">5,000円以下</span><span class="sub" id="b_5k_sub">満足に</span></div>
-      <div class="card" data-key="b_10k"   data-type="budget"><span class="emoji">💳</span><span class="label" id="b_10k">10,000円以下</span><span class="sub" id="b_10k_sub">贅沢に</span></div>
-      <div class="card" data-key="b_over"  data-type="budget"><span class="emoji">✨</span><span class="label" id="b_over">10,000円以上</span><span class="sub" id="b_over_sub">大奮発！</span></div>
+      <div class="card" data-type="budget" data-key="free"><span class="emoji">🆓</span><span class="label" id="b-free">無料</span><span class="sub" id="b-free-s">0円</span></div>
+      <div class="card" data-type="budget" data-key="b2k"><span class="emoji">💴</span><span class="label" id="b-2k">〜2,000円</span><span class="sub" id="b-2k-s">カジュアルに</span></div>
+      <div class="card" data-type="budget" data-key="b5k"><span class="emoji">💵</span><span class="label" id="b-5k">〜5,000円</span><span class="sub" id="b-5k-s">満足に</span></div>
+      <div class="card" data-type="budget" data-key="b10k"><span class="emoji">💳</span><span class="label" id="b-10k">〜10,000円</span><span class="sub" id="b-10k-s">贅沢に</span></div>
+      <div class="card" data-type="budget" data-key="bover"><span class="emoji">✨</span><span class="label" id="b-over">10,000円以上</span><span class="sub" id="b-over-s">大奮発！</span></div>
     </div>
     <div class="input-wrap">
-      <label>📍 エリアのヒント（任意）</label>
+      <label id="area-label">📍 エリアのヒント（任意）</label>
       <input type="text" id="location" placeholder="例：大阪、渋谷、海の近く…">
     </div>
     <div class="btn-row">
-      <button class="btn btn-ghost" data-goto="3">← 戻る</button>
-      <button class="btn btn-primary" id="btn-budget" disabled id="fetch-btn">提案してもらう ✨</button>
+      <button class="btn btn-ghost" data-goto="3" id="back-4">← 戻る</button>
+      <button class="btn btn-primary" id="btn-budget" disabled>提案してもらう ✨</button>
     </div>
     <div id="error-msg"></div>
   </div>
 
-  <!-- Loading / Streaming -->
+  <!-- Loading -->
   <div class="step" id="step-loading">
-    <div id="stream-header" style="text-align:center;margin-bottom:20px">
-      <div class="spinner" id="stream-spinner"></div>
-      <p id="stream-msg" style="color:var(--muted);font-size:14px;margin-top:12px">AIがおでかけ先を考えています…</p>
+    <div class="loading-wrap">
+      <div class="spinner"></div>
+      <p id="loading-msg">AIがおでかけ先を考えています…</p>
     </div>
-    <div id="stream-cards"></div>
   </div>
 
   <!-- Result -->
   <div class="step" id="step-result">
     <div class="result-meta">
       <div class="tags" id="result-tags"></div>
-      <h2>おすすめのおでかけ先 🎉</h2>
+      <h2 id="result-title">おすすめのおでかけ先 🎉</h2>
     </div>
     <div id="suggestions-list"></div>
-    <div class="btn-row" style="margin-top:20px">
-      <button class="btn btn-primary" id="reset-btn" id="reset-btn">🔄 もう一度探す</button>
-    </div>
-
-    <!-- Share section -->
-    <div class="share-section" id="share-section" style="display:none">
-      <div class="share-title">📣 行ってきた！をシェア</div>
-      <div class="share-desc">写真と一緒に投稿して、おでかけの思い出をシェアしよう！</div>
-      <div class="share-btns">
-        <a class="share-btn share-x" id="share-x" href="#" target="_blank" rel="noopener">𝕏 Xでシェア</a>
-        <a class="share-btn share-line" id="share-line" href="#" target="_blank" rel="noopener">💬 LINEで送る</a>
-        <a class="share-btn share-fb" id="share-fb" href="#" target="_blank" rel="noopener">📘 Facebookで</a>
-        <button class="share-btn share-copy" id="copy-share-btn">📋 テキストをコピー</button>
-      </div>
+    <div class="btn-row" style="margin-top:18px">
+      <button class="btn btn-primary" id="reset-btn">🔄 もう一度探す</button>
     </div>
     <div id="saved-section" class="saved-section" style="display:none">
-      <h3>❤️ 気になる場所</h3>
+      <h3>❤️ <span id="saved-title-txt">気になる場所</span></h3>
       <div id="saved-list"></div>
     </div>
+    <div class="share-section" id="share-section" style="display:none">
+      <div class="share-title" id="share-title">📣 行ってきた！をシェア</div>
+      <div class="share-desc" id="share-desc">写真と一緒に投稿して、おでかけの思い出をシェアしよう！</div>
+      <div class="share-btns">
+        <a class="share-btn share-x" id="share-x" href="#" target="_blank" rel="noopener">𝕏 X</a>
+        <a class="share-btn share-line" id="share-line" href="#" target="_blank" rel="noopener">💬 LINE</a>
+        <a class="share-btn share-fb" id="share-fb" href="#" target="_blank" rel="noopener">📘 Facebook</a>
+        <button class="share-btn share-copy" id="copy-btn">📋 コピー</button>
+      </div>
+    </div>
   </div>
-
 </div>
 
-<!-- Question modal -->
+<!-- Q Modal -->
 <div class="modal-overlay" id="q-modal">
   <div class="modal-box">
     <input type="hidden" id="modal-idx" value="0">
     <div class="modal-head">
       <div class="modal-ttl" id="modal-ttl"></div>
-      <button class="modal-close" id="close-q-btn">✕</button>
+      <button class="modal-close" id="modal-close-btn">✕</button>
     </div>
-    <textarea class="modal-ta" id="modal-ta" placeholder="例：雨でも楽しめますか？　子どもと行けますか？　近くにご飯屋さんはありますか？"></textarea>
-    <button class="modal-send" id="modal-send" id="modal-send">質問する →</button>
+    <textarea class="modal-ta" id="modal-ta" placeholder="例：雨でも楽しめますか？"></textarea>
+    <button class="modal-send" id="modal-send">質問する →</button>
     <div id="modal-ans"></div>
   </div>
 </div>
 
-<!-- Ad banner -->
+<!-- Ad -->
 <div class="ad-banner">
   <div class="ad-label">広告</div>
   <iframe class="ad-frame" src="about:blank" scrolling="no"></iframe>
-  <a href="/privacy.html" style="font-size:10px;color:#8a8070;text-decoration:none;letter-spacing:0.1em;margin-top:4px;" target="_blank">プライバシーポリシー</a>
+  <a class="privacy-link" href="/privacy.html" target="_blank">プライバシーポリシー</a>
 </div>
 
 <script>
-const state = {
-  date:null, group:null, mood:null, time:null, budget:null,
+// ── State ─────────────────────────────────────────────────
+var state = {
+  date:null, dateKey:null, group:null, mood:null, time:null, budget:null,
   saved:[], suggestions:[],
-  wx:{ today:null, tomorrow:null, weekend:null },
-  geo:{ lat:34.6937, lon:135.5023, name:'大阪' }
+  wx:{today:null,tomorrow:null,weekend:null},
+  geo:{lat:34.6937,lon:135.5023,name:'大阪'}
 };
 
-const MONTHS = [null,'winter','winter','spring','spring','spring','summer','summer','summer','autumn','autumn','autumn','winter'];
-const SEASON = { spring:'春', summer:'夏', autumn:'秋', winter:'冬' }[MONTHS[new Date().getMonth()+1]];
+var MONTHS=[null,'winter','winter','spring','spring','spring','summer','summer','summer','autumn','autumn','autumn','winter'];
+var SEASON={spring:'春',summer:'夏',autumn:'秋',winter:'冬'}[MONTHS[new Date().getMonth()+1]];
 
-const WX_LABEL = {0:'快晴',1:'晴れ',2:'晴れ時々曇り',3:'曇り',45:'霧',48:'霧',51:'小雨',53:'雨',55:'強雨',61:'小雨',63:'雨',65:'強雨',71:'小雪',73:'雪',75:'大雪',80:'にわか雨',81:'雨',82:'強いにわか雨',95:'雷雨',96:'雷雨',99:'雷雨'};
-const WX_ICON  = {0:'☀️',1:'🌤️',2:'🌤️',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌦️',63:'🌧️',65:'🌧️',71:'🌨️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
+var WX_LABEL={0:'快晴',1:'晴れ',2:'晴れ時々曇り',3:'曇り',45:'霧',48:'霧',51:'小雨',53:'雨',55:'強雨',61:'小雨',63:'雨',65:'強雨',71:'小雪',73:'雪',75:'大雪',80:'にわか雨',81:'雨',82:'強いにわか雨',95:'雷雨',96:'雷雨',99:'雷雨'};
+var WX_ICON={0:'☀️',1:'🌤️',2:'🌤️',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌦️',63:'🌧️',65:'🌧️',71:'🌨️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
 
-// ── Weather ──────────────────────────────────────────────
-function requestLocation() {
-  const card = document.getElementById('location-card');
-  const btn = card.querySelector('.btn-allow');
-  btn.textContent = '取得中…';
-  btn.disabled = true;
-  if (!navigator.geolocation) { skipLocation(); return; }
+// ── Languages ─────────────────────────────────────────────
+var COUNTRIES=[
+  {code:'ja',flag:'🇯🇵',name:'日本語'},
+  {code:'en',flag:'🇺🇸',name:'English'},
+  {code:'en_gb',flag:'🇬🇧',name:'English(UK)'},
+  {code:'zh',flag:'🇨🇳',name:'中文'},
+  {code:'ko',flag:'🇰🇷',name:'한국어'},
+  {code:'fr',flag:'🇫🇷',name:'Français'},
+  {code:'de',flag:'🇩🇪',name:'Deutsch'},
+  {code:'es',flag:'🇪🇸',name:'Español'},
+  {code:'it',flag:'🇮🇹',name:'Italiano'},
+  {code:'pt',flag:'🇵🇹',name:'Português'},
+  {code:'pt_br',flag:'🇧🇷',name:'Português(BR)'},
+  {code:'ru',flag:'🇷🇺',name:'Русский'},
+  {code:'ar',flag:'🇸🇦',name:'العربية'},
+  {code:'tr',flag:'🇹🇷',name:'Türkçe'},
+  {code:'th',flag:'🇹🇭',name:'ภาษาไทย'},
+  {code:'vi',flag:'🇻🇳',name:'Tiếng Việt'},
+  {code:'id',flag:'🇮🇩',name:'Indonesia'},
+  {code:'hi',flag:'🇮🇳',name:'हिन्दी'},
+  {code:'es_mx',flag:'🇲🇽',name:'Español(MX)'},
+  {code:'es_ar',flag:'🇦🇷',name:'Español(AR)'}
+];
+
+var LTXT={
+  ja:{title:'今日、明日、どこいこう？',sub:'暇だけどやることない…を解決するアプリ',locTitle:'現在地の天気を表示しますか？',locDesc:'位置情報を使うと、今いる場所のリアルタイム天気をもとにおでかけ先を提案できます。情報は天気取得のみに使用し、保存はしません。',allow:'📍 現在地を使う',skip:'スキップ',sDate:'いつ行く？',today:'今日',tomorrow:'明日',weekend:'今週末',sGroup:'だれと行く？',sMood:'どんなおでかけがしたい？',sTime:'どの時間帯に？',sBudget:'ひとりあたりの予算は？',morning:'午前中',afternoon:'午後',evening:'夕方〜夜',allday:'一日中',areaLabel:'📍 エリアのヒント（任意）',areaPlaceholder:'例：大阪、渋谷、海の近く…',suggest:'提案してもらう ✨',back:'← 戻る',next:'次へ →',loading:'AIがおでかけ先を考えています…',resultTitle:'おすすめのおでかけ先 🎉',reset:'🔄 もう一度探す',shareTitle:'📣 行ってきた！をシェア',shareDesc:'写真と一緒に投稿して、おでかけの思い出をシェアしよう！',mapBtn:'🗺️ Google マップで開く',qBtn:'💬 このスポットに質問する',qPlaceholder:'例：雨でも楽しめますか？',qSend:'質問する →',wx_rain:'☂️ 雨予報なので屋内スポット中心にご提案！',wx_drizzle:'🌂 雨の可能性あり。念のため屋内も確認を！',wx_sunny:'☀️ 絶好のおでかけ日和！屋外も楽しめます',wx_cloudy:'🌤️ まずまずの天気。お出かけ楽しんで！',promptLang:'日本語',promptOnly:'必ず日本語のみで回答してください。',gSolo:'ひとりで',gSoloS:'自分のペースで',gCouple:'カップル',gCoupleS:'ふたりで',gFamily:'家族・子連れ',gFamilyS:'みんなで',gFriends:'友達グループ',gFriendsS:'わいわい',gDad:'お父さんと',gDadS:'子ども目線で',gMom:'お母さんと',gMomS:'子ども目線で',mRefresh:'リフレッシュ',mSightseeing:'観光・名所',mHidden:'人が少ない穴場',mCulture:'文化・芸術',mFood:'グルメ',mActive:'アクティブ',mRelax:'のんびり',mAdventure:'冒険・非日常',mEvent:'イベント・フェス',bFree:'無料',bFreeS:'0円',b2k:'〜2,000円',b2kS:'カジュアルに',b5k:'〜5,000円',b5kS:'満足に',b10k:'〜10,000円',b10kS:'贅沢に',bOver:'10,000円以上',bOverS:'大奮発！'},
+  en:{title:'Where to go today?',sub:'Solve your "nothing to do" moments',locTitle:'Show weather for your location?',locDesc:'Using your location, we suggest outings based on real-time weather. Location is only used for weather.',allow:'📍 Use my location',skip:'Skip',sDate:'When?',today:'Today',tomorrow:'Tomorrow',weekend:'This weekend',sGroup:'Who are you going with?',sMood:'What kind of outing?',sTime:'Time of day?',sBudget:'Budget per person?',morning:'Morning',afternoon:'Afternoon',evening:'Evening',allday:'All day',areaLabel:'📍 Area hint (optional)',areaPlaceholder:'e.g. Tokyo, London, near the sea',suggest:'Get suggestions ✨',back:'← Back',next:'Next →',loading:'AI is thinking of places…',resultTitle:'Recommended outings 🎉',reset:'🔄 Search again',shareTitle:'📣 Share your visit!',shareDesc:'Post with a photo and share your outing memory!',mapBtn:'🗺️ Open in Google Maps',qBtn:'💬 Ask about this spot',qPlaceholder:'e.g. Can we go in the rain?',qSend:'Ask →',wx_rain:'☂️ Rain expected - indoor spots recommended!',wx_drizzle:'🌂 Possible rain - check indoor options too!',wx_sunny:'☀️ Perfect outing weather! Outdoors OK!',wx_cloudy:'🌤️ Not bad weather. Enjoy your outing!',promptLang:'English',promptOnly:'Reply only in English.',gSolo:'Solo',gSoloS:'My own pace',gCouple:'Couple',gCoupleS:'Just the two of us',gFamily:'Family',gFamilyS:'All together',gFriends:'Friends',gFriendsS:'Fun group',gDad:'With Dad',gDadS:"Kid's view",gMom:'With Mom',gMomS:"Kid's view",mRefresh:'Refresh',mSightseeing:'Sightseeing',mHidden:'Hidden gems',mCulture:'Culture & Art',mFood:'Foodie',mActive:'Active',mRelax:'Relaxing',mAdventure:'Adventure',mEvent:'Events & Festivals',bFree:'Free',bFreeS:'$0',b2k:'Under $20',b2kS:'Casual',b5k:'Under $50',b5kS:'Good',b10k:'Under $100',b10kS:'Generous',bOver:'$100+',bOverS:'Go all out!'},
+  zh:{title:'今天去哪里？',sub:'解决"无聊没事做"的烦恼',locTitle:'显示当前位置的天气？',locDesc:'使用位置信息，可根据您所在地的实时天气推荐出行目的地。',allow:'📍 使用当前位置',skip:'跳过',sDate:'什么时候去？',today:'今天',tomorrow:'明天',weekend:'本周末',sGroup:'和谁一起去？',sMood:'想要什么样的出行？',sTime:'什么时间段？',sBudget:'每人预算？',morning:'上午',afternoon:'下午',evening:'傍晚夜晚',allday:'全天',areaLabel:'📍 地区提示（可选）',areaPlaceholder:'例：上海、北京、海边',suggest:'获取推荐 ✨',back:'← 返回',next:'下一步 →',loading:'AI正在思考目的地…',resultTitle:'推荐出行目的地 🎉',reset:'🔄 重新搜索',shareTitle:'📣 分享你的出行！',shareDesc:'和照片一起发布，分享你的出行回忆！',mapBtn:'🗺️ 在谷歌地图打开',qBtn:'💬 询问这个地方',qPlaceholder:'例：下雨也可以去吗？',qSend:'提问 →',wx_rain:'☂️ 有雨，推荐室内场所！',wx_drizzle:'🌂 可能有雨，也看看室内选择！',wx_sunny:'☀️ 绝佳出行天气！可以去户外！',wx_cloudy:'🌤️ 天气还好，出发吧！',promptLang:'中文',promptOnly:'请只用中文回答。',gSolo:'独自一人',gSoloS:'按自己节奏',gCouple:'情侣',gCoupleS:'两人同行',gFamily:'家庭',gFamilyS:'全家出行',gFriends:'朋友群',gFriendsS:'热闹出行',gDad:'和爸爸',gDadS:'孩子视角',gMom:'和妈妈',gMomS:'孩子视角',mRefresh:'放松',mSightseeing:'观光名胜',mHidden:'冷门景点',mCulture:'文化艺术',mFood:'美食',mActive:'运动',mRelax:'悠闲',mAdventure:'冒险',mEvent:'活动节庆',bFree:'免费',bFreeS:'0元',b2k:'100元以下',b2kS:'随意',b5k:'300元以下',b5kS:'满足',b10k:'700元以下',b10kS:'豪华',bOver:'700元以上',bOverS:'尽情享受！'},
+  ko:{title:'오늘 어디 갈까요?',sub:'"심심한데 할 게 없다"를 해결하는 앱',locTitle:'현재 위치의 날씨를 표시할까요?',locDesc:'위치 정보를 사용하면 현재 위치의 실시간 날씨를 기반으로 외출 장소를 추천해 드립니다.',allow:'📍 현재 위치 사용',skip:'건너뛰기',sDate:'언제 갈까요?',today:'오늘',tomorrow:'내일',weekend:'이번 주말',sGroup:'누구와 함께?',sMood:'어떤 외출을 원하세요?',sTime:'어느 시간대?',sBudget:'1인당 예산?',morning:'오전',afternoon:'오후',evening:'저녁밤',allday:'하루 종일',areaLabel:'📍 지역 힌트 (선택)',areaPlaceholder:'예: 서울, 부산, 바다 근처',suggest:'추천받기 ✨',back:'← 뒤로',next:'다음 →',loading:'AI가 장소를 고르는 중…',resultTitle:'추천 외출지 🎉',reset:'🔄 다시 검색',shareTitle:'📣 다녀왔어요! 공유',shareDesc:'사진과 함께 게시하고 외출 추억을 공유해보세요!',mapBtn:'🗺️ 구글 지도로 열기',qBtn:'💬 이 장소에 질문하기',qPlaceholder:'예: 비가 와도 즐길 수 있나요?',qSend:'질문하기 →',wx_rain:'☂️ 비 예보 - 실내 스팟 위주로 추천!',wx_drizzle:'🌂 비 가능성 있음 - 실내도 확인하세요!',wx_sunny:'☀️ 완벽한 나들이 날씨!',wx_cloudy:'🌤️ 무난한 날씨. 즐거운 외출!',promptLang:'한국어',promptOnly:'반드시 한국어로만 답변해 주세요.',gSolo:'혼자',gSoloS:'내 페이스로',gCouple:'커플',gCoupleS:'둘이서',gFamily:'가족',gFamilyS:'다 같이',gFriends:'친구들',gFriendsS:'왁자지껄',gDad:'아빠와',gDadS:'아이 시선으로',gMom:'엄마와',gMomS:'아이 시선으로',mRefresh:'리프레시',mSightseeing:'관광 명소',mHidden:'숨은 명소',mCulture:'문화 예술',mFood:'미식',mActive:'액티브',mRelax:'여유롭게',mAdventure:'모험',mEvent:'이벤트 페스티벌',bFree:'무료',bFreeS:'0원',b2k:'2만원 이하',b2kS:'가볍게',b5k:'5만원 이하',b5kS:'만족',b10k:'10만원 이하',b10kS:'호화',bOver:'10만원 이상',bOverS:'마음껏!'}
+};
+// Copy base langs for variants
+['en_gb','fr','de','es','it','pt','pt_br','ru','ar','tr','th','vi','id','hi','es_mx','es_ar'].forEach(function(c){
+  var base = c==='en_gb'?'en':c==='pt_br'?'pt':['es_mx','es_ar'].includes(c)?'es':'en';
+  if(!LTXT[c]) LTXT[c] = Object.assign({},LTXT[base]||LTXT.en,{promptLang:c,promptOnly:'Reply only in '+c+'.'});
+});
+
+var currentLang = 'ja';
+function T(k){ return (LTXT[currentLang]||LTXT.ja)[k] || (LTXT.ja)[k] || k; }
+
+// ── Apply Language ────────────────────────────────────────
+function applyLang(){
+  var t = LTXT[currentLang]||LTXT.ja;
+  var c = COUNTRIES.find(function(x){return x.code===currentLang;})||COUNTRIES[0];
+  function s(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+  function p(id,v){var e=document.getElementById(id);if(e)e.placeholder=v;}
+  s('lang-flag',c.flag); s('lang-name',c.name);
+  s('h-title',t.title); s('h-sub',t.sub);
+  s('loc-title',t.locTitle); s('loc-desc',t.locDesc);
+  document.getElementById('btn-allow').textContent=t.allow;
+  document.getElementById('btn-skip').textContent=t.skip;
+  s('s-date-title',t.sDate);
+  s('lbl-today',t.today); s('lbl-tomorrow',t.tomorrow); s('lbl-weekend',t.weekend);
+  document.querySelectorAll('#grid-date .card[data-key="today"]').forEach(function(c){c.dataset.val=t.today;});
+  document.querySelectorAll('#grid-date .card[data-key="tomorrow"]').forEach(function(c){c.dataset.val=t.tomorrow;});
+  document.querySelectorAll('#grid-date .card[data-key="weekend"]').forEach(function(c){c.dataset.val=t.weekend;});
+  s('s-group-title',t.sGroup);
+  s('g-solo',t.gSolo);s('g-solo-s',t.gSoloS);s('g-couple',t.gCouple);s('g-couple-s',t.gCoupleS);
+  s('g-family',t.gFamily);s('g-family-s',t.gFamilyS);s('g-friends',t.gFriends);s('g-friends-s',t.gFriendsS);
+  s('g-dad',t.gDad);s('g-dad-s',t.gDadS);s('g-mom',t.gMom);s('g-mom-s',t.gMomS);
+  s('s-mood-title',t.sMood);
+  s('m-refresh',t.mRefresh);s('m-sightseeing',t.mSightseeing);s('m-hidden',t.mHidden);
+  s('m-culture',t.mCulture);s('m-food',t.mFood);s('m-active',t.mActive);
+  s('m-relax',t.mRelax);s('m-adventure',t.mAdventure);s('m-event',t.mEvent);
+  s('s-time-title',t.sTime);
+  s('t-morning',t.morning);s('t-afternoon',t.afternoon);s('t-evening',t.evening);s('t-allday',t.allday);
+  s('s-budget-title',t.sBudget);
+  s('b-free',t.bFree);s('b-free-s',t.bFreeS);s('b-2k',t.b2k);s('b-2k-s',t.b2kS);
+  s('b-5k',t.b5k);s('b-5k-s',t.b5kS);s('b-10k',t.b10k);s('b-10k-s',t.b10kS);
+  s('b-over',t.bOver);s('b-over-s',t.bOverS);
+  s('area-label',t.areaLabel);p('location',t.areaPlaceholder);
+  s('loading-msg',t.loading);
+  document.getElementById('btn-budget').textContent=t.suggest;
+  document.querySelectorAll('.btn-ghost').forEach(function(b){b.textContent=t.back;});
+  ['btn-date','btn-group','btn-mood','btn-time'].forEach(function(id){
+    var e=document.getElementById(id);if(e&&e.disabled===false)e.textContent=t.next;
+    else if(e)e.textContent=t.next;
+  });
+  s('result-title',t.resultTitle);
+  s('reset-btn',t.reset);
+  s('share-title',t.shareTitle);s('share-desc',t.shareDesc);
+  p('modal-ta',t.qPlaceholder);
+  s('modal-send',t.qSend);
+  document.documentElement.dir=(currentLang==='ar')?'rtl':'ltr';
+  // Rebuild lang grid active state
+  document.querySelectorAll('.lang-item').forEach(function(el){
+    el.classList.toggle('active',el.dataset.code===currentLang);
+  });
+}
+
+// ── Build lang grid ───────────────────────────────────────
+function buildLangGrid(){
+  var g = document.getElementById('lang-grid');
+  g.innerHTML='';
+  COUNTRIES.forEach(function(c){
+    var div=document.createElement('div');
+    div.className='lang-item'+(c.code===currentLang?' active':'');
+    div.dataset.code=c.code;
+    div.innerHTML='<span class="lang-flag">'+c.flag+'</span><span class="lang-name">'+c.name+'</span>';
+    div.addEventListener('click',function(){
+      currentLang=c.code;
+      document.getElementById('lang-accordion').classList.remove('open');
+      document.getElementById('lang-toggle-btn').classList.remove('open');
+      applyLang();
+    });
+    g.appendChild(div);
+  });
+}
+
+// ── Weather ───────────────────────────────────────────────
+function requestLocation(){
+  var btn=document.getElementById('btn-allow');
+  btn.textContent='取得中…';btn.disabled=true;
+  if(!navigator.geolocation){skipLocation();return;}
   navigator.geolocation.getCurrentPosition(
-    p => {
-      state.geo.lat = p.coords.latitude;
-      state.geo.lon = p.coords.longitude;
-      state.geo.name = '現在地';
-      card.style.display = 'none';
-      document.getElementById('weather-card').style.display = 'flex';
-      fetchWeather();
-    },
-    () => {
-      // 拒否された場合もスキップ扱いでデフォルト天気を表示
-      skipLocation();
-    },
-    { timeout: 8000 }
+    function(p){state.geo.lat=p.coords.latitude;state.geo.lon=p.coords.longitude;state.geo.name='現在地';
+      document.getElementById('loc-card').style.display='none';
+      document.getElementById('wx-card').style.display='flex';
+      fetchWeather();},
+    function(){skipLocation();},{timeout:8000}
   );
 }
-
-function skipLocation() {
-  document.getElementById('location-card').style.display = 'none';
-  // スキップ時は天気カードを非表示のまま
+function skipLocation(){
+  document.getElementById('loc-card').style.display='none';
 }
 
-async function initWeather() {
-  // 何もしない。起動時は許可カードを表示するだけ
+async function fetchWeather(){
+  try{
+    var r=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+state.geo.lat+'&longitude='+state.geo.lon+'&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo&forecast_days=7');
+    var d=await r.json();var dy=d.daily;
+    var dow=new Date().getDay();var wkIdx=Math.min((6-dow+7)%7||7,6);
+    state.wx.today={code:dy.weather_code[0],max:Math.round(dy.temperature_2m_max[0]),min:Math.round(dy.temperature_2m_min[0]),rain:dy.precipitation_probability_max[0]};
+    state.wx.tomorrow={code:dy.weather_code[1],max:Math.round(dy.temperature_2m_max[1]),min:Math.round(dy.temperature_2m_min[1]),rain:dy.precipitation_probability_max[1]};
+    state.wx.weekend={code:dy.weather_code[wkIdx],max:Math.round(dy.temperature_2m_max[wkIdx]),min:Math.round(dy.temperature_2m_min[wkIdx]),rain:dy.precipitation_probability_max[wkIdx]};
+    showWx('today');updateBadges();
+  }catch(e){document.getElementById('wx-card').innerHTML='<div class="wx-msg">⚠️ 天気情報を取得できませんでした</div>';}
 }
 
-async function fetchWeather() {
-  try {
-    const {lat,lon} = state.geo;
-    const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo&forecast_days=7');
-    const d = await r.json();
-    const dy = d.daily;
-    const dow = new Date().getDay();
-    const wkIdx = Math.min((6 - dow + 7) % 7 || 7, 6);
-    state.wx.today    = { code:dy.weather_code[0], max:Math.round(dy.temperature_2m_max[0]), min:Math.round(dy.temperature_2m_min[0]), rain:dy.precipitation_probability_max[0] };
-    state.wx.tomorrow = { code:dy.weather_code[1], max:Math.round(dy.temperature_2m_max[1]), min:Math.round(dy.temperature_2m_min[1]), rain:dy.precipitation_probability_max[1] };
-    state.wx.weekend  = { code:dy.weather_code[wkIdx], max:Math.round(dy.temperature_2m_max[wkIdx]), min:Math.round(dy.temperature_2m_min[wkIdx]), rain:dy.precipitation_probability_max[wkIdx] };
-    showWeather('today');
-    updateBadges();
-  } catch(e) {
-    document.getElementById('weather-card').innerHTML = '<div class="wx-msg">⚠️ 天気情報を取得できませんでした</div>';
-  }
-}
-
-function showWeather(key) {
-  const w = state.wx[key]; if (!w) return;
-  const lbl = {today:'今日',tomorrow:'明日',weekend:'今週末'}[key];
-  document.getElementById('weather-card').innerHTML =
+function showWx(key){
+  var w=state.wx[key];if(!w)return;
+  var lbl={today:T('today'),tomorrow:T('tomorrow'),weekend:T('weekend')}[key];
+  document.getElementById('wx-card').innerHTML=
     '<div class="wx-icon">'+(WX_ICON[w.code]||'🌡️')+'</div>'+
-    '<div class="wx-info">'+
-      '<div class="wx-date">'+lbl+'の天気（'+state.geo.name+'周辺）</div>'+
-      '<div class="wx-main">'+(WX_LABEL[w.code]||'—')+'</div>'+
-      '<div class="wx-sub">降水確率 '+w.rain+'%　最低'+w.min+'°</div>'+
-    '</div>'+
+    '<div class="wx-info"><div class="wx-date">'+lbl+'（'+state.geo.name+'）</div>'+
+    '<div class="wx-main">'+(WX_LABEL[w.code]||'—')+'</div>'+
+    '<div class="wx-sub">降水確率 '+w.rain+'%　最低'+w.min+'°</div></div>'+
     '<div class="wx-temp">'+w.max+'°</div>';
 }
 
-function updateBadges() {
-  ['today','tomorrow','weekend'].forEach(key => {
-    const w = state.wx[key]; if (!w) return;
-    const badge = document.getElementById('badge-'+key);
-    if (badge) badge.textContent = (WX_ICON[w.code]||'') + ' ' + w.max + '° / ' + w.min + '°';
+function updateBadges(){
+  ['today','tomorrow','weekend'].forEach(function(key){
+    var w=state.wx[key];if(!w)return;
+    var el=document.getElementById('badge-'+key);
+    if(el)el.textContent=(WX_ICON[w.code]||'')+' '+w.max+'°/'+w.min+'°';
   });
 }
 
-// ── Navigation ───────────────────────────────────────────
-function selectCard(el, type) {
-  el.closest('.grid').querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  // Use data-key (language-independent) if available, otherwise data-val
-  state[type] = el.dataset.key || el.dataset.val;
-  const btns = {date:'btn-date',group:'btn-group',mood:'btn-mood',time:'btn-time',budget:'btn-budget'};
-  document.getElementById(btns[type]).disabled = false;
-  if (type === 'date') {
-    // Map selected date label to wx key regardless of language
-    const dc = document.querySelectorAll('#grid-date .card');
-    const idx = Array.from(dc).indexOf(el);
-    const wxKeys = ['today','tomorrow','weekend'];
-    state.dateKey = wxKeys[idx] || 'today';
-    showWeather(state.dateKey);
-  }
-}
-
-function goStep(n) {
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  ['step-date','step-group','step-mood','step-time','step-budget'][n] && document.getElementById(['step-date','step-group','step-mood','step-time','step-budget'][n]).classList.add('active');
-  document.querySelectorAll('.dot').forEach((d,i) => { d.classList.toggle('done', i<n); d.classList.toggle('active', i===n); });
+// ── Navigation ────────────────────────────────────────────
+function goStep(n){
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  var steps=['step-date','step-group','step-mood','step-time','step-budget'];
+  var el=document.getElementById(steps[n]);if(el)el.classList.add('active');
+  document.querySelectorAll('.dot').forEach(function(d,i){
+    d.classList.toggle('done',i<n);d.classList.toggle('active',i===n);
+  });
   window.scrollTo(0,0);
 }
 
-// ── API call (streaming) ─────────────────────────────────
-async function fetchSuggestions() {
-  document.getElementById('error-msg').innerHTML = '';
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  document.getElementById('step-loading').classList.add('active');
-  document.getElementById('stream-cards').innerHTML = '';
-  document.getElementById('stream-spinner').style.display = 'block';
-  document.getElementById('stream-msg').textContent = T('loading');
-
-  const loc = document.getElementById('location').value.trim();
-  // date → wx key mapping (works regardless of language)
-  const wxKey = state.dateKey || 'today';
-  const wx = state.wx[wxKey];
-  const wxStr = wx ? (WX_LABEL[wx.code]||'不明')+'・最高'+wx.max+'°・降水確率'+wx.rain+'%' : '不明';
-  // エリア：手入力を最優先。入力があればGPS位置情報は無視する
-  const areaStr = loc
-    ? loc  // 手入力が最優先
-    : (state.geo.name && state.geo.name !== '大阪' ? state.geo.name+'周辺' : '指定なし');
-
-  const prompt =
-    'あなたはおでかけ提案の専門家です。以下の条件でおでかけ先を3つ提案してください。\n'+
-    '条件：\n'+
-    '- 日程: '+state.date+'\n'+
-    '- 天気: '+wxStr+'\n'+
-    '- メンバー: '+state.group+'\n'+
-    '- 気分: '+state.mood+'\n'+
-    '- 時間帯: '+state.time+'\n'+
-    '- 予算（ひとりあたり）: '+state.budget+'\n'+
-    '- 季節: '+SEASON+'\n'+
-    '- エリア: ' + areaStr + '\n' + '- 回答言語: ' + T('promptLang') + '\n\n'+
-    '天気（'+wxStr+'）を必ず考慮してください。\n'+
-    '・雨・強雨の場合は屋内スポットを中心に提案し、descriptionに「雨でも楽しめる理由」を自然に含めてください。\n'+
-    '・晴れ・快晴の場合は屋外スポットも積極的に提案し、descriptionに「晴れだからこそ楽しい理由」を自然に含めてください。\n'+
-    '・曇りや不安定な天気の場合は屋内・屋外どちらも提案しつつ、tipに天気への対策を含めてください。\n'+
-    'CRITICAL: '+T('promptOnly')+'\n'+
-    'VARIETY RULE: Make the 3 suggestions DIVERSE and SURPRISING. Mix different types:\n'+
-    '- One safe/popular choice\n'+
-    '- One unexpected/hidden gem\n'+
-    '- One bold/adventurous suggestion that might surprise the user\n'+
-    'Do NOT suggest similar places. Think creatively and broadly!\n'+
-    'Return ONLY a valid JSON array. No markdown, no explanation, no extra text.\n'+
-    '[{"name":"real specific place name","type":"category in '+lang+'","description":"appeal for '+state.group+' max 80 chars in '+lang+'","tip":"tip for '+state.group+' max 40 chars in '+lang+'","vibes":["tag1 in '+lang+'","tag2","tag3"],"bestTime":"best time max 20 chars in '+lang+'"}]';
-
-  try {
-    const res = await fetch('/api/chat', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ messages:[{role:'user',content:prompt}] })
-    });
-    if (!res.ok) { const e=await res.json(); throw new Error(e.error?.message||'APIエラー '+res.status); }
-    const data = await res.json();
-    const raw = (data.content||[]).map(b=>b.type==='text'?b.text:'').join('');
-    if (!raw) throw new Error('レスポンスが空です');
-    let js = raw;
-    const f = raw.match(/```(?:json)?\s*([\s\S]*?)```/); if (f) js=f[1];
-    else { const a = raw.match(/\[[\s\S]*\]/); if (a) js=a[0]; }
-    let list; try { list=JSON.parse(js.trim()); } catch(e){ throw new Error('JSONパース失敗: '+raw.slice(0,100)); }
-    if (!Array.isArray(list)||!list.length) throw new Error('提案リストが空です');
-    state.suggestions = list;
-    renderResults(list);
-
-  } catch(e) {
-    document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
-    document.getElementById('step-budget').classList.add('active');
-    document.getElementById('error-msg').innerHTML = '<div class="error-msg">❌ '+esc(e.message)+'</div>';
-  }
-}
-
-// ストリーム中に完成したスポットを即座にカード表示
-function tryShowStreamCards(text, alreadyShown) {
-  // "name" フィールドが見つかるたびにカードを表示
-  const nameMatches = [...text.matchAll(/"name"\s*:\s*"([^"]+)"/g)];
-  const typeMatches = [...text.matchAll(/"type"\s*:\s*"([^"]+)"/g)];
-  const descMatches = [...text.matchAll(/"description"\s*:\s*"([^"]+)"/g)];
-  const container = document.getElementById('stream-cards');
-
-  for (let i = alreadyShown; i < nameMatches.length; i++) {
-    const name = nameMatches[i]?.[1] || '';
-    const type = typeMatches[i]?.[1] || '';
-    const desc = descMatches[i]?.[1] || '';
-    const card = document.createElement('div');
-    card.className = 'stream-card';
-    card.id = 'stream-card-'+i;
-    card.innerHTML =
-      '<div class="stream-card-name">'+esc(name)+'</div>'+
-      '<div class="stream-card-type">📌 '+esc(type)+'</div>'+
-      (desc
-        ? '<div class="stream-card-desc">'+esc(desc)+'</div>'
-        : '<div class="stream-card-skeleton" style="width:90%"></div><div class="stream-card-skeleton" style="width:70%"></div>'
-      );
-    container.appendChild(card);
-  }
-  return nameMatches.length;
-}
-
-// ── Render ───────────────────────────────────────────────
-function renderResults(list) {
-  // date → wx key mapping (works regardless of language)
-  const wxKey = state.dateKey || 'today';
-  const wx = state.wx[wxKey];
-  const wxLine = wx ? (WX_ICON[wx.code]||'')+'&nbsp;'+(WX_LABEL[wx.code]||'')+'&nbsp;'+wx.max+'°&nbsp;(降水'+wx.rain+'%)' : '';
-  // 天気コメント生成
-  let wxComment = '';
-  if (wx) {
-    const code = wx.code;
-    const rain = wx.rain;
-    if ([61,63,65,80,81,82,95,96,99].includes(code) || rain >= 70) {
-      wxComment = T('wx_rain');
-    } else if ([51,53,55].includes(code) || rain >= 40) {
-      wxComment = T('wx_drizzle');
-    } else if ([0,1].includes(code) && rain < 20) {
-      wxComment = T('wx_sunny');
-    } else if ([2,3].includes(code)) {
-      wxComment = T('wx_cloudy');
+function selectCard(el,type){
+  el.closest('.grid').querySelectorAll('.card').forEach(function(c){c.classList.remove('selected');});
+  el.classList.add('selected');
+  state[type]=el.dataset.key;
+  var btns={date:'btn-date',group:'btn-group',mood:'btn-mood',time:'btn-time',budget:'btn-budget'};
+  var btn=document.getElementById(btns[type]);if(btn)btn.disabled=false;
+  if(type==='date'){
+    state.dateKey=el.dataset.key;
+    showWx(state.dateKey);
+    if(document.getElementById('wx-card').style.display==='none' && state.geo.name==='現在地'){
+      document.getElementById('wx-card').style.display='flex';
     }
   }
+}
 
-  document.getElementById('result-tags').innerHTML =
-    (wxComment ? '<span style="color:var(--accent);font-size:12px;font-weight:700;">'+wxComment+'</span><br>' : '')+
-    '<strong>'+state.date+'</strong> · '+state.group+' · '+state.mood+'<br>'+state.time+' · '+state.budget+' · '+SEASON;
+// ── Fetch suggestions ─────────────────────────────────────
+async function fetchSuggestions(){
+  document.getElementById('error-msg').innerHTML='';
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('step-loading').classList.add('active');
 
-  const c = document.getElementById('suggestions-list'); c.innerHTML='';
-  list.forEach((s,i)=>{
-    const d=document.createElement('div'); d.className='suggestion';
-    d.innerHTML=
-      '<div class="sug-head">'+
-        '<div><div class="sug-name">'+esc(s.name)+'</div><div class="sug-type">📌 '+esc(s.type)+'</div></div>'+
-        '<button class="save-btn" id="save-'+i+'" data-save-idx="'+i+'" data-save-name="'+esc(s.name)+'">🤍</button>'+
-      '</div>'+
+  var loc=document.getElementById('location').value.trim();
+  var wxKey=state.dateKey||'today';
+  var wx=state.wx[wxKey];
+  var wxStr=wx?(WX_LABEL[wx.code]||'unknown')+', max '+wx.max+'°, rain '+wx.rain+'%':'unknown';
+  var areaStr=loc||( state.geo.name!=='大阪'?state.geo.name+'area':'not specified');
+  var lang=T('promptLang');
+
+  var prompt=
+    'You are an outing suggestion expert. Suggest 3 diverse outing destinations.\n'+
+    'Conditions: date='+state.dateKey+', weather='+wxStr+', group='+state.group+
+    ', mood='+state.mood+', time='+state.time+', budget='+state.budget+
+    ', season='+SEASON+', area='+areaStr+'\n'+
+    'CRITICAL: '+T('promptOnly')+'\n'+
+    'VARIETY: Make suggestions diverse - 1 popular, 1 hidden gem, 1 surprising/bold choice.\n'+
+    'If area is specified, suggest ONLY places in that area.\n'+
+    'Consider weather: rainy=prefer indoor, sunny=outdoor OK.\n'+
+    'Return ONLY valid JSON array, no markdown:\n'+
+    '[{"name":"specific real place","type":"category in '+lang+'","description":"appeal for group max 80 chars in '+lang+'","tip":"tip max 40 chars in '+lang+'","vibes":["tag1","tag2","tag3"],"bestTime":"best time max 20 chars in '+lang+'"}]';
+
+  try{
+    var res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:prompt}]})});
+    if(!res.ok){var err=await res.json();throw new Error(err.error||'API error '+res.status);}
+    var data=await res.json();
+    var raw=(data.content||[]).map(function(b){return b.type==='text'?b.text:'';}).join('');
+    if(!raw)throw new Error('Empty response');
+    var js=raw;
+    var f=raw.match(/```(?:json)?\s*([\s\S]*?)```/);if(f)js=f[1];
+    else{var a=raw.match(/\[[\s\S]*\]/);if(a)js=a[0];}
+    var list;try{list=JSON.parse(js.trim());}catch(e){throw new Error('Parse error: '+raw.slice(0,100));}
+    if(!Array.isArray(list)||!list.length)throw new Error('Empty list');
+    state.suggestions=list;
+    renderResults(list);
+  }catch(e){
+    document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+    document.getElementById('step-budget').classList.add('active');
+    document.getElementById('error-msg').innerHTML='<div class="error-msg">❌ '+esc(e.message)+'</div>';
+  }
+}
+
+// ── Render results ────────────────────────────────────────
+function renderResults(list){
+  var wx=state.wx[state.dateKey||'today'];
+  var wxComment='';
+  if(wx){
+    var code=wx.code,rain=wx.rain;
+    if([61,63,65,80,81,82,95,96,99].indexOf(code)>=0||rain>=70)wxComment=T('wx_rain');
+    else if([51,53,55].indexOf(code)>=0||rain>=40)wxComment=T('wx_drizzle');
+    else if([0,1].indexOf(code)>=0&&rain<20)wxComment=T('wx_sunny');
+    else if([2,3].indexOf(code)>=0)wxComment=T('wx_cloudy');
+  }
+  var tagsEl=document.getElementById('result-tags');
+  tagsEl.innerHTML=(wxComment?'<span style="color:var(--acc);font-size:11px;font-weight:700;">'+wxComment+'</span><br>':'')+
+    state.dateKey+' · '+state.group+' · '+state.mood+'<br>'+state.time+' · '+state.budget+' · '+SEASON;
+  document.getElementById('result-title').textContent=T('resultTitle');
+
+  var c=document.getElementById('suggestions-list');c.innerHTML='';
+  list.forEach(function(s,i){
+    var div=document.createElement('div');div.className='suggestion';
+    div.innerHTML=
+      '<div class="sug-head"><div><div class="sug-name">'+esc(s.name)+'</div><div class="sug-type">📌 '+esc(s.type)+'</div></div>'+
+      '<button class="save-btn" data-si="'+i+'" data-sn="'+esc(s.name)+'">🤍</button></div>'+
       '<div class="sug-desc">'+esc(s.description)+'</div>'+
       '<div class="sug-tip">💡 '+esc(s.tip)+'</div>'+
-      '<div class="vibes">'+(s.vibes||[]).map(v=>'<span class="vibe">'+esc(v)+'</span>').join('')+'</div>'+
+      '<div class="vibes">'+(s.vibes||[]).map(function(v){return '<span class="vibe">'+esc(v)+'</span>';}).join('')+'</div>'+
       '<div class="sug-time">⏰ '+esc(s.bestTime)+'</div>'+
       '<a class="map-btn" href="https://www.google.com/maps/search/'+encodeURIComponent(s.name)+'" target="_blank" rel="noopener">'+T('mapBtn')+'</a>'+
-      '<button class="question-btn" data-openq="'+i+'">'+T('questionBtn')+'</button>';
-    c.appendChild(d);
+      '<button class="question-btn" data-qi="'+i+'">'+T('qBtn')+'</button>';
+    c.appendChild(div);
   });
-  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
   document.getElementById('step-result').classList.add('active');
-  document.querySelectorAll('.dot').forEach(d=>{d.classList.add('done');d.classList.remove('active');});
-  updateShareLinks();
+  document.querySelectorAll('.dot').forEach(function(d){d.classList.add('done');d.classList.remove('active');});
+
+  // Share links
+  updateShareLinks(list[0].name);
+  document.getElementById('share-section').style.display='block';
   window.scrollTo(0,0);
 }
 
-// ── Save ─────────────────────────────────────────────────
-function toggleSave(i, name) {
-  const btn = document.getElementById('save-'+i);
-  if (state.saved.includes(name)) { state.saved=state.saved.filter(n=>n!==name); btn.textContent='🤍'; }
-  else { state.saved.push(name); btn.textContent='❤️'; }
-  const sec=document.getElementById('saved-section');
+function updateShareLinks(spotName){
+  var text=(T('promptLang')==='日本語'?'🗺️「'+spotName+'」に行ってきました！':'🗺️ I visited "'+spotName+'"!')+
+    '\n'+state.group+' · '+state.time+' · '+state.budget+
+    '\nhttps://outing-suggestion.vercel.app\n#おでかけ #行ってきた';
+  var enc=encodeURIComponent(text);
+  var url=encodeURIComponent('https://outing-suggestion.vercel.app');
+  document.getElementById('share-x').href='https://twitter.com/intent/tweet?text='+enc;
+  document.getElementById('share-line').href='https://social-plugins.line.me/lineit/share?url='+url+'&text='+enc;
+  document.getElementById('share-fb').href='https://www.facebook.com/sharer/sharer.php?u='+url;
+}
+
+// ── Save ──────────────────────────────────────────────────
+function toggleSave(i,name){
+  var btn=document.querySelector('[data-si="'+i+'"]');
+  if(state.saved.indexOf(name)>=0){state.saved=state.saved.filter(function(n){return n!==name;});if(btn)btn.textContent='🤍';}
+  else{state.saved.push(name);if(btn)btn.textContent='❤️';}
+  var sec=document.getElementById('saved-section');
   sec.style.display=state.saved.length?'block':'none';
-  document.getElementById('saved-list').innerHTML=state.saved.map(n=>'<div class="saved-item">· '+esc(n)+'</div>').join('');
+  document.getElementById('saved-list').innerHTML=state.saved.map(function(n){return '<div class="saved-item">· '+esc(n)+'</div>';}).join('');
 }
 
 // ── Question modal ────────────────────────────────────────
-function openQ(idx) {
-  const s=state.suggestions[idx];
-  document.getElementById('modal-ttl').textContent='💬 '+s.name+' について質問';
+function openQ(idx){
+  var s=state.suggestions[idx];
+  document.getElementById('modal-ttl').textContent='💬 '+s.name;
   document.getElementById('modal-ta').value='';
   document.getElementById('modal-ans').innerHTML='';
   document.getElementById('modal-idx').value=idx;
   document.getElementById('modal-send').disabled=false;
-  document.getElementById('modal-send').textContent='質問する →';
+  document.getElementById('modal-send').textContent=T('qSend');
   document.getElementById('q-modal').classList.add('open');
 }
-function closeQ() { document.getElementById('q-modal').classList.remove('open'); }
-document.getElementById('q-modal').addEventListener('click', e=>{ if(e.target===e.currentTarget)closeQ(); });
+function closeQ(){document.getElementById('q-modal').classList.remove('open');}
 
-async function sendQ() {
-  const idx=parseInt(document.getElementById('modal-idx').value);
-  const s=state.suggestions[idx];
-  const q=document.getElementById('modal-ta').value.trim();
-  if (!q) return;
-  const btn=document.getElementById('modal-send');
-  btn.disabled=true; btn.textContent='送信中…';
-  document.getElementById('modal-ans').innerHTML='<div style="text-align:center;padding:16px 0"><div class="spinner" style="width:24px;height:24px;margin:0 auto 10px"></div><p style="color:var(--muted);font-size:13px">回答中…</p></div>';
-
-  const kmap={'今日':'today','明日':'tomorrow','今週末':'weekend'};
-  const wx=state.wx[kmap[state.date]];
-  const wxStr=wx?(WX_LABEL[wx.code]||'')+'・最高'+wx.max+'°':'';
-
-  const prompt=
-    'おでかけスポット「'+s.name+'」（'+s.type+'）について質問に答えてください。\n'+
-    '条件: '+state.date+'・'+wxStr+'・'+state.group+'・予算'+state.budget+'・エリア:'+state.geo.name+'\n'+
-    '質問: '+q+'\n\n'+
-    '以下のJSON形式のみで返してください（前置き・説明不要）:\n'+
-    '{\n'+
-    '  "answer": "質問への回答（150字以内）",\n'+
-    '  "links": [\n'+
-    '    {"name":"関連スポットや参考サイト名","url":"https://...","icon":"絵文字1文字"},\n'+
-    '    {"name":"関連スポットや参考サイト名","url":"https://...","icon":"絵文字1文字"},\n'+
-    '    {"name":"関連スポットや参考サイト名","url":"https://...","icon":"絵文字1文字"}\n'+
-    '  ]\n'+
-    '}\n'+
-    'linksはGoogle Maps、食べログ、じゃらん、ぐるなび、公式サイト等の実在しそうなURLを3件。URLは実在する可能性が高い形式で。';
-
-  try {
-    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();
-    const raw=(data.content||[]).map(b=>b.type==='text'?b.text:'').join('');
-
-    let answer='', links=[];
-    try {
-      const f=raw.match(/```(?:json)?\s*([\s\S]*?)```/);
-      const js = f ? f[1] : (raw.match(/\{[\s\S]*\}/) || ['{}'])[0];
-      const parsed=JSON.parse(js.trim());
-      answer=parsed.answer||'';
-      links=parsed.links||[];
-    } catch(e){ answer=raw; }
-
-    let html='<div class="modal-answer">'+esc(answer)+'</div>';
-    html+='<div class="disclaimer">⚠️ 以下はAIによるご提案です。情報は変更されている場合がありますので、訪問前に必ずご確認ください。</div>';
-    if (links.length>0) {
-      html+='<div class="search-links"><div class="search-links-title">🔗 関連スポット・参考リンク</div>';
-      links.forEach(l=>{
-        const domain = (() => { try { return new URL(l.url).hostname; } catch(e){ return l.url; } })();
-        html+='<a class="search-link" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+
-          '<span class="search-link-icon">'+esc(l.icon||'🔗')+'</span>'+
-          '<span class="search-link-body">'+
-            '<span class="search-link-name">'+esc(l.name)+'</span>'+
-            '<span class="search-link-url">'+esc(domain)+'</span>'+
-          '</span>'+
-        '</a>';
+async function sendQ(){
+  var idx=parseInt(document.getElementById('modal-idx').value);
+  var s=state.suggestions[idx];
+  var q=document.getElementById('modal-ta').value.trim();
+  if(!q)return;
+  var btn=document.getElementById('modal-send');
+  btn.disabled=true;btn.textContent='…';
+  document.getElementById('modal-ans').innerHTML='<div style="text-align:center;padding:14px"><div class="spinner" style="width:22px;height:22px;margin:0 auto 8px"></div></div>';
+  var wx=state.wx[state.dateKey||'today'];
+  var wxStr=wx?(WX_LABEL[wx.code]||'')+' max'+wx.max+'°':'';
+  var lang=T('promptLang');
+  var prompt='Answer in '+lang+' about outing spot "'+s.name+'" ('+s.type+').\nConditions: '+state.group+', '+wxStr+', budget '+state.budget+'\nQuestion: '+q+'\nAlso provide 3 related links.\nReturn ONLY JSON (no markdown): {"answer":"max 150 chars in '+lang+'","links":[{"name":"site","url":"https://...","icon":"emoji"}]}';
+  try{
+    var res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:prompt}]})});
+    var data=await res.json();
+    var raw=(data.content||[]).map(function(b){return b.type==='text'?b.text:'';}).join('');
+    var answer='',links=[];
+    try{var f=raw.match(/```(?:json)?\s*([\s\S]*?)```/);var js=f?f[1]:(raw.match(/\{[\s\S]*\}/)||['{}'])[0];var parsed=JSON.parse(js.trim());answer=parsed.answer||'';links=parsed.links||[];}
+    catch(e){answer=raw;}
+    var html='<div class="modal-answer">'+esc(answer)+'</div>';
+    html+='<div class="disclaimer">⚠️ AI generated. Please verify before visiting.</div>';
+    if(links.length){
+      html+='<div class="search-links"><div class="search-links-title">🔗 Links</div>';
+      links.forEach(function(l){
+        var domain=function(){try{return new URL(l.url).hostname;}catch(e){return l.url;}}();
+        html+='<a class="search-link" href="'+esc(l.url)+'" target="_blank" rel="noopener"><span class="search-link-icon">'+esc(l.icon||'🔗')+'</span><span class="search-link-body"><span class="search-link-name">'+esc(l.name)+'</span><span class="search-link-url">'+esc(domain)+'</span></span></a>';
       });
       html+='</div>';
     }
     document.getElementById('modal-ans').innerHTML=html;
-  } catch(e) {
-    document.getElementById('modal-ans').innerHTML='<div class="error-msg">❌ '+esc(e.message)+'</div>';
-  } finally { btn.disabled=false; btn.textContent='質問する →'; }
+  }catch(e){document.getElementById('modal-ans').innerHTML='<div class="error-msg">❌ '+esc(e.message)+'</div>';}
+  finally{btn.disabled=false;btn.textContent=T('qSend');}
 }
 
-// ── Reset ────────────────────────────────────────────────
-function resetApp() {
-  Object.assign(state,{date:null,group:null,mood:null,time:null,budget:null,saved:[],suggestions:[]});
-  document.querySelectorAll('.card').forEach(c=>c.classList.remove('selected'));
-  ['btn-date','btn-group','btn-mood','btn-time','btn-budget'].forEach(id=>document.getElementById(id).disabled=true);
+// ── Copy share text ───────────────────────────────────────
+function copyShareText(){
+  var s=state.suggestions[0];if(!s)return;
+  var text=(T('promptLang')==='日本語'?'🗺️「'+s.name+'」に行ってきました！':'🗺️ I visited "'+s.name+'"!')+
+    '\n'+state.group+' · '+state.budget+'\nhttps://outing-suggestion.vercel.app';
+  navigator.clipboard.writeText(text).then(function(){
+    var btn=document.getElementById('copy-btn');
+    btn.textContent='✅ Copied!';
+    setTimeout(function(){btn.textContent='📋 コピー';},2000);
+  });
+}
+
+// ── Reset ─────────────────────────────────────────────────
+function resetApp(){
+  state.date=null;state.dateKey=null;state.group=null;state.mood=null;
+  state.time=null;state.budget=null;state.saved=[];state.suggestions=[];
+  document.querySelectorAll('.card').forEach(function(c){c.classList.remove('selected');});
+  ['btn-date','btn-group','btn-mood','btn-time','btn-budget'].forEach(function(id){
+    var e=document.getElementById(id);if(e)e.disabled=true;
+  });
   document.getElementById('location').value='';
   document.getElementById('error-msg').innerHTML='';
   document.getElementById('saved-section').style.display='none';
   document.getElementById('share-section').style.display='none';
-  // リセット時は天気カードをそのまま維持（再許可は不要）
-  if (document.getElementById('weather-card').style.display !== 'none') {
-    showWeather('today');
-  }
+  showWx('today');
   goStep(0);
 }
 
-// ── Share ────────────────────────────────────────────────
-function buildShareText(spotName) {
-  // date → wx key mapping (works regardless of language)
-  const wxKey = state.dateKey || 'today';
-  const wx = state.wx[wxKey];
-  const wxLabel = wx ? (WX_LABEL[wx.code]||'') : '';
-  const tags = '#今日どこいこう #おでかけ #行ってきた';
-  const url = 'https://outing-suggestion.vercel.app';
-  return (currentLang==='ja' ? '🗺️「' + spotName + '」に行ってきました！' : '🗺️ I visited "' + spotName + '"!') + '\n' +
-    (wxLabel ? wxLabel + '・' : '') +
-    state.group + '・' + state.time + '・' + state.budget + '\n\n' +
-    'AIがおでかけ先を提案してくれるアプリで見つけました👇\n' +
-    url + '\n' + tags;
-}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-function updateShareLinks() {
-  const first = state.suggestions[0];
-  if (!first) return;
-  const text = buildShareText(first.name);
-  const encoded = encodeURIComponent(text);
-  const url = encodeURIComponent('https://outing-suggestion.vercel.app');
-
-  document.getElementById('share-x').href =
-    'https://twitter.com/intent/tweet?text=' + encoded;
-  document.getElementById('share-line').href =
-    'https://social-plugins.line.me/lineit/share?url=' + url + '&text=' + encoded;
-  document.getElementById('share-fb').href =
-    'https://www.facebook.com/sharer/sharer.php?u=' + url + '&quote=' + encoded;
-  document.getElementById('share-section').style.display = 'block';
-}
-
-function copyShareText() {
-  const first = state.suggestions[0];
-  if (!first) return;
-  const text = buildShareText(first.name);
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.querySelector('.share-copy');
-    btn.textContent = '✅ コピーしました！';
-    setTimeout(() => btn.textContent = '📋 テキストをコピー', 2000);
-  });
-}
-
-
-initWeather();
-
-// ── Country / Language ────────────────────────────────────
-const COUNTRIES=[
-  {code:'ja',flag:'🇯🇵',nativeName:'日本語'},
-  {code:'en',flag:'🇺🇸',nativeName:'English(US)'},
-  {code:'en_gb',flag:'🇬🇧',nativeName:'English(UK)'},
-  {code:'zh',flag:'🇨🇳',nativeName:'中文'},
-  {code:'ko',flag:'🇰🇷',nativeName:'한국어'},
-  {code:'fr',flag:'🇫🇷',nativeName:'Français'},
-  {code:'de',flag:'🇩🇪',nativeName:'Deutsch'},
-  {code:'es',flag:'🇪🇸',nativeName:'Español(ES)'},
-  {code:'it',flag:'🇮🇹',nativeName:'Italiano'},
-  {code:'pt',flag:'🇵🇹',nativeName:'Português'},
-  {code:'pt_br',flag:'🇧🇷',nativeName:'Português(BR)'},
-  {code:'ru',flag:'🇷🇺',nativeName:'Русский'},
-  {code:'ar',flag:'🇸🇦',nativeName:'العربية'},
-  {code:'tr',flag:'🇹🇷',nativeName:'Türkçe'},
-  {code:'th',flag:'🇹🇭',nativeName:'ภาษาไทย'},
-  {code:'vi',flag:'🇻🇳',nativeName:'Tiếng Việt'},
-  {code:'id',flag:'🇮🇩',nativeName:'Indonesia'},
-  {code:'hi',flag:'🇮🇳',nativeName:'हिन्दी'},
-  {code:'es_mx',flag:'🇲🇽',nativeName:'Español(MX)'},
-  {code:'es_ar',flag:'🇦🇷',nativeName:'Español(AR)'},
-];
-const LTXT={
-  ja:{title:'今日、明日、どこいこう？',subtitle:'暇だけどやることない…を解決するアプリ',locTitle:'現在地の天気を表示しますか？',locDesc:'位置情報を使うと、今いる場所のリアルタイム天気をもとにおでかけ先を提案できます。情報は天気取得のみに使用し、保存はしません。',locAllow:'📍 現在地を使う',locSkip:'スキップ',stepDate:'いつ行く？',today:'今日',tomorrow:'明日',weekend:'今週末',stepGroup:'だれと行く？',stepMood:'どんなおでかけがしたい？',stepTime:'どの時間帯に？',stepBudget:'ひとりあたりの予算は？',morning:'午前中',afternoon:'午後',evening:'夕方〜夜',allday:'一日中',areaLabel:'📍 エリアのヒント（任意）',areaPlaceholder:'例：大阪、渋谷、海の近く…',suggest:'提案してもらう ✨',back:'← 戻る',next:'次へ →',loading:'AIがおでかけ先を考えています…',resultTitle:'おすすめのおでかけ先 🎉',reset:'🔄 もう一度探す',shareTitle:'📣 行ってきた！をシェア',shareDesc:'写真と一緒に投稿して、おでかけの思い出をシェアしよう！',mapBtn:'🗺️ Google マップで開く',questionBtn:'💬 このスポットに質問する',questionPlaceholder:'例：雨でも楽しめますか？',questionSend:'質問する →',countryModalTitle:'🌍 言語・地域を選択',promptLang:'日本語',promptOnly:'必ず日本語のみで回答してください。英語・韓国語・中国語は使わないでください。'},
-  en:{title:'Where to go today?',subtitle:'Solve your "nothing to do" moments',locTitle:'Show weather for your location?',locDesc:'Using your location, we suggest outings based on real-time weather.',locAllow:'📍 Use my location',locSkip:'Skip',stepDate:'When?',today:'Today',tomorrow:'Tomorrow',weekend:'This weekend',stepGroup:'Who are you going with?',stepMood:'What kind of outing?',stepTime:'Time of day?',stepBudget:'Budget per person?',morning:'Morning',afternoon:'Afternoon',evening:'Evening',allday:'All day',areaLabel:'📍 Area hint (optional)',areaPlaceholder:'e.g. Tokyo, London, near the sea',suggest:'Get suggestions ✨',back:'Back',next:'Next →',loading:'AI is thinking of places…',resultTitle:'Recommended outings 🎉',reset:'🔄 Search again',shareTitle:'📣 Share your visit!',shareDesc:'Post with a photo and share your outing memory!',mapBtn:'🗺️ Open in Google Maps',questionBtn:'💬 Ask about this spot',questionPlaceholder:'e.g. Can we go in the rain?',questionSend:'Ask →',countryModalTitle:'🌍 Select language / region',promptLang:'English',promptOnly:'Reply only in English.'},
-  en_gb:{title:'Where to go today?',subtitle:'Solve your "nothing to do" moments',locTitle:'Show weather for your location?',locDesc:'Using your location, we suggest outings based on real-time weather.',locAllow:'📍 Use my location',locSkip:'Skip',stepDate:'When?',today:'Today',tomorrow:'Tomorrow',weekend:'This weekend',stepGroup:'Who are you going with?',stepMood:'What kind of outing?',stepTime:'Time of day?',stepBudget:'Budget per person?',morning:'Morning',afternoon:'Afternoon',evening:'Evening',allday:'All day',areaLabel:'📍 Area hint (optional)',areaPlaceholder:'e.g. London, Manchester, near the coast',suggest:'Get suggestions ✨',back:'Back',next:'Next →',loading:'AI is thinking of places…',resultTitle:'Recommended outings 🎉',reset:'🔄 Search again',shareTitle:'📣 Share your visit!',shareDesc:'Post with a photo and share your outing memory!',mapBtn:'🗺️ Open in Google Maps',questionBtn:'💬 Ask about this spot',questionPlaceholder:'e.g. Can we go in the rain?',questionSend:'Ask →',countryModalTitle:'🌍 Select language / region',promptLang:'English',promptOnly:'Reply only in English.'},
-  zh:{title:'今天去哪里？',subtitle:'解决"无聊没事做"的烦恼',locTitle:'显示当前位置的天气？',locDesc:'使用位置信息，可根据您所在地的实时天气推荐出行目的地。',locAllow:'📍 使用当前位置',locSkip:'跳过',stepDate:'什么时候去？',today:'今天',tomorrow:'明天',weekend:'本周末',stepGroup:'和谁一起去？',stepMood:'想要什么样的出行？',stepTime:'什么时间段？',stepBudget:'每人预算？',morning:'上午',afternoon:'下午',evening:'傍晚夜晚',allday:'全天',areaLabel:'📍 地区提示（可选）',areaPlaceholder:'例：上海、北京、海边',suggest:'获取推荐 ✨',back:'返回',next:'下一步 →',loading:'AI正在思考目的地…',resultTitle:'推荐出行目的地 🎉',reset:'🔄 重新搜索',shareTitle:'📣 分享你的出行！',shareDesc:'和照片一起发布，分享你的出行回忆！',mapBtn:'🗺️ 在谷歌地图打开',questionBtn:'💬 询问这个地方',questionPlaceholder:'例：下雨也可以去吗？',questionSend:'提问 →',countryModalTitle:'🌍 选择语言/地区',promptLang:'中文',promptOnly:'请只用中文回答。'},
-  ko:{title:'오늘 어디 갈까요?',subtitle:'"심심한데 할 게 없다"를 해결하는 앱',locTitle:'현재 위치의 날씨를 표시할까요?',locDesc:'위치 정보를 사용하면 현재 위치의 실시간 날씨를 기반으로 외출 장소를 추천해 드립니다.',locAllow:'📍 현재 위치 사용',locSkip:'건너뛰기',stepDate:'언제 갈까요?',today:'오늘',tomorrow:'내일',weekend:'이번 주말',stepGroup:'누구와 함께?',stepMood:'어떤 외출을 원하세요?',stepTime:'어느 시간대?',stepBudget:'1인당 예산?',morning:'오전',afternoon:'오후',evening:'저녁밤',allday:'하루 종일',areaLabel:'📍 지역 힌트 (선택)',areaPlaceholder:'예: 서울, 부산, 바다 근처',suggest:'추천받기 ✨',back:'뒤로',next:'다음 →',loading:'AI가 장소를 고르는 중…',resultTitle:'추천 외출지 🎉',reset:'🔄 다시 검색',shareTitle:'📣 다녀왔어요! 공유',shareDesc:'사진과 함께 게시하고 외출 추억을 공유해보세요!',mapBtn:'🗺️ 구글 지도로 열기',questionBtn:'💬 이 장소에 질문하기',questionPlaceholder:'예: 비가 와도 즐길 수 있나요?',questionSend:'질문하기 →',countryModalTitle:'🌍 언어/지역 선택',promptLang:'한국어',promptOnly:'반드시 한국어로만 답변해 주세요.'},
-  fr:{title:'Ou aller aujourd hui?',subtitle:'Resolvez votre rien a faire',locTitle:'Afficher la meteo de votre position?',locDesc:'En utilisant votre position, nous suggerons des sorties basees sur la meteo.',locAllow:'📍 Utiliser ma position',locSkip:'Ignorer',stepDate:'Quand?',today:"Aujourd'hui",tomorrow:'Demain',weekend:'Ce week-end',stepGroup:'Avec qui?',stepMood:'Quel type de sortie?',stepTime:'Quelle heure?',stepBudget:'Budget par personne?',morning:'Matin',afternoon:'Apres-midi',evening:'Soir',allday:'Toute la journee',areaLabel:'📍 Indice de zone (optionnel)',areaPlaceholder:'ex: Paris, Lyon, bord de mer',suggest:'Obtenir des suggestions ✨',back:'Retour',next:'Suivant →',loading:"L'IA cherche des endroits…",resultTitle:'Sorties recommandees 🎉',reset:'🔄 Nouvelle recherche',shareTitle:'📣 Partagez votre visite!',shareDesc:'Publiez avec une photo et partagez votre souvenir!',mapBtn:'🗺️ Ouvrir dans Google Maps',questionBtn:'💬 Poser une question',questionPlaceholder:'ex: Peut-on y aller sous la pluie?',questionSend:'Envoyer →',countryModalTitle:'🌍 Selectionner la langue/region',promptLang:'francais',promptOnly:'Repondez uniquement en francais.'},
-  de:{title:'Wohin heute?',subtitle:'Lose dein "nichts zu tun"-Problem',locTitle:'Wetter fur deinen Standort anzeigen?',locDesc:'Mit deinem Standort schlagen wir Ausfluege basierend auf dem Echtzeit-Wetter vor.',locAllow:'📍 Standort verwenden',locSkip:'Uberspringen',stepDate:'Wann?',today:'Heute',tomorrow:'Morgen',weekend:'Dieses Wochenende',stepGroup:'Mit wem?',stepMood:'Was fur ein Ausflug?',stepTime:'Welche Tageszeit?',stepBudget:'Budget pro Person?',morning:'Morgen',afternoon:'Nachmittag',evening:'Abend',allday:'Den ganzen Tag',areaLabel:'📍 Gebietshinweis (optional)',areaPlaceholder:'z.B. Berlin, Munchen, am Meer',suggest:'Vorschlage bekommen ✨',back:'Zuruck',next:'Weiter →',loading:'KI sucht nach Orten…',resultTitle:'Empfohlene Ausfluege 🎉',reset:'🔄 Erneut suchen',shareTitle:'📣 Teile deinen Besuch!',shareDesc:'Poste mit einem Foto und teile deine Erinnerung!',mapBtn:'🗺️ In Google Maps offnen',questionBtn:'💬 Diese Stelle fragen',questionPlaceholder:'z.B. Geht das auch im Regen?',questionSend:'Fragen →',countryModalTitle:'🌍 Sprache/Region auswahlen',promptLang:'Deutsch',promptOnly:'Antworte nur auf Deutsch.'},
-  es:{title:'A donde ir hoy?',subtitle:'Resuelve tu no hay nada que hacer',locTitle:'Mostrar el tiempo de tu ubicacion?',locDesc:'Usando tu ubicacion, sugerimos salidas basadas en el tiempo.',locAllow:'📍 Usar mi ubicacion',locSkip:'Omitir',stepDate:'Cuando?',today:'Hoy',tomorrow:'Manana',weekend:'Este fin de semana',stepGroup:'Con quien?',stepMood:'Que tipo de salida?',stepTime:'A que hora?',stepBudget:'Presupuesto por persona?',morning:'Manana',afternoon:'Tarde',evening:'Noche',allday:'Todo el dia',areaLabel:'📍 Pista de zona (opcional)',areaPlaceholder:'ej: Madrid, Barcelona, cerca del mar',suggest:'Obtener sugerencias ✨',back:'Atras',next:'Siguiente →',loading:'La IA esta buscando lugares…',resultTitle:'Salidas recomendadas 🎉',reset:'🔄 Buscar de nuevo',shareTitle:'📣 Comparte tu visita!',shareDesc:'Publica con una foto y comparte tu recuerdo!',mapBtn:'🗺️ Abrir en Google Maps',questionBtn:'💬 Preguntar sobre este lugar',questionPlaceholder:'ej: Se puede ir con lluvia?',questionSend:'Preguntar →',countryModalTitle:'🌍 Seleccionar idioma/region',promptLang:'espanol',promptOnly:'Responde unicamente en espanol.'},
-  it:{title:'Dove andare oggi?',subtitle:'Risolvi il tuo non ho niente da fare',locTitle:'Mostrare il meteo della tua posizione?',locDesc:'Usando la tua posizione, suggeriamo uscite basate sul meteo.',locAllow:'📍 Usa la mia posizione',locSkip:'Salta',stepDate:'Quando?',today:'Oggi',tomorrow:'Domani',weekend:'Questo weekend',stepGroup:'Con chi?',stepMood:'Che tipo di uscita?',stepTime:'Che ora?',stepBudget:'Budget per persona?',morning:'Mattina',afternoon:'Pomeriggio',evening:'Sera',allday:'Tutto il giorno',areaLabel:'📍 Suggerimento zona (opzionale)',areaPlaceholder:'es: Roma, Milano, vicino al mare',suggest:'Ottieni suggerimenti ✨',back:'Indietro',next:'Avanti →',loading:"L'IA sta cercando posti…",resultTitle:'Uscite consigliate 🎉',reset:'🔄 Cerca di nuovo',shareTitle:'📣 Condividi la tua visita!',shareDesc:'Pubblica con una foto e condividi il tuo ricordo!',mapBtn:'🗺️ Apri in Google Maps',questionBtn:'💬 Chiedi di questo posto',questionPlaceholder:'es: Si puo andare con la pioggia?',questionSend:'Chiedi →',countryModalTitle:'🌍 Seleziona lingua/regione',promptLang:'italiano',promptOnly:'Rispondi solo in italiano.'},
-  pt:{title:'Para onde ir hoje?',subtitle:'Resolva o seu nao tenho nada para fazer',locTitle:'Mostrar o tempo da sua localizacao?',locDesc:'Usando a sua localizacao, sugerimos saidas baseadas no tempo.',locAllow:'📍 Usar minha localizacao',locSkip:'Pular',stepDate:'Quando?',today:'Hoje',tomorrow:'Amanha',weekend:'Este fim de semana',stepGroup:'Com quem?',stepMood:'Que tipo de saida?',stepTime:'Que horas?',stepBudget:'Orcamento por pessoa?',morning:'Manha',afternoon:'Tarde',evening:'Noite',allday:'O dia todo',areaLabel:'📍 Dica de area (opcional)',areaPlaceholder:'ex: Lisboa, Porto, perto do mar',suggest:'Obter sugestoes ✨',back:'Voltar',next:'Proximo →',loading:'A IA esta a pensar em lugares…',resultTitle:'Saidas recomendadas 🎉',reset:'🔄 Pesquisar novamente',shareTitle:'📣 Partilhe a sua visita!',shareDesc:'Publique com uma foto e partilhe a sua memoria!',mapBtn:'🗺️ Abrir no Google Maps',questionBtn:'💬 Perguntar sobre este local',questionPlaceholder:'ex: Da para ir com chuva?',questionSend:'Perguntar →',countryModalTitle:'🌍 Selecionar idioma/regiao',promptLang:'portugues',promptOnly:'Responda apenas em portugues.'},
-  pt_br:{title:'Para onde ir hoje?',subtitle:'Resolva o seu nao tenho nada para fazer',locTitle:'Mostrar o clima da sua localizacao?',locDesc:'Usando sua localizacao, sugerimos passeios baseados no clima.',locAllow:'📍 Usar minha localizacao',locSkip:'Pular',stepDate:'Quando?',today:'Hoje',tomorrow:'Amanha',weekend:'Este fim de semana',stepGroup:'Com quem?',stepMood:'Que tipo de passeio?',stepTime:'Que horas?',stepBudget:'Orcamento por pessoa?',morning:'Manha',afternoon:'Tarde',evening:'Noite',allday:'O dia todo',areaLabel:'📍 Dica de area (opcional)',areaPlaceholder:'ex: Sao Paulo, Rio, perto da praia',suggest:'Obter sugestoes ✨',back:'Voltar',next:'Proximo →',loading:'A IA esta pensando em lugares…',resultTitle:'Passeios recomendados 🎉',reset:'🔄 Pesquisar novamente',shareTitle:'📣 Compartilhe sua visita!',shareDesc:'Publique com uma foto e compartilhe sua memoria!',mapBtn:'🗺️ Abrir no Google Maps',questionBtn:'💬 Perguntar sobre este lugar',questionPlaceholder:'ex: Da para ir com chuva?',questionSend:'Perguntar →',countryModalTitle:'🌍 Selecionar idioma/regiao',promptLang:'portugues',promptOnly:'Responda apenas em portugues.'},
-  ru:{title:'Куда пойти сегодня?',subtitle:'Решите проблему нечего делать',locTitle:'Показать погоду для вашего местоположения?',locDesc:'Используя ваше местоположение, мы предложим прогулки на основе погоды.',locAllow:'📍 Использовать геолокацию',locSkip:'Пропустить',stepDate:'Когда?',today:'Сегодня',tomorrow:'Завтра',weekend:'Эти выходные',stepGroup:'С кем?',stepMood:'Какая прогулка?',stepTime:'Время суток?',stepBudget:'Бюджет на человека?',morning:'Утро',afternoon:'День',evening:'Вечер',allday:'Весь день',areaLabel:'📍 Подсказка района',areaPlaceholder:'напр: Москва, СПб, у моря',suggest:'Получить предложения ✨',back:'Назад',next:'Далее →',loading:'ИИ ищет места…',resultTitle:'Рекомендуемые прогулки 🎉',reset:'🔄 Искать снова',shareTitle:'📣 Поделитесь посещением!',shareDesc:'Опубликуйте с фото и поделитесь воспоминанием!',mapBtn:'🗺️ Открыть в Google Maps',questionBtn:'💬 Спросить об этом месте',questionPlaceholder:'напр: Можно ли идти в дождь?',questionSend:'Спросить →',countryModalTitle:'🌍 Выбор языка/региона',promptLang:'русский',promptOnly:'Отвечай только на русском языке.'},
-  ar:{title:'أين تذهب اليوم؟',subtitle:'حل مشكلة ليس لدي ما أفعله',locTitle:'هل تريد عرض طقس موقعك؟',locDesc:'باستخدام موقعك يمكننا اقتراح نزهات بناء على الطقس.',locAllow:'📍 استخدام موقعي',locSkip:'تخطي',stepDate:'متى؟',today:'اليوم',tomorrow:'غدا',weekend:'هذا الاسبوع',stepGroup:'مع من؟',stepMood:'ما نوع النزهة؟',stepTime:'أي وقت؟',stepBudget:'الميزانية للشخص؟',morning:'الصباح',afternoon:'بعد الظهر',evening:'المساء',allday:'طوال اليوم',areaLabel:'📍 تلميح المنطقة',areaPlaceholder:'مثال: الرياض، دبي، قرب البحر',suggest:'احصل على اقتراحات ✨',back:'رجوع',next:'التالي →',loading:'الذكاء الاصطناعي يفكر في أماكن…',resultTitle:'النزهات الموصى بها 🎉',reset:'🔄 ابحث مرة أخرى',shareTitle:'📣 شارك زيارتك!',shareDesc:'انشر مع صورة وشارك ذكرياتك!',mapBtn:'🗺️ فتح في خرائط Google',questionBtn:'💬 اسأل عن هذا المكان',questionPlaceholder:'مثال: هل يمكن الذهاب تحت المطر؟',questionSend:'اسأل →',countryModalTitle:'🌍 اختر اللغة/المنطقة',promptLang:'العربية',promptOnly:'أجب باللغة العربية فقط.'},
-  tr:{title:'Bugün nereye gidilir?',subtitle:'Yapacak bir seyim yok sorununu coz',locTitle:'Konumunuzun hava durumunu goster?',locDesc:'Konumunuzu kullanarak gercek zamanli hava durumuna gore geziler onerebiliriz.',locAllow:'📍 Konumumu kullan',locSkip:'Atla',stepDate:'Ne zaman?',today:'Bugün',tomorrow:'Yarin',weekend:'Bu hafta sonu',stepGroup:'Kiminle?',stepMood:'Ne tur bir gezi?',stepTime:'Gunun hangi saati?',stepBudget:'Kisi basi butce?',morning:'Sabah',afternoon:'Ogleden sonra',evening:'Aksam',allday:'Tum gun',areaLabel:'📍 Bolge ipucu (istege bagli)',areaPlaceholder:'or: Istanbul, Ankara, deniz kenari',suggest:'Oneriler al ✨',back:'Geri',next:'Ileri →',loading:'Yapay zeka yerler ariyor…',resultTitle:'Onerilen geziler 🎉',reset:'🔄 Tekrar ara',shareTitle:'📣 Ziyaretini paylas!',shareDesc:'Fotografla paylas ve anini anlat!',mapBtn:'🗺️ Google Haritalarda ac',questionBtn:'💬 Bu yer hakkinda sor',questionPlaceholder:'or: Yagmurda gidilebilir mi?',questionSend:'Sor →',countryModalTitle:'🌍 Dil/bolge sec',promptLang:'Turkce',promptOnly:'Yalnizca Turkce yanitla.'},
-  th:{title:'วันนี้จะไปไหน?',subtitle:'แก้ปัญหาไม่รู้จะทำอะไร',locTitle:'แสดงสภาพอากาศของตำแหน่งของคุณ?',locDesc:'โดยใช้ตำแหน่งของคุณ เราสามารถแนะนำการเดินทางตามสภาพอากาศ',locAllow:'📍 ใช้ตำแหน่งของฉัน',locSkip:'ข้าม',stepDate:'เมื่อไร?',today:'วันนี้',tomorrow:'พรุ่งนี้',weekend:'สุดสัปดาห์นี้',stepGroup:'ไปกับใคร?',stepMood:'อยากทำอะไร?',stepTime:'ช่วงเวลาไหน?',stepBudget:'งบต่อคน?',morning:'เช้า',afternoon:'บ่าย',evening:'เย็น',allday:'ทั้งวัน',areaLabel:'📍 คำใบ้พื้นที่',areaPlaceholder:'เช่น: กรุงเทพ, เชียงใหม่',suggest:'รับคำแนะนำ ✨',back:'กลับ',next:'ถัดไป →',loading:'AI กำลังคิดหาสถานที่…',resultTitle:'การเดินทางที่แนะนำ 🎉',reset:'🔄 ค้นหาใหม่',shareTitle:'📣 แชร์การเยี่ยมชม!',shareDesc:'โพสต์พร้อมรูปภาพและแชร์ความทรงจำ!',mapBtn:'🗺️ เปิดใน Google Maps',questionBtn:'💬 ถามเกี่ยวกับสถานที่นี้',questionPlaceholder:'เช่น: ไปได้ตอนฝนตกไหม?',questionSend:'ถาม →',countryModalTitle:'🌍 เลือกภาษา/ภูมิภาค',promptLang:'ภาษาไทย',promptOnly:'ตอบเป็นภาษาไทยเท่านั้น'},
-  vi:{title:'Hom nay di dau?',subtitle:'Giai quyet van de khong biet lam gi',locTitle:'Hien thi thoi tiet vi tri cua ban?',locDesc:'Su dung vi tri cua ban, chung toi goi y chuyen di dua tren thoi tiet thuc.',locAllow:'📍 Dung vi tri cua toi',locSkip:'Bo qua',stepDate:'Khi nao?',today:'Hom nay',tomorrow:'Ngay mai',weekend:'Cuoi tuan nay',stepGroup:'Di voi ai?',stepMood:'Loai chuyen di nao?',stepTime:'Thoi diem nao?',stepBudget:'Ngan sach moi nguoi?',morning:'Buoi sang',afternoon:'Buoi chieu',evening:'Buoi toi',allday:'Ca ngay',areaLabel:'📍 Goi y khu vuc (tuy chon)',areaPlaceholder:'vd: Ha Noi, TP.HCM, gan bien',suggest:'Nhan goi y ✨',back:'Quay lai',next:'Tiep theo →',loading:'AI dang tim dia diem…',resultTitle:'Chuyen di duoc de xuat 🎉',reset:'🔄 Tim kiem lai',shareTitle:'📣 Chia se chuyen tham!',shareDesc:'Dang kem anh va chia se ky niem!',mapBtn:'🗺️ Mo trong Google Maps',questionBtn:'💬 Hoi ve dia diem nay',questionPlaceholder:'vd: Co the di khi troi mua khong?',questionSend:'Hoi →',countryModalTitle:'🌍 Chon ngon ngu/khu vuc',promptLang:'tieng Viet',promptOnly:'Chi tra loi bang tieng Viet.'},
-  id:{title:'Mau ke mana hari ini?',subtitle:'Atasi masalah tidak ada yang bisa dilakukan',locTitle:'Tampilkan cuaca lokasi Anda?',locDesc:'Menggunakan lokasi Anda, kami menyarankan perjalanan berdasarkan cuaca real-time.',locAllow:'📍 Gunakan lokasi saya',locSkip:'Lewati',stepDate:'Kapan?',today:'Hari ini',tomorrow:'Besok',weekend:'Akhir pekan ini',stepGroup:'Dengan siapa?',stepMood:'Jenis perjalanan apa?',stepTime:'Waktu apa?',stepBudget:'Anggaran per orang?',morning:'Pagi',afternoon:'Siang',evening:'Malam',allday:'Sepanjang hari',areaLabel:'📍 Petunjuk area (opsional)',areaPlaceholder:'mis: Jakarta, Bali, dekat pantai',suggest:'Dapatkan saran ✨',back:'Kembali',next:'Lanjut →',loading:'AI sedang mencari tempat…',resultTitle:'Perjalanan yang direkomendasikan 🎉',reset:'🔄 Cari lagi',shareTitle:'📣 Bagikan kunjungan Anda!',shareDesc:'Posting dengan foto dan bagikan kenangan!',mapBtn:'🗺️ Buka di Google Maps',questionBtn:'💬 Tanya tentang tempat ini',questionPlaceholder:'mis: Bisa ke sana saat hujan?',questionSend:'Tanya →',countryModalTitle:'🌍 Pilih bahasa/wilayah',promptLang:'Bahasa Indonesia',promptOnly:'Jawab hanya dalam Bahasa Indonesia.'},
-  hi:{title:'आज कहाँ जाएँ?',subtitle:'कुछ नहीं करना है की समस्या हल करें',locTitle:'अपने स्थान का मौसम दिखाएं?',locDesc:'आपके स्थान का उपयोग करके हम वास्तविक समय के मौसम के आधार पर यात्राएं सुझाते हैं।',locAllow:'📍 मेरा स्थान उपयोग करें',locSkip:'छोड़ें',stepDate:'कब?',today:'आज',tomorrow:'कल',weekend:'इस सप्ताहांत',stepGroup:'किसके साथ?',stepMood:'किस तरह की यात्रा?',stepTime:'दिन का समय?',stepBudget:'प्रति व्यक्ति बजट?',morning:'सुबह',afternoon:'दोपहर',evening:'शाम',allday:'पूरे दिन',areaLabel:'📍 क्षेत्र संकेत',areaPlaceholder:'जैसे: दिल्ली, मुंबई, समुद्र के पास',suggest:'सुझाव पाएं ✨',back:'वापस',next:'अगला →',loading:'AI जगहें ढूंढ रहा है…',resultTitle:'अनुशंसित यात्राएं 🎉',reset:'🔄 फिर से खोजें',shareTitle:'📣 अपनी यात्रा साझा करें!',shareDesc:'फोटो के साथ पोस्ट करें और यादें साझा करें!',mapBtn:'🗺️ Google Maps में खोलें',questionBtn:'💬 इस जगह के बारे में पूछें',questionPlaceholder:'जैसे: बारिश में जा सकते हैं?',questionSend:'पूछें →',countryModalTitle:'🌍 भाषा/क्षेत्र चुनें',promptLang:'हिन्दी',promptOnly:'केवल हिन्दी में जवाब दें।'},
-  es_mx:{title:'A donde ir hoy?',subtitle:'Resuelve tu no se que hacer',locTitle:'Mostrar el clima de tu ubicacion?',locDesc:'Usando tu ubicacion sugerimos salidas basadas en el clima.',locAllow:'📍 Usar mi ubicacion',locSkip:'Omitir',stepDate:'Cuando?',today:'Hoy',tomorrow:'Manana',weekend:'Este fin de semana',stepGroup:'Con quien?',stepMood:'Que tipo de salida?',stepTime:'A que hora?',stepBudget:'Presupuesto por persona?',morning:'Manana',afternoon:'Tarde',evening:'Noche',allday:'Todo el dia',areaLabel:'📍 Pista de zona (opcional)',areaPlaceholder:'ej: Ciudad de Mexico, Guadalajara',suggest:'Obtener sugerencias ✨',back:'Atras',next:'Siguiente →',loading:'La IA esta buscando lugares…',resultTitle:'Salidas recomendadas 🎉',reset:'🔄 Buscar de nuevo',shareTitle:'📣 Comparte tu visita!',shareDesc:'Publica con una foto y comparte tu recuerdo!',mapBtn:'🗺️ Abrir en Google Maps',questionBtn:'💬 Preguntar sobre este lugar',questionPlaceholder:'ej: Se puede ir con lluvia?',questionSend:'Preguntar →',countryModalTitle:'🌍 Seleccionar idioma/region',promptLang:'espanol mexicano',promptOnly:'Responde unicamente en espanol.'},
-  es_ar:{title:'A donde ir hoy?',subtitle:'Resolve tu no tengo nada que hacer',locTitle:'Mostrar el clima de tu ubicacion?',locDesc:'Usando tu ubicacion sugerimos salidas basadas en el clima.',locAllow:'📍 Usar mi ubicacion',locSkip:'Omitir',stepDate:'Cuando?',today:'Hoy',tomorrow:'Manana',weekend:'Este finde',stepGroup:'Con quien?',stepMood:'Que tipo de salida?',stepTime:'A que hora?',stepBudget:'Presupuesto por persona?',morning:'Manana',afternoon:'Tarde',evening:'Noche',allday:'Todo el dia',areaLabel:'📍 Pista de zona (opcional)',areaPlaceholder:'ej: Buenos Aires, Cordoba',suggest:'Obtener sugerencias ✨',back:'Atras',next:'Siguiente →',loading:'La IA esta buscando lugares…',resultTitle:'Salidas recomendadas 🎉',reset:'🔄 Buscar de nuevo',shareTitle:'📣 Comparte tu visita!',shareDesc:'Publica con una foto y comparte tu recuerdo!',mapBtn:'🗺️ Abrir en Google Maps',questionBtn:'💬 Preguntar sobre este lugar',questionPlaceholder:'ej: Se puede ir con lluvia?',questionSend:'Preguntar →',countryModalTitle:'🌍 Seleccionar idioma/region',promptLang:'espanol rioplatense',promptOnly:'Responde unicamente en espanol.'},
-};
-
-let currentLang='ja';
-function T(k){const t=LTXT[currentLang]||LTXT.ja;return t[k]||LTXT.ja[k]||k;}
-
-function buildCountryGrid(){
-  const g=document.getElementById('country-grid');
-  if(!g)return;
-  g.innerHTML='';
-  COUNTRIES.forEach(function(c){
-    const div=document.createElement('div');
-    div.className='country-item'+(c.code===currentLang?' active':'');
-    div.innerHTML='<span class="country-flag">'+c.flag+'</span><span class="country-name">'+c.nativeName+'</span>';
-    div.addEventListener('click',function(){selectCountry(c.code);,'g_solo':'ひとりで','g_solo_sub':'自分のペースで','g_couple':'カップル','g_couple_sub':'ふたりで','g_family':'家族・子連れ','g_family_sub':'みんなで','g_friends':'友達グループ','g_friends_sub':'わいわい','g_dad':'お父さんと','g_dad_sub':'子ども目線で','g_mom':'お母さんと','g_mom_sub':'子ども目線で','m_refresh':'リフレッシュ','m_sightseeing':'観光・名所','m_hidden':'人が少ない穴場','m_culture':'文化・芸術','m_food':'グルメ','m_active':'アクティブ','m_relax':'のんびり','m_adventure':'冒険・非日常','m_event':'イベント・フェス','b_free':'無料','b_free_sub':'0円','b_2k':'〜2,000円','b_2k_sub':'カジュアルに','b_5k':'〜5,000円','b_5k_sub':'満足に','b_10k':'〜10,000円','b_10k_sub':'贅沢に','b_over':'10,000円以上','b_over_sub':'大奮発！','g_solo':'Solo','g_solo_sub':'My own pace','g_couple':'Couple','g_couple_sub':'Just the two of us','g_family':'Family','g_family_sub':'Everyone together','g_friends':'Friends','g_friends_sub':'Fun group','g_dad':'With Dad','g_dad_sub':'Kid\'s perspective','g_mom':'With Mom','g_mom_sub':'Kid\'s perspective','m_refresh':'Refresh','m_sightseeing':'Sightseeing','m_hidden':'Hidden gems','m_culture':'Culture & Art','m_food':'Foodie','m_active':'Active','m_relax':'Relaxing','m_adventure':'Adventure','m_event':'Events & Festivals','b_free':'Free','b_free_sub':'$0','b_2k':'Under $20','b_2k_sub':'Casual','b_5k':'Under $50','b_5k_sub':'Satisfying','b_10k':'Under $100','b_10k_sub':'Splurge','b_over':'$100+','b_over_sub':'Go all out!','g_solo':'独自一人','g_solo_sub':'按自己节奏','g_couple':'情侣','g_couple_sub':'两人同行','g_family':'家庭','g_family_sub':'全家出行','g_friends':'朋友群','g_friends_sub':'热闹出行','g_dad':'和爸爸','g_dad_sub':'孩子视角','g_mom':'和妈妈','g_mom_sub':'孩子视角','m_refresh':'放松','m_sightseeing':'观光名胜','m_hidden':'冷门景点','m_culture':'文化艺术','m_food':'美食','m_active':'运动','m_relax':'悠闲','m_adventure':'冒险','m_event':'活动节庆','b_free':'免费','b_free_sub':'0元','b_2k':'100元以下','b_2k_sub':'随意','b_5k':'300元以下','b_5k_sub':'满足','b_10k':'700元以下','b_10k_sub':'豪华','b_over':'700元以上','b_over_sub':'尽情享受！','g_solo':'혼자','g_solo_sub':'내 페이스로','g_couple':'커플','g_couple_sub':'둘이서','g_family':'가족','g_family_sub':'다 같이','g_friends':'친구들','g_friends_sub':'왁자지껄','g_dad':'아빠와','g_dad_sub':'아이 시선으로','g_mom':'엄마와','g_mom_sub':'아이 시선으로','m_refresh':'리프레시','m_sightseeing':'관광 명소','m_hidden':'숨은 명소','m_culture':'문화 예술','m_food':'미식','m_active':'액티브','m_relax':'여유롭게','m_adventure':'모험','m_event':'이벤트 페스티벌','b_free':'무료','b_free_sub':'0원','b_2k':'2만원 이하','b_2k_sub':'가볍게','b_5k':'5만원 이하','b_5k_sub':'만족스럽게','b_10k':'10만원 이하','b_10k_sub':'호화롭게','b_over':'10만원 이상','b_over_sub':'마음껏!','g_solo':'Seul(e)','g_solo_sub':'À mon rythme','g_couple':'Couple','g_couple_sub':'À deux','g_family':'Famille','g_family_sub':'Tous ensemble','g_friends':'Amis','g_friends_sub':'En groupe','g_dad':'Avec papa','g_dad_sub':'Vue d\'enfant','g_mom':'Avec maman','g_mom_sub':'Vue d\'enfant','m_refresh':'Se ressourcer','m_sightseeing':'Tourisme','m_hidden':'Lieux cachés','m_culture':'Culture & Art','m_food':'Gastronomie','m_active':'Actif','m_relax':'Détente','m_adventure':'Aventure','m_event':'Événements','b_free':'Gratuit','b_free_sub':'0€','b_2k':'Moins de 20€','b_2k_sub':'Casual','b_5k':'Moins de 50€','b_5k_sub':'Satisfaisant','b_10k':'Moins de 100€','b_10k_sub':'Généreux','b_over':'100€+','b_over_sub':'Sans limite!','g_solo':'Alleine','g_solo_sub':'Mein Tempo','g_couple':'Paar','g_couple_sub':'Zu zweit','g_family':'Familie','g_family_sub':'Alle zusammen','g_friends':'Freunde','g_friends_sub':'Gruppe','g_dad':'Mit Papa','g_dad_sub':'Kinderperspektive','g_mom':'Mit Mama','g_mom_sub':'Kinderperspektive','m_refresh':'Erholen','m_sightseeing':'Sehenswürdigkeiten','m_hidden':'Geheimtipps','m_culture':'Kultur & Kunst','m_food':'Kulinarik','m_active':'Aktiv','m_relax':'Entspannen','m_adventure':'Abenteuer','m_event':'Events & Feste','b_free':'Kostenlos','b_free_sub':'0€','b_2k':'Unter 20€','b_2k_sub':'Casual','b_5k':'Unter 50€','b_5k_sub':'Gut','b_10k':'Unter 100€','b_10k_sub':'Großzügig','b_over':'100€+','b_over_sub':'Alles raus!','g_solo':'Solo/a','g_solo_sub':'A mi ritmo','g_couple':'Pareja','g_couple_sub':'De dos','g_family':'Familia','g_family_sub':'Todos juntos','g_friends':'Amigos','g_friends_sub':'En grupo','g_dad':'Con papá','g_dad_sub':'Perspectiva niño','g_mom':'Con mamá','g_mom_sub':'Perspectiva niño','m_refresh':'Recargar','m_sightseeing':'Turismo','m_hidden':'Lugares ocultos','m_culture':'Cultura & Arte','m_food':'Gastronomía','m_active':'Activo','m_relax':'Relajarse','m_adventure':'Aventura','m_event':'Eventos & Festivales','b_free':'Gratis','b_free_sub':'0€','b_2k':'Menos de 20€','b_2k_sub':'Casual','b_5k':'Menos de 50€','b_5k_sub':'Satisfecho','b_10k':'Menos de 100€','b_10k_sub':'Generoso','b_over':'100€+','b_over_sub':'Sin límite!','g_solo':'Da solo/a','g_solo_sub':'Al mio ritmo','g_couple':'Coppia','g_couple_sub':'In due','g_family':'Famiglia','g_family_sub':'Tutti insieme','g_friends':'Amici','g_friends_sub':'In gruppo','g_dad':'Con papà','g_dad_sub':'Ottica bambino','g_mom':'Con mamma','g_mom_sub':'Ottica bambino','m_refresh':'Ricaricarsi','m_sightseeing':'Turismo','m_hidden':'Luoghi nascosti','m_culture':'Cultura & Arte','m_food':'Gastronomia','m_active':'Attivo','m_relax':'Relax','m_adventure':'Avventura','m_event':'Eventi & Festival','b_free':'Gratis','b_free_sub':'0€','b_2k':'Meno di 20€','b_2k_sub':'Casual','b_5k':'Meno di 50€','b_5k_sub':'Soddisfacente','b_10k':'Meno di 100€','b_10k_sub':'Generoso','b_over':'100€+','b_over_sub':'Senza limiti!','g_solo':'Sozinho/a','g_solo_sub':'No meu ritmo','g_couple':'Casal','g_couple_sub':'A dois','g_family':'Família','g_family_sub':'Todos juntos','g_friends':'Amigos','g_friends_sub':'Em grupo','g_dad':'Com papai','g_dad_sub':'Visão de criança','g_mom':'Com mamãe','g_mom_sub':'Visão de criança','m_refresh':'Recarregar','m_sightseeing':'Turismo','m_hidden':'Lugares escondidos','m_culture':'Cultura & Arte','m_food':'Gastronomia','m_active':'Ativo','m_relax':'Relaxar','m_adventure':'Aventura','m_event':'Eventos & Festivais','b_free':'Grátis','b_free_sub':'R$0','b_2k':'Até R$100','b_2k_sub':'Casual','b_5k':'Até R$250','b_5k_sub':'Satisfatório','b_10k':'Até R$500','b_10k_sub':'Generoso','b_over':'R$500+','b_over_sub':'Sem limites!','g_solo':'Один/одна','g_solo_sub':'В своём темпе','g_couple':'Пара','g_couple_sub':'Вдвоём','g_family':'Семья','g_family_sub':'Все вместе','g_friends':'Друзья','g_friends_sub':'Компанией','g_dad':'С папой','g_dad_sub':'Глазами ребёнка','g_mom':'С мамой','g_mom_sub':'Глазами ребёнка','m_refresh':'Отдохнуть','m_sightseeing':'Достопримечательности','m_hidden':'Тайные места','m_culture':'Культура & Искусство','m_food':'Гастрономия','m_active':'Активный','m_relax':'Отдых','m_adventure':'Приключение','m_event':'События & Фестивали','b_free':'Бесплатно','b_free_sub':'0₽','b_2k':'До 2000₽','b_2k_sub':'Легко','b_5k':'До 5000₽','b_5k_sub':'Хорошо','b_10k':'До 10000₽','b_10k_sub':'Щедро','b_over':'10000₽+','b_over_sub':'Без ограничений!','g_solo':'وحدي','g_solo_sub':'بوتيرتي','g_couple':'زوجان','g_couple_sub':'معاً','g_family':'عائلة','g_family_sub':'معاً','g_friends':'أصدقاء','g_friends_sub':'مجموعة','g_dad':'مع الأب','g_dad_sub':'من منظور الطفل','g_mom':'مع الأم','g_mom_sub':'من منظور الطفل','m_refresh':'تجديد النشاط','m_sightseeing':'معالم سياحية','m_hidden':'أماكن خفية','m_culture':'ثقافة وفن','m_food':'متعة الطعام','m_active':'نشاط','m_relax':'استرخاء','m_adventure':'مغامرة','m_event':'فعاليات ومهرجانات','b_free':'مجاني','b_free_sub':'0','b_2k':'أقل من 50 ريال','b_2k_sub':'عادي','b_5k':'أقل من 150 ريال','b_5k_sub':'مُرضٍ','b_10k':'أقل من 300 ريال','b_10k_sub':'سخي','b_over':'300 ريال+','b_over_sub':'بلا حدود!','g_solo':'Yalnız','g_solo_sub':'Kendi hızımda','g_couple':'Çift','g_couple_sub':'İkimiz','g_family':'Aile','g_family_sub':'Hep birlikte','g_friends':'Arkadaşlar','g_friends_sub':'Grup','g_dad':'Babayla','g_dad_sub':'Çocuk gözüyle','g_mom':'Anneyle','g_mom_sub':'Çocuk gözüyle','m_refresh':'Tazelemek','m_sightseeing':'Turizm','m_hidden':'Gizli yerler','m_culture':'Kültür & Sanat','m_food':'Gastronomi','m_active':'Aktif','m_relax':'Rahatlamak','m_adventure':'Macera','m_event':'Etkinlikler','b_free':'Ücretsiz','b_free_sub':'0₺','b_2k':'200₺ altı','b_2k_sub':'Rahat','b_5k':'500₺ altı','b_5k_sub':'Tatmin edici','b_10k':'1000₺ altı','b_10k_sub':'Cömert','b_over':'1000₺+','b_over_sub':'Sınır yok!','g_solo':'คนเดียว','g_solo_sub':'จังหวะตัวเอง','g_couple':'คู่รัก','g_couple_sub':'สองคน','g_family':'ครอบครัว','g_family_sub':'ทุกคน','g_friends':'กลุ่มเพื่อน','g_friends_sub':'สนุกสนาน','g_dad':'กับพ่อ','g_dad_sub':'มุมมองเด็ก','g_mom':'กับแม่','g_mom_sub':'มุมมองเด็ก','m_refresh':'รีเฟรช','m_sightseeing':'ท่องเที่ยว','m_hidden':'สถานที่ลับ','m_culture':'วัฒนธรรม','m_food':'อาหาร','m_active':'กระฉับกระเฉง','m_relax':'ผ่อนคลาย','m_adventure':'ผจญภัย','m_event':'งานอีเวนต์','b_free':'ฟรี','b_free_sub':'0บาท','b_2k':'ไม่เกิน 500บาท','b_2k_sub':'เบาๆ','b_5k':'ไม่เกิน 1500บาท','b_5k_sub':'พอใจ','b_10k':'ไม่เกิน 3000บาท','b_10k_sub':'หรูหรา','b_over':'3000บาท+','b_over_sub':'ไม่จำกัด!','g_solo':'Một mình','g_solo_sub':'Tốc độ của tôi','g_couple':'Cặp đôi','g_couple_sub':'Hai người','g_family':'Gia đình','g_family_sub':'Cả nhà','g_friends':'Nhóm bạn','g_friends_sub':'Vui vẻ','g_dad':'Với bố','g_dad_sub':'Góc nhìn trẻ em','g_mom':'Với mẹ','g_mom_sub':'Góc nhìn trẻ em','m_refresh':'Thư giãn','m_sightseeing':'Tham quan','m_hidden':'Địa điểm ẩn','m_culture':'Văn hóa & Nghệ thuật','m_food':'Ẩm thực','m_active':'Năng động','m_relax':'Nhàn rỗi','m_adventure':'Phiêu lưu','m_event':'Sự kiện & Lễ hội','b_free':'Miễn phí','b_free_sub':'0đ','b_2k':'Dưới 50k','b_2k_sub':'Nhẹ nhàng','b_5k':'Dưới 150k','b_5k_sub':'Thoải mái','b_10k':'Dưới 300k','b_10k_sub':'Sang trọng','b_over':'300k+','b_over_sub':'Không giới hạn!','g_solo':'Sendiri','g_solo_sub':'Tempo saya','g_couple':'Pasangan','g_couple_sub':'Berdua','g_family':'Keluarga','g_family_sub':'Semua bersama','g_friends':'Teman','g_friends_sub':'Kelompok','g_dad':'Dengan Ayah','g_dad_sub':'Dari sudut anak','g_mom':'Dengan Ibu','g_mom_sub':'Dari sudut anak','m_refresh':'Menyegarkan','m_sightseeing':'Wisata','m_hidden':'Tempat tersembunyi','m_culture':'Budaya & Seni','m_food':'Kuliner','m_active':'Aktif','m_relax':'Santai','m_adventure':'Petualangan','m_event':'Event & Festival','b_free':'Gratis','b_free_sub':'Rp0','b_2k':'Di bawah Rp50k','b_2k_sub':'Santai','b_5k':'Di bawah Rp150k','b_5k_sub':'Puas','b_10k':'Di bawah Rp300k','b_10k_sub':'Mewah','b_over':'Rp300k+','b_over_sub':'Tanpa batas!','g_solo':'अकेले','g_solo_sub':'अपनी गति से','g_couple':'जोड़ा','g_couple_sub':'दो लोग','g_family':'परिवार','g_family_sub':'सब साथ','g_friends':'दोस्त','g_friends_sub':'समूह','g_dad':'पापा के साथ','g_dad_sub':'बच्चे की नज़र','g_mom':'मम्मी के साथ','g_mom_sub':'बच्चे की नज़र','m_refresh':'तरोताज़ा','m_sightseeing':'पर्यटन','m_hidden':'छुपी जगहें','m_culture':'संस्कृति & कला','m_food':'खानपान','m_active':'सक्रिय','m_relax':'आराम','m_adventure':'रोमांच','m_event':'कार्यक्रम','b_free':'मुफ़्त','b_free_sub':'₹0','b_2k':'₹500 तक','b_2k_sub':'हल्का','b_5k':'₹1500 तक','b_5k_sub':'संतोषजनक','b_10k':'₹3000 तक','b_10k_sub':'शानदार','b_over':'₹3000+','b_over_sub':'बिना सीमा!','g_solo':'Solo','g_solo_sub':'My own pace','g_couple':'Couple','g_couple_sub':'Just the two of us','g_family':'Family','g_family_sub':'Everyone together','g_friends':'Friends','g_friends_sub':'Fun group','g_dad':'With Dad','g_dad_sub':'Kid\'s perspective','g_mom':'With Mom','g_mom_sub':'Kid\'s perspective','m_refresh':'Refresh','m_sightseeing':'Sightseeing','m_hidden':'Hidden gems','m_culture':'Culture & Art','m_food':'Foodie','m_active':'Active','m_relax':'Relaxing','m_adventure':'Adventure','m_event':'Events & Festivals','b_free':'Free','b_free_sub':'$0','b_2k':'Under $20','b_2k_sub':'Casual','b_5k':'Under $50','b_5k_sub':'Satisfying','b_10k':'Under $100','b_10k_sub':'Splurge','b_over':'$100+','b_over_sub':'Go all out!','g_solo':'Sozinho/a','g_solo_sub':'No meu ritmo','g_couple':'Casal','g_couple_sub':'A dois','g_family':'Família','g_family_sub':'Todos juntos','g_friends':'Amigos','g_friends_sub':'Em grupo','g_dad':'Com papai','g_dad_sub':'Visão de criança','g_mom':'Com mamãe','g_mom_sub':'Visão de criança','m_refresh':'Recarregar','m_sightseeing':'Turismo','m_hidden':'Lugares escondidos','m_culture':'Cultura & Arte','m_food':'Gastronomia','m_active':'Ativo','m_relax':'Relaxar','m_adventure':'Aventura','m_event':'Eventos & Festivais','b_free':'Grátis','b_free_sub':'R$0','b_2k':'Até R$100','b_2k_sub':'Casual','b_5k':'Até R$250','b_5k_sub':'Satisfatório','b_10k':'Até R$500','b_10k_sub':'Generoso','b_over':'R$500+','b_over_sub':'Sem limites!','g_solo':'Solo/a','g_solo_sub':'A mi ritmo','g_couple':'Pareja','g_couple_sub':'De dos','g_family':'Familia','g_family_sub':'Todos juntos','g_friends':'Amigos','g_friends_sub':'En grupo','g_dad':'Con papá','g_dad_sub':'Perspectiva niño','g_mom':'Con mamá','g_mom_sub':'Perspectiva niño','m_refresh':'Recargar','m_sightseeing':'Turismo','m_hidden':'Lugares ocultos','m_culture':'Cultura & Arte','m_food':'Gastronomía','m_active':'Activo','m_relax':'Relajarse','m_adventure':'Aventura','m_event':'Eventos & Festivales','b_free':'Gratis','b_free_sub':'0€','b_2k':'Menos de 20€','b_2k_sub':'Casual','b_5k':'Menos de 50€','b_5k_sub':'Satisfecho','b_10k':'Menos de 100€','b_10k_sub':'Generoso','b_over':'100€+','b_over_sub':'Sin límite!','g_solo':'Solo/a','g_solo_sub':'A mi ritmo','g_couple':'Pareja','g_couple_sub':'De dos','g_family':'Familia','g_family_sub':'Todos juntos','g_friends':'Amigos','g_friends_sub':'En grupo','g_dad':'Con papá','g_dad_sub':'Perspectiva niño','g_mom':'Con mamá','g_mom_sub':'Perspectiva niño','m_refresh':'Recargar','m_sightseeing':'Turismo','m_hidden':'Lugares ocultos','m_culture':'Cultura & Arte','m_food':'Gastronomía','m_active':'Activo','m_relax':'Relajarse','m_adventure':'Aventura','m_event':'Eventos & Festivales','b_free':'Gratis','b_free_sub':'0€','b_2k':'Menos de 20€','b_2k_sub':'Casual','b_5k':'Menos de 50€','b_5k_sub':'Satisfecho','b_10k':'Menos de 100€','b_10k_sub':'Generoso','b_over':'100€+','b_over_sub':'Sin límite!','wx_rain':'☂️ 雨予報なので屋内スポット中心にご提案！','wx_drizzle':'🌂 雨の可能性あり。念のため屋内も確認を！','wx_sunny':'☀️ 絶好のおでかけ日和！屋外も楽しめます','wx_cloudy':'🌤️ まずまずの天気。お出かけ楽しんで！','wx_rain':'☂️ Rain expected - indoor spots recommended!','wx_drizzle':'🌂 Possible rain - check indoor options too!','wx_sunny':'☀️ Perfect outing weather! Outdoors OK!','wx_cloudy':'🌤️ Not bad weather. Enjoy your outing!','wx_rain':'☂️ 有雨，推荐室内场所！','wx_drizzle':'🌂 可能有雨，也看看室内选择！','wx_sunny':'☀️ 绝佳出行天气！可以去户外！','wx_cloudy':'🌤️ 天气还好，出发吧！','wx_rain':'☂️ 비 예보 - 실내 스팟 위주로 추천!','wx_drizzle':'🌂 비 가능성 있음 - 실내도 확인하세요!','wx_sunny':'☀️ 완벽한 나들이 날씨! 야외도 OK!','wx_cloudy':'🌤️ 무난한 날씨. 즐거운 외출!','wx_rain':'☂️ Pluie prévue - sorties en intérieur!','wx_drizzle':'🌂 Pluie possible - vérifiez les options!','wx_sunny':'☀️ Temps parfait pour sortir!','wx_cloudy':'🌤️ Temps correct. Profitez!','wx_rain':'☂️ Regen erwartet - Innenbereich empfohlen!','wx_drizzle':'🌂 Möglicher Regen - Alternativen prüfen!','wx_sunny':'☀️ Perfektes Ausflugswetter!','wx_cloudy':'🌤️ Akzeptables Wetter. Viel Spaß!','wx_rain':'☂️ Lluvia esperada - recomendamos interiores!','wx_drizzle':'🌂 Posible lluvia - revisa opciones!','wx_sunny':'☀️ Tiempo perfecto para salir!','wx_cloudy':'🌤️ Buen tiempo. Disfruta!','wx_rain':'☂️ Pioggia prevista - preferire interni!','wx_drizzle':'🌂 Possibile pioggia - controlla le opzioni!','wx_sunny':'☀️ Tempo perfetto per uscire!','wx_cloudy':'🌤️ Tempo accettabile. Divertiti!','wx_rain':'☂️ Chuva prevista - ambientes fechados!','wx_drizzle':'🌂 Possível chuva - verifique opções!','wx_sunny':'☀️ Tempo perfeito para sair!','wx_cloudy':'🌤️ Tempo razoável. Aproveite!','wx_rain':'☂️ Ожидается дождь - рекомендуем помещения!','wx_drizzle':'🌂 Возможен дождь - рассмотрите варианты!','wx_sunny':'☀️ Отличная погода для прогулки!','wx_cloudy':'🌤️ Неплохая погода. Наслаждайтесь!','wx_rain':'☂️ متوقع مطر - يُنصح بالأماكن الداخلية!','wx_drizzle':'🌂 احتمال مطر - تحقق من الخيارات!','wx_sunny':'☀️ طقس مثالي للخروج!','wx_cloudy':'🌤️ طقس جيد. استمتع!','wx_rain':'☂️ Yağmur bekleniyor - iç mekanlar önerilir!','wx_drizzle':'🌂 Yağmur olabilir - alternatifleri kontrol et!','wx_sunny':'☀️ Mükemmel çıkış havası!','wx_cloudy':'🌤️ Fena değil. İyi eğlenceler!','wx_rain':'☂️ คาดว่าจะมีฝน - แนะนำสถานที่ในร่ม!','wx_drizzle':'🌂 อาจมีฝน - ลองดูตัวเลือกในร่ม!','wx_sunny':'☀️ อากาศดีเที่ยวได้เลย!','wx_cloudy':'🌤️ อากาศพอใช้ สนุกกันนะ!','wx_rain':'☂️ Dự báo mưa - nên chọn địa điểm trong nhà!','wx_drizzle':'🌂 Có thể có mưa - xem thêm lựa chọn!','wx_sunny':'☀️ Thời tiết tuyệt vời để ra ngoài!','wx_cloudy':'🌤️ Thời tiết ổn. Vui vẻ nhé!','wx_rain':'☂️ Hujan diprediksi - tempat indoor direkomendasikan!','wx_drizzle':'🌂 Kemungkinan hujan - cek opsi indoor!','wx_sunny':'☀️ Cuaca sempurna untuk keluar!','wx_cloudy':'🌤️ Cuaca lumayan. Selamat menikmati!','wx_rain':'☂️ बारिश की संभावना - इनडोर स्थान बेहतर!','wx_drizzle':'🌂 हल्की बारिश हो सकती है!','wx_sunny':'☀️ बाहर जाने के लिए बेहतरीन मौसम!','wx_cloudy':'🌤️ ठीक-ठाक मौसम। मज़े करो!','wx_rain':'☂️ Rain expected - indoor spots recommended!','wx_drizzle':'🌂 Possible rain - check indoor options too!','wx_sunny':'☀️ Perfect outing weather! Outdoors OK!','wx_cloudy':'🌤️ Not bad weather. Enjoy your outing!','wx_rain':'☂️ Chuva prevista - ambientes fechados!','wx_drizzle':'🌂 Possível chuva - verifique opções!','wx_sunny':'☀️ Tempo perfeito para sair!','wx_cloudy':'🌤️ Tempo razoável. Aproveite!','wx_rain':'☂️ Lluvia esperada - recomendamos interiores!','wx_drizzle':'🌂 Posible lluvia - revisa opciones!','wx_sunny':'☀️ Tiempo perfecto para salir!','wx_cloudy':'🌤️ Buen tiempo. Disfruta!','wx_rain':'☂️ Lluvia esperada - recomendamos interiores!','wx_drizzle':'🌂 Posible lluvia - revisa opciones!','wx_sunny':'☀️ Tiempo perfecto para salir!','wx_cloudy':'🌤️ Buen tiempo. Disfruta!'});
-    g.appendChild(div);
-  });
-}
-function openCountryModal(){
-  var modal = document.getElementById('country-modal');
-  if(modal.classList.contains('open')){
-    modal.classList.remove('open');
-  } else {
-    buildCountryGrid();
-    modal.classList.add('open');
-  }
-}
-function closeCountryModal(){document.getElementById('country-modal').classList.remove('open');}
-document.getElementById('country-modal').addEventListener('click',function(e){if(e.target===this)closeCountryModal();});
-function selectCountry(code){
-  currentLang=code;
-  closeCountryModal();
-  var arrow=document.getElementById('country-arrow');
-  if(arrow) arrow.style.transform='rotate(0deg)';
-  applyLang();
-}
-
-function applyLang(){
-  const t=LTXT[currentLang]||LTXT.ja;
-  const c=COUNTRIES.find(x=>x.code===currentLang)||COUNTRIES[0];
-  const s=function(id,val){const el=document.getElementById(id);if(el)el.textContent=val;};
-  const q=function(sel,val){const el=document.querySelector(sel);if(el)el.textContent=val;};
-  const p=function(id,val){const el=document.getElementById(id);if(el)el.placeholder=val;};
-  s('country-current-flag',c.flag);
-  s('country-current-name',c.nativeName);
-  q('.header h1',t.title);
-  q('.header p',t.subtitle);
-  q('.location-card-title',t.locTitle);
-  q('.location-card-desc',t.locDesc);
-  q('.btn-allow',t.locAllow);
-  q('.btn-skip',t.locSkip);
-  q('#step-date h2',t.stepDate);
-  q('#step-group h2',t.stepGroup);
-  q('#step-mood h2',t.stepMood);
-  q('#step-time h2',t.stepTime);
-  q('#step-budget h2',t.stepBudget);
-  const dc=document.querySelectorAll('#grid-date .card');
-  if(dc[0]){dc[0].querySelector('.label').textContent=t.today;dc[0].dataset.val=t.today;}
-  if(dc[1]){dc[1].querySelector('.label').textContent=t.tomorrow;dc[1].dataset.val=t.tomorrow;}
-  if(dc[2]){dc[2].querySelector('.label').textContent=t.weekend;dc[2].dataset.val=t.weekend;}
-  const tc=document.querySelectorAll('#grid-time .card');
-  ['morning','afternoon','evening','allday'].forEach(function(k,i){if(tc[i])tc[i].querySelector('.label').textContent=t[k];});
-  const al=document.querySelector('#step-budget label');if(al)al.textContent=t.areaLabel;
-  p('location',t.areaPlaceholder);
-  s('btn-date',t.next);s('btn-group',t.next);s('btn-mood',t.next);s('btn-time',t.next);s('btn-budget',t.suggest);
-  document.querySelectorAll('.btn-ghost').forEach(function(b){b.textContent=t.back;});
-  s('stream-msg',t.loading);
-  q('#step-result h2',t.resultTitle);
-  s('reset-btn',t.reset);
-  q('.share-title',t.shareTitle);
-  q('.share-desc',t.shareDesc);
-  p('modal-ta',t.questionPlaceholder);
-  s('modal-send',t.questionSend);
-  s('country-modal-title',t.countryModalTitle);
-
-  // Update all card labels
-  const cardIds = ['g_solo','g_solo_sub','g_couple','g_couple_sub','g_family','g_family_sub',
-    'g_friends','g_friends_sub','g_dad','g_dad_sub','g_mom','g_mom_sub',
-    'm_refresh','m_sightseeing','m_hidden','m_culture','m_food','m_active',
-    'm_relax','m_adventure','m_event',
-    'b_free','b_free_sub','b_2k','b_2k_sub','b_5k','b_5k_sub',
-    'b_10k','b_10k_sub','b_over','b_over_sub'];
-  cardIds.forEach(function(id){
-    const el=document.getElementById(id);
-    if(el && t[id]) el.textContent=t[id];
-  });
-
-  document.documentElement.dir=(currentLang==='ar')?'rtl':'ltr';
-}
-
-// ── Event bindings ────────────────────────────────────────
+// ── Init ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function(){
+  // Build language grid
+  buildLangGrid();
   applyLang();
 
-  // Country
-  var e; 
-  e=document.getElementById('open-country-btn'); if(e) e.addEventListener('click',openCountryModal);
-  e=document.getElementById('close-country-btn'); if(e) e.addEventListener('click',closeCountryModal);
+  // Lang toggle
+  document.getElementById('lang-toggle-btn').addEventListener('click',function(){
+    this.classList.toggle('open');
+    document.getElementById('lang-accordion').classList.toggle('open');
+  });
 
   // Location
-  e=document.getElementById('btn-allow-loc'); if(e) e.addEventListener('click',requestLocation);
-  e=document.getElementById('btn-skip-loc');  if(e) e.addEventListener('click',skipLocation);
-
-  // Step navigation
-  document.querySelectorAll('[data-goto]').forEach(function(btn){
-    btn.addEventListener('click',function(){goStep(parseInt(this.dataset.goto));});
-  });
-
-  // Fetch & Reset
-  e=document.getElementById('fetch-btn');  if(e) e.addEventListener('click',fetchSuggestions);
-  e=document.getElementById('reset-btn');  if(e) e.addEventListener('click',resetApp);
-  e=document.getElementById('copy-share-btn'); if(e) e.addEventListener('click',copyShareText);
+  document.getElementById('btn-allow').addEventListener('click',requestLocation);
+  document.getElementById('btn-skip').addEventListener('click',skipLocation);
 
   // Cards
   document.querySelectorAll('.card[data-type]').forEach(function(card){
     card.addEventListener('click',function(){selectCard(this,this.dataset.type);});
   });
 
-  // Delegated events in results
-  document.getElementById('suggestions-list').addEventListener('click',function(e){
-    var s=e.target.closest('[data-save-idx]');
-    if(s) toggleSave(parseInt(s.dataset.saveIdx),s.dataset.saveName);
-    var q=e.target.closest('[data-openq]');
-    if(q) openQ(parseInt(q.dataset.openq));
+  // Step nav buttons
+  document.querySelectorAll('[data-goto]').forEach(function(btn){
+    btn.addEventListener('click',function(){goStep(parseInt(this.dataset.goto));});
   });
 
-  // Modals
+  // Fetch
+  document.getElementById('btn-budget').addEventListener('click',fetchSuggestions);
+
+  // Reset
+  document.getElementById('reset-btn').addEventListener('click',resetApp);
+
+  // Copy share
+  document.getElementById('copy-btn').addEventListener('click',copyShareText);
+
+  // Results delegated events
+  document.getElementById('suggestions-list').addEventListener('click',function(e){
+    var saveBtn=e.target.closest('[data-si]');
+    if(saveBtn){toggleSave(parseInt(saveBtn.dataset.si),saveBtn.dataset.sn);return;}
+    var qBtn=e.target.closest('[data-qi]');
+    if(qBtn){openQ(parseInt(qBtn.dataset.qi));return;}
+  });
+
+  // Q modal
+  document.getElementById('modal-close-btn').addEventListener('click',closeQ);
+  document.getElementById('modal-send').addEventListener('click',sendQ);
   document.getElementById('q-modal').addEventListener('click',function(e){if(e.target===this)closeQ();});
-  e=document.getElementById('modal-send');  if(e) e.addEventListener('click',sendQ);
-  e=document.getElementById('close-q-btn'); if(e) e.addEventListener('click',closeQ);
+
+  // Weather
+  initWeather();
 });
+
+function initWeather(){
+  // Show location card, wait for user action
+}
 </script>
 </body>
 </html>
