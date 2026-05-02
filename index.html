@@ -650,6 +650,11 @@ async function fetchSuggestions() {
     '・晴れ・快晴の場合は屋外スポットも積極的に提案し、descriptionに「晴れだからこそ楽しい理由」を自然に含めてください。\n'+
     '・曇りや不安定な天気の場合は屋内・屋外どちらも提案しつつ、tipに天気への対策を含めてください。\n'+
     'CRITICAL: '+T('promptOnly')+'\n'+
+    'VARIETY RULE: Make the 3 suggestions DIVERSE and SURPRISING. Mix different types:\n'+
+    '- One safe/popular choice\n'+
+    '- One unexpected/hidden gem\n'+
+    '- One bold/adventurous suggestion that might surprise the user\n'+
+    'Do NOT suggest similar places. Think creatively and broadly!\n'+
     'Return ONLY a valid JSON array. No markdown, no explanation, no extra text.\n'+
     '[{"name":"real specific place name","type":"category in '+lang+'","description":"appeal for '+state.group+' max 80 chars in '+lang+'","tip":"tip for '+state.group+' max 40 chars in '+lang+'","vibes":["tag1 in '+lang+'","tag2","tag3"],"bestTime":"best time max 20 chars in '+lang+'"}]';
 
@@ -902,7 +907,6 @@ function copyShareText() {
 
 
 initWeather();
-applyLang();
 
 // ── Country / Language ────────────────────────────────────
 const COUNTRIES=[
@@ -1022,6 +1026,8 @@ function applyLang(){
 
   document.documentElement.dir=(currentLang==='ar')?'rtl':'ltr';
 }
+// Initialize language on page load
+document.addEventListener("DOMContentLoaded", function(){ applyLang(); });
 </script>
 </body>
 </html>
