@@ -146,6 +146,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .search-link-name{font-size:12px;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
 .search-link-url{font-size:10px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;margin-top:2px;}
 /* Ad */
+.more-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;margin-top:4px;margin-bottom:8px;background:var(--sur);border:1px solid var(--bor);border-radius:12px;color:var(--mut);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:all 0.2s;}
+.more-btn:hover{border-color:rgba(240,165,0,0.4);color:var(--acc);}
 .ad-banner{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--bg);border-top:1px solid var(--bor);display:flex;flex-direction:column;align-items:center;padding:5px 0 8px;}
 .ad-label{font-size:9px;color:var(--mut);letter-spacing:0.15em;margin-bottom:3px;}
 .ad-frame{width:320px;height:50px;border:none;border-radius:5px;background:rgba(255,255,255,0.03);display:block;}
@@ -554,12 +556,12 @@ async function fetchSuggestions(){
   var lang=T('promptLang');
 
   var prompt=
-    'You are an outing suggestion expert. Suggest 3 diverse outing destinations.\n'+
+    'You are an outing suggestion expert. Suggest 9 diverse outing destinations.\n'+
     'Conditions: date='+state.dateKey+', weather='+wxStr+', group='+state.group+
     ', mood='+state.mood+', time='+state.time+', budget='+state.budget+
     ', season='+SEASON+', area='+areaStr+'\n'+
     'CRITICAL: '+T('promptOnly')+'\n'+
-    'VARIETY: Make suggestions diverse - 1 popular, 1 hidden gem, 1 surprising/bold choice.\n'+
+    'VARIETY: Make all 9 suggestions DIVERSE. Mix popular spots, hidden gems, bold/surprising choices, different categories (nature, food, culture, activity, etc). No similar places.\n'+
     'If area is specified, suggest ONLY places in that area.\n'+
     'Consider weather: rainy=prefer indoor, sunny=outdoor OK.\n'+
     'Return ONLY valid JSON array, no markdown:\n'+
@@ -586,6 +588,44 @@ async function fetchSuggestions(){
 }
 
 // ── Render results ────────────────────────────────────────
+function makeCard(s,i){
+  var div=document.createElement('div');div.className='suggestion';
+  div.style.animationDelay=(i%3*0.1)+'s';
+  div.innerHTML=
+    '<div class="sug-head"><div><div class="sug-name">'+esc(s.name)+'</div><div class="sug-type">📌 '+esc(s.type)+'</div></div>'+
+    '<button class="save-btn" data-si="'+i+'" data-sn="'+esc(s.name)+'">🤍</button></div>'+
+    '<div class="sug-desc">'+esc(s.description)+'</div>'+
+    '<div class="sug-tip">💡 '+esc(s.tip)+'</div>'+
+    '<div class="vibes">'+(s.vibes||[]).map(function(v){return '<span class="vibe">'+esc(v)+'</span>';}).join('')+'</div>'+
+    '<div class="sug-time">⏰ '+esc(s.bestTime)+'</div>'+
+    '<a class="map-btn" href="https://www.google.com/maps/search/'+encodeURIComponent(s.name)+'" target="_blank" rel="noopener">'+T('mapBtn')+'</a>'+
+    '<button class="question-btn" data-qi="'+i+'">'+T('qBtn')+'</button>';
+  return div;
+}
+
+function showMoreSuggestions(){
+  var list=state.suggestions;
+  var c=document.getElementById('suggestions-list');
+  var start=state.shownCount;
+  var end=Math.min(start+3,list.length);
+  // Remove existing more-btn if any
+  var existing=document.getElementById('more-btn');
+  if(existing)existing.remove();
+  for(var i=start;i<end;i++){
+    c.appendChild(makeCard(list[i],i));
+  }
+  state.shownCount=end;
+  // Add "more" button if there are remaining suggestions
+  if(state.shownCount<list.length){
+    var remaining=list.length-state.shownCount;
+    var btn=document.createElement('button');
+    btn.className='more-btn';btn.id='more-btn';
+    btn.textContent='＋ もっと見る（残り'+remaining+'件）';
+    btn.addEventListener('click',function(){showMoreSuggestions();window.scrollTo(0,document.body.scrollHeight-600);});
+    c.appendChild(btn);
+  }
+}
+
 function renderResults(list){
   var wx=state.wx[state.dateKey||'today'];
   var wxComment='';
@@ -602,19 +642,8 @@ function renderResults(list){
   document.getElementById('result-title').textContent=T('resultTitle');
 
   var c=document.getElementById('suggestions-list');c.innerHTML='';
-  list.forEach(function(s,i){
-    var div=document.createElement('div');div.className='suggestion';
-    div.innerHTML=
-      '<div class="sug-head"><div><div class="sug-name">'+esc(s.name)+'</div><div class="sug-type">📌 '+esc(s.type)+'</div></div>'+
-      '<button class="save-btn" data-si="'+i+'" data-sn="'+esc(s.name)+'">🤍</button></div>'+
-      '<div class="sug-desc">'+esc(s.description)+'</div>'+
-      '<div class="sug-tip">💡 '+esc(s.tip)+'</div>'+
-      '<div class="vibes">'+(s.vibes||[]).map(function(v){return '<span class="vibe">'+esc(v)+'</span>';}).join('')+'</div>'+
-      '<div class="sug-time">⏰ '+esc(s.bestTime)+'</div>'+
-      '<a class="map-btn" href="https://www.google.com/maps/search/'+encodeURIComponent(s.name)+'" target="_blank" rel="noopener">'+T('mapBtn')+'</a>'+
-      '<button class="question-btn" data-qi="'+i+'">'+T('qBtn')+'</button>';
-    c.appendChild(div);
-  });
+  state.shownCount=0;
+  showMoreSuggestions();
 
   document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
   document.getElementById('step-result').classList.add('active');
@@ -709,7 +738,7 @@ function copyShareText(){
 // ── Reset ─────────────────────────────────────────────────
 function resetApp(){
   state.date=null;state.dateKey=null;state.group=null;state.mood=null;
-  state.time=null;state.budget=null;state.saved=[];state.suggestions=[];
+  state.time=null;state.budget=null;state.saved=[];state.suggestions=[];state.shownCount=0;
   document.querySelectorAll('.card').forEach(function(c){c.classList.remove('selected');});
   ['btn-date','btn-group','btn-mood','btn-time','btn-budget'].forEach(function(id){
     var e=document.getElementById(id);if(e)e.disabled=true;
