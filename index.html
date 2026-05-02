@@ -946,7 +946,14 @@ function T(k){const t=LTXT[currentLang]||LTXT.ja;return t[k]||LTXT.ja[k]||k;}
 function buildCountryGrid(){
   const g=document.getElementById('country-grid');
   if(!g)return;
-  g.innerHTML=COUNTRIES.map(c=>'<div class="country-item'+(c.code===currentLang?' active':'')+'" onclick="selectCountry(''+c.code+'')"><span class="country-flag">'+c.flag+'</span><span class="country-name">'+c.nativeName+'</span></div>').join('');
+  g.innerHTML='';
+  COUNTRIES.forEach(function(c){
+    const div=document.createElement('div');
+    div.className='country-item'+(c.code===currentLang?' active':'');
+    div.innerHTML='<span class="country-flag">'+c.flag+'</span><span class="country-name">'+c.nativeName+'</span>';
+    div.addEventListener('click',function(){selectCountry(c.code);});
+    g.appendChild(div);
+  });
 }
 function openCountryModal(){buildCountryGrid();document.getElementById('country-modal').classList.add('open');}
 function closeCountryModal(){document.getElementById('country-modal').classList.remove('open');}
