@@ -483,6 +483,7 @@ function requestLocation(){
 }
 function skipLocation(){
   document.getElementById('loc-card').style.display='none';
+  // スキップ時は天気カードを表示しない
 }
 
 async function fetchWeather(){
@@ -562,6 +563,12 @@ async function fetchSuggestions(){
     ', season='+SEASON+', area='+areaStr+'\n'+
     'CRITICAL: '+T('promptOnly')+'\n'+
     'VARIETY: Make all 9 suggestions DIVERSE. Mix popular spots, hidden gems, bold/surprising choices, different categories (nature, food, culture, activity, etc). No similar places.\n'+
+    'TRAVEL RANGE based on budget:\n'+
+    '- Free / under $20 (無料/〜2,000円): within 10km of the area\n'+
+    '- Under $50 (〜5,000円): within 30km of the area\n'+
+    '- Under $100 (〜10,000円): within 50km of the area\n'+
+    '- Over $100 (10,000円以上): anywhere OK, travel/trip level distance\n'+
+    'Apply this range strictly. If user specifies an area, use that as center.\n'+
     'If area is specified, suggest ONLY places in that area.\n'+
     'Consider weather: rainy=prefer indoor, sunny=outdoor OK.\n'+
     'Return ONLY valid JSON array, no markdown:\n'+
