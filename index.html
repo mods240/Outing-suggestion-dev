@@ -375,12 +375,12 @@
   <div class="step" id="step-group">
     <h2>だれと行く？</h2>
     <div class="grid grid-3" id="grid-group">
-      <div class="card" data-val="ひとりで"     onclick="selectCard(this,'group')"><span class="emoji">🧍</span><span class="label">ひとりで</span><span class="sub">自分のペースで</span></div>
-      <div class="card" data-val="カップル"     onclick="selectCard(this,'group')"><span class="emoji">💑</span><span class="label">カップル</span><span class="sub">ふたりで</span></div>
-      <div class="card" data-val="家族・子連れ"  onclick="selectCard(this,'group')"><span class="emoji">👨‍👩‍👧</span><span class="label">家族・子連れ</span><span class="sub">みんなで</span></div>
-      <div class="card" data-val="友達グループ"  onclick="selectCard(this,'group')"><span class="emoji">👫</span><span class="label">友達グループ</span><span class="sub">わいわい</span></div>
-      <div class="card" data-val="お父さんと一緒に" onclick="selectCard(this,'group')"><span class="emoji">👨</span><span class="label">お父さんと</span><span class="sub">子ども目線で</span></div>
-      <div class="card" data-val="お母さんと一緒に" onclick="selectCard(this,'group')"><span class="emoji">👩</span><span class="label">お母さんと</span><span class="sub">子ども目線で</span></div>
+      <div class="card" data-key="solo"    onclick="selectCard(this,'group')"><span class="emoji">🧍</span><span class="label" id="g_solo">ひとりで</span><span class="sub" id="g_solo_sub">自分のペースで</span></div>
+      <div class="card" data-key="couple"  onclick="selectCard(this,'group')"><span class="emoji">💑</span><span class="label" id="g_couple">カップル</span><span class="sub" id="g_couple_sub">ふたりで</span></div>
+      <div class="card" data-key="family"  onclick="selectCard(this,'group')"><span class="emoji">👨‍👩‍👧</span><span class="label" id="g_family">家族・子連れ</span><span class="sub" id="g_family_sub">みんなで</span></div>
+      <div class="card" data-key="friends" onclick="selectCard(this,'group')"><span class="emoji">👫</span><span class="label" id="g_friends">友達グループ</span><span class="sub" id="g_friends_sub">わいわい</span></div>
+      <div class="card" data-key="dad"     onclick="selectCard(this,'group')"><span class="emoji">👨</span><span class="label" id="g_dad">お父さんと</span><span class="sub" id="g_dad_sub">子ども目線で</span></div>
+      <div class="card" data-key="mom"     onclick="selectCard(this,'group')"><span class="emoji">👩</span><span class="label" id="g_mom">お母さんと</span><span class="sub" id="g_mom_sub">子ども目線で</span></div>
     </div>
     <div class="btn-row">
       <button class="btn btn-ghost" onclick="goStep(0)">← 戻る</button>
@@ -392,15 +392,15 @@
   <div class="step" id="step-mood">
     <h2>どんなおでかけがしたい？</h2>
     <div class="grid grid-3" id="grid-mood">
-      <div class="card" data-val="リフレッシュしたい"   onclick="selectCard(this,'mood')"><span class="emoji">🌿</span><span class="label">リフレッシュ</span></div>
-      <div class="card" data-val="観光・名所めぐり"     onclick="selectCard(this,'mood')"><span class="emoji">🏯</span><span class="label">観光・名所</span></div>
-      <div class="card" data-val="人が少ない穴場へ"     onclick="selectCard(this,'mood')"><span class="emoji">🌾</span><span class="label">人が少ない穴場</span></div>
-      <div class="card" data-val="文化・芸術を楽しみたい" onclick="selectCard(this,'mood')"><span class="emoji">🎨</span><span class="label">文化・芸術</span></div>
-      <div class="card" data-val="美食を楽しみたい"     onclick="selectCard(this,'mood')"><span class="emoji">🍜</span><span class="label">グルメ</span></div>
-      <div class="card" data-val="体を動かしたい"       onclick="selectCard(this,'mood')"><span class="emoji">🏃</span><span class="label">アクティブ</span></div>
-      <div class="card" data-val="静かにのんびりしたい" onclick="selectCard(this,'mood')"><span class="emoji">📚</span><span class="label">のんびり</span></div>
-      <div class="card" data-val="冒険・非日常を味わいたい" onclick="selectCard(this,'mood')"><span class="emoji">⚡</span><span class="label">冒険・非日常</span></div>
-      <div class="card" data-val="イベント・フェスに行きたい" onclick="selectCard(this,'mood')"><span class="emoji">🎪</span><span class="label">イベント・フェス</span></div>
+      <div class="card" data-key="refresh"  onclick="selectCard(this,'mood')"><span class="emoji">🌿</span><span class="label" id="m_refresh">リフレッシュ</span></div>
+      <div class="card" data-key="sightseeing" onclick="selectCard(this,'mood')"><span class="emoji">🏯</span><span class="label" id="m_sightseeing">観光・名所</span></div>
+      <div class="card" data-key="hidden"   onclick="selectCard(this,'mood')"><span class="emoji">🌾</span><span class="label" id="m_hidden">人が少ない穴場</span></div>
+      <div class="card" data-key="culture"  onclick="selectCard(this,'mood')"><span class="emoji">🎨</span><span class="label" id="m_culture">文化・芸術</span></div>
+      <div class="card" data-key="food"     onclick="selectCard(this,'mood')"><span class="emoji">🍜</span><span class="label" id="m_food">グルメ</span></div>
+      <div class="card" data-key="active"   onclick="selectCard(this,'mood')"><span class="emoji">🏃</span><span class="label" id="m_active">アクティブ</span></div>
+      <div class="card" data-key="relax"    onclick="selectCard(this,'mood')"><span class="emoji">📚</span><span class="label" id="m_relax">のんびり</span></div>
+      <div class="card" data-key="adventure" onclick="selectCard(this,'mood')"><span class="emoji">⚡</span><span class="label" id="m_adventure">冒険・非日常</span></div>
+      <div class="card" data-key="event"    onclick="selectCard(this,'mood')"><span class="emoji">🎪</span><span class="label" id="m_event">イベント・フェス</span></div>
     </div>
     <div class="btn-row">
       <button class="btn btn-ghost" onclick="goStep(1)">← 戻る</button>
@@ -427,11 +427,11 @@
   <div class="step" id="step-budget">
     <h2>ひとりあたりの予算は？</h2>
     <div class="grid grid-3" id="grid-budget">
-      <div class="card" data-val="無料"         onclick="selectCard(this,'budget')"><span class="emoji">🆓</span><span class="label">無料</span><span class="sub">0円</span></div>
-      <div class="card" data-val="2,000円以下"  onclick="selectCard(this,'budget')"><span class="emoji">💴</span><span class="label">2,000円以下</span><span class="sub">カジュアルに</span></div>
-      <div class="card" data-val="5,000円以下"  onclick="selectCard(this,'budget')"><span class="emoji">💵</span><span class="label">5,000円以下</span><span class="sub">満足に</span></div>
-      <div class="card" data-val="10,000円以下" onclick="selectCard(this,'budget')"><span class="emoji">💳</span><span class="label">10,000円以下</span><span class="sub">贅沢に</span></div>
-      <div class="card" data-val="10,000円以上" onclick="selectCard(this,'budget')"><span class="emoji">✨</span><span class="label">10,000円以上</span><span class="sub">大奮発！</span></div>
+      <div class="card" data-key="b_free"  onclick="selectCard(this,'budget')"><span class="emoji">🆓</span><span class="label" id="b_free">無料</span><span class="sub" id="b_free_sub">0円</span></div>
+      <div class="card" data-key="b_2k"    onclick="selectCard(this,'budget')"><span class="emoji">💴</span><span class="label" id="b_2k">2,000円以下</span><span class="sub" id="b_2k_sub">カジュアルに</span></div>
+      <div class="card" data-key="b_5k"    onclick="selectCard(this,'budget')"><span class="emoji">💵</span><span class="label" id="b_5k">5,000円以下</span><span class="sub" id="b_5k_sub">満足に</span></div>
+      <div class="card" data-key="b_10k"   onclick="selectCard(this,'budget')"><span class="emoji">💳</span><span class="label" id="b_10k">10,000円以下</span><span class="sub" id="b_10k_sub">贅沢に</span></div>
+      <div class="card" data-key="b_over"  onclick="selectCard(this,'budget')"><span class="emoji">✨</span><span class="label" id="b_over">10,000円以上</span><span class="sub" id="b_over_sub">大奮発！</span></div>
     </div>
     <div class="input-wrap">
       <label>📍 エリアのヒント（任意）</label>
@@ -594,12 +594,17 @@ function updateBadges() {
 function selectCard(el, type) {
   el.closest('.grid').querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
-  state[type] = el.dataset.val;
+  // Use data-key (language-independent) if available, otherwise data-val
+  state[type] = el.dataset.key || el.dataset.val;
   const btns = {date:'btn-date',group:'btn-group',mood:'btn-mood',time:'btn-time',budget:'btn-budget'};
   document.getElementById(btns[type]).disabled = false;
   if (type === 'date') {
-    const kmap = {'今日':'today','明日':'tomorrow','今週末':'weekend'};
-    showWeather(kmap[state.date] || 'today');
+    // Map selected date label to wx key regardless of language
+    const dc = document.querySelectorAll('#grid-date .card');
+    const idx = Array.from(dc).indexOf(el);
+    const wxKeys = ['today','tomorrow','weekend'];
+    state.dateKey = wxKeys[idx] || 'today';
+    showWeather(state.dateKey);
   }
 }
 
@@ -620,11 +625,14 @@ async function fetchSuggestions() {
   document.getElementById('stream-msg').textContent = T('loading');
 
   const loc = document.getElementById('location').value.trim();
-  const kmap = {'今日':'today','明日':'tomorrow','今週末':'weekend'};
-  const wx = state.wx[kmap[state.date]];
+  // date → wx key mapping (works regardless of language)
+  const wxKey = state.dateKey || 'today';
+  const wx = state.wx[wxKey];
   const wxStr = wx ? (WX_LABEL[wx.code]||'不明')+'・最高'+wx.max+'°・降水確率'+wx.rain+'%' : '不明';
-  const geoArea = (state.geo.name && state.geo.name !== '大阪') ? state.geo.name+'周辺' : null;
-  const areaStr = loc || geoArea || '指定なし（日本国内）';
+  // エリア：手入力を最優先。入力があればGPS位置情報は無視する
+  const areaStr = loc
+    ? loc  // 手入力が最優先
+    : (state.geo.name && state.geo.name !== '大阪' ? state.geo.name+'周辺' : '指定なし');
 
   const prompt =
     'あなたはおでかけ提案の専門家です。以下の条件でおでかけ先を3つ提案してください。\n'+
@@ -700,8 +708,9 @@ function tryShowStreamCards(text, alreadyShown) {
 
 // ── Render ───────────────────────────────────────────────
 function renderResults(list) {
-  const kmap = {'今日':'today','明日':'tomorrow','今週末':'weekend'};
-  const wx = state.wx[kmap[state.date]];
+  // date → wx key mapping (works regardless of language)
+  const wxKey = state.dateKey || 'today';
+  const wx = state.wx[wxKey];
   const wxLine = wx ? (WX_ICON[wx.code]||'')+'&nbsp;'+(WX_LABEL[wx.code]||'')+'&nbsp;'+wx.max+'°&nbsp;(降水'+wx.rain+'%)' : '';
   // 天気コメント生成
   let wxComment = '';
@@ -852,8 +861,9 @@ function resetApp() {
 
 // ── Share ────────────────────────────────────────────────
 function buildShareText(spotName) {
-  const kmap = {'今日':'today','明日':'tomorrow','今週末':'weekend'};
-  const wx = state.wx[kmap[state.date]];
+  // date → wx key mapping (works regardless of language)
+  const wxKey = state.dateKey || 'today';
+  const wx = state.wx[wxKey];
   const wxLabel = wx ? (WX_LABEL[wx.code]||'') : '';
   const tags = '#今日どこいこう #おでかけ #行ってきた';
   const url = 'https://outing-suggestion.vercel.app';
@@ -951,7 +961,7 @@ function buildCountryGrid(){
     const div=document.createElement('div');
     div.className='country-item'+(c.code===currentLang?' active':'');
     div.innerHTML='<span class="country-flag">'+c.flag+'</span><span class="country-name">'+c.nativeName+'</span>';
-    div.addEventListener('click',function(){selectCountry(c.code);});
+    div.addEventListener('click',function(){selectCountry(c.code);,'g_solo':'ひとりで','g_solo_sub':'自分のペースで','g_couple':'カップル','g_couple_sub':'ふたりで','g_family':'家族・子連れ','g_family_sub':'みんなで','g_friends':'友達グループ','g_friends_sub':'わいわい','g_dad':'お父さんと','g_dad_sub':'子ども目線で','g_mom':'お母さんと','g_mom_sub':'子ども目線で','m_refresh':'リフレッシュ','m_sightseeing':'観光・名所','m_hidden':'人が少ない穴場','m_culture':'文化・芸術','m_food':'グルメ','m_active':'アクティブ','m_relax':'のんびり','m_adventure':'冒険・非日常','m_event':'イベント・フェス','b_free':'無料','b_free_sub':'0円','b_2k':'〜2,000円','b_2k_sub':'カジュアルに','b_5k':'〜5,000円','b_5k_sub':'満足に','b_10k':'〜10,000円','b_10k_sub':'贅沢に','b_over':'10,000円以上','b_over_sub':'大奮発！','g_solo':'Solo','g_solo_sub':'My own pace','g_couple':'Couple','g_couple_sub':'Just the two of us','g_family':'Family','g_family_sub':'Everyone together','g_friends':'Friends','g_friends_sub':'Fun group','g_dad':'With Dad','g_dad_sub':'Kid\'s perspective','g_mom':'With Mom','g_mom_sub':'Kid\'s perspective','m_refresh':'Refresh','m_sightseeing':'Sightseeing','m_hidden':'Hidden gems','m_culture':'Culture & Art','m_food':'Foodie','m_active':'Active','m_relax':'Relaxing','m_adventure':'Adventure','m_event':'Events & Festivals','b_free':'Free','b_free_sub':'$0','b_2k':'Under $20','b_2k_sub':'Casual','b_5k':'Under $50','b_5k_sub':'Satisfying','b_10k':'Under $100','b_10k_sub':'Splurge','b_over':'$100+','b_over_sub':'Go all out!','g_solo':'独自一人','g_solo_sub':'按自己节奏','g_couple':'情侣','g_couple_sub':'两人同行','g_family':'家庭','g_family_sub':'全家出行','g_friends':'朋友群','g_friends_sub':'热闹出行','g_dad':'和爸爸','g_dad_sub':'孩子视角','g_mom':'和妈妈','g_mom_sub':'孩子视角','m_refresh':'放松','m_sightseeing':'观光名胜','m_hidden':'冷门景点','m_culture':'文化艺术','m_food':'美食','m_active':'运动','m_relax':'悠闲','m_adventure':'冒险','m_event':'活动节庆','b_free':'免费','b_free_sub':'0元','b_2k':'100元以下','b_2k_sub':'随意','b_5k':'300元以下','b_5k_sub':'满足','b_10k':'700元以下','b_10k_sub':'豪华','b_over':'700元以上','b_over_sub':'尽情享受！','g_solo':'혼자','g_solo_sub':'내 페이스로','g_couple':'커플','g_couple_sub':'둘이서','g_family':'가족','g_family_sub':'다 같이','g_friends':'친구들','g_friends_sub':'왁자지껄','g_dad':'아빠와','g_dad_sub':'아이 시선으로','g_mom':'엄마와','g_mom_sub':'아이 시선으로','m_refresh':'리프레시','m_sightseeing':'관광 명소','m_hidden':'숨은 명소','m_culture':'문화 예술','m_food':'미식','m_active':'액티브','m_relax':'여유롭게','m_adventure':'모험','m_event':'이벤트 페스티벌','b_free':'무료','b_free_sub':'0원','b_2k':'2만원 이하','b_2k_sub':'가볍게','b_5k':'5만원 이하','b_5k_sub':'만족스럽게','b_10k':'10만원 이하','b_10k_sub':'호화롭게','b_over':'10만원 이상','b_over_sub':'마음껏!','g_solo':'Seul(e)','g_solo_sub':'À mon rythme','g_couple':'Couple','g_couple_sub':'À deux','g_family':'Famille','g_family_sub':'Tous ensemble','g_friends':'Amis','g_friends_sub':'En groupe','g_dad':'Avec papa','g_dad_sub':'Vue d\'enfant','g_mom':'Avec maman','g_mom_sub':'Vue d\'enfant','m_refresh':'Se ressourcer','m_sightseeing':'Tourisme','m_hidden':'Lieux cachés','m_culture':'Culture & Art','m_food':'Gastronomie','m_active':'Actif','m_relax':'Détente','m_adventure':'Aventure','m_event':'Événements','b_free':'Gratuit','b_free_sub':'0€','b_2k':'Moins de 20€','b_2k_sub':'Casual','b_5k':'Moins de 50€','b_5k_sub':'Satisfaisant','b_10k':'Moins de 100€','b_10k_sub':'Généreux','b_over':'100€+','b_over_sub':'Sans limite!','g_solo':'Alleine','g_solo_sub':'Mein Tempo','g_couple':'Paar','g_couple_sub':'Zu zweit','g_family':'Familie','g_family_sub':'Alle zusammen','g_friends':'Freunde','g_friends_sub':'Gruppe','g_dad':'Mit Papa','g_dad_sub':'Kinderperspektive','g_mom':'Mit Mama','g_mom_sub':'Kinderperspektive','m_refresh':'Erholen','m_sightseeing':'Sehenswürdigkeiten','m_hidden':'Geheimtipps','m_culture':'Kultur & Kunst','m_food':'Kulinarik','m_active':'Aktiv','m_relax':'Entspannen','m_adventure':'Abenteuer','m_event':'Events & Feste','b_free':'Kostenlos','b_free_sub':'0€','b_2k':'Unter 20€','b_2k_sub':'Casual','b_5k':'Unter 50€','b_5k_sub':'Gut','b_10k':'Unter 100€','b_10k_sub':'Großzügig','b_over':'100€+','b_over_sub':'Alles raus!','g_solo':'Solo/a','g_solo_sub':'A mi ritmo','g_couple':'Pareja','g_couple_sub':'De dos','g_family':'Familia','g_family_sub':'Todos juntos','g_friends':'Amigos','g_friends_sub':'En grupo','g_dad':'Con papá','g_dad_sub':'Perspectiva niño','g_mom':'Con mamá','g_mom_sub':'Perspectiva niño','m_refresh':'Recargar','m_sightseeing':'Turismo','m_hidden':'Lugares ocultos','m_culture':'Cultura & Arte','m_food':'Gastronomía','m_active':'Activo','m_relax':'Relajarse','m_adventure':'Aventura','m_event':'Eventos & Festivales','b_free':'Gratis','b_free_sub':'0€','b_2k':'Menos de 20€','b_2k_sub':'Casual','b_5k':'Menos de 50€','b_5k_sub':'Satisfecho','b_10k':'Menos de 100€','b_10k_sub':'Generoso','b_over':'100€+','b_over_sub':'Sin límite!','g_solo':'Da solo/a','g_solo_sub':'Al mio ritmo','g_couple':'Coppia','g_couple_sub':'In due','g_family':'Famiglia','g_family_sub':'Tutti insieme','g_friends':'Amici','g_friends_sub':'In gruppo','g_dad':'Con papà','g_dad_sub':'Ottica bambino','g_mom':'Con mamma','g_mom_sub':'Ottica bambino','m_refresh':'Ricaricarsi','m_sightseeing':'Turismo','m_hidden':'Luoghi nascosti','m_culture':'Cultura & Arte','m_food':'Gastronomia','m_active':'Attivo','m_relax':'Relax','m_adventure':'Avventura','m_event':'Eventi & Festival','b_free':'Gratis','b_free_sub':'0€','b_2k':'Meno di 20€','b_2k_sub':'Casual','b_5k':'Meno di 50€','b_5k_sub':'Soddisfacente','b_10k':'Meno di 100€','b_10k_sub':'Generoso','b_over':'100€+','b_over_sub':'Senza limiti!','g_solo':'Sozinho/a','g_solo_sub':'No meu ritmo','g_couple':'Casal','g_couple_sub':'A dois','g_family':'Família','g_family_sub':'Todos juntos','g_friends':'Amigos','g_friends_sub':'Em grupo','g_dad':'Com papai','g_dad_sub':'Visão de criança','g_mom':'Com mamãe','g_mom_sub':'Visão de criança','m_refresh':'Recarregar','m_sightseeing':'Turismo','m_hidden':'Lugares escondidos','m_culture':'Cultura & Arte','m_food':'Gastronomia','m_active':'Ativo','m_relax':'Relaxar','m_adventure':'Aventura','m_event':'Eventos & Festivais','b_free':'Grátis','b_free_sub':'R$0','b_2k':'Até R$100','b_2k_sub':'Casual','b_5k':'Até R$250','b_5k_sub':'Satisfatório','b_10k':'Até R$500','b_10k_sub':'Generoso','b_over':'R$500+','b_over_sub':'Sem limites!','g_solo':'Один/одна','g_solo_sub':'В своём темпе','g_couple':'Пара','g_couple_sub':'Вдвоём','g_family':'Семья','g_family_sub':'Все вместе','g_friends':'Друзья','g_friends_sub':'Компанией','g_dad':'С папой','g_dad_sub':'Глазами ребёнка','g_mom':'С мамой','g_mom_sub':'Глазами ребёнка','m_refresh':'Отдохнуть','m_sightseeing':'Достопримечательности','m_hidden':'Тайные места','m_culture':'Культура & Искусство','m_food':'Гастрономия','m_active':'Активный','m_relax':'Отдых','m_adventure':'Приключение','m_event':'События & Фестивали','b_free':'Бесплатно','b_free_sub':'0₽','b_2k':'До 2000₽','b_2k_sub':'Легко','b_5k':'До 5000₽','b_5k_sub':'Хорошо','b_10k':'До 10000₽','b_10k_sub':'Щедро','b_over':'10000₽+','b_over_sub':'Без ограничений!','g_solo':'وحدي','g_solo_sub':'بوتيرتي','g_couple':'زوجان','g_couple_sub':'معاً','g_family':'عائلة','g_family_sub':'معاً','g_friends':'أصدقاء','g_friends_sub':'مجموعة','g_dad':'مع الأب','g_dad_sub':'من منظور الطفل','g_mom':'مع الأم','g_mom_sub':'من منظور الطفل','m_refresh':'تجديد النشاط','m_sightseeing':'معالم سياحية','m_hidden':'أماكن خفية','m_culture':'ثقافة وفن','m_food':'متعة الطعام','m_active':'نشاط','m_relax':'استرخاء','m_adventure':'مغامرة','m_event':'فعاليات ومهرجانات','b_free':'مجاني','b_free_sub':'0','b_2k':'أقل من 50 ريال','b_2k_sub':'عادي','b_5k':'أقل من 150 ريال','b_5k_sub':'مُرضٍ','b_10k':'أقل من 300 ريال','b_10k_sub':'سخي','b_over':'300 ريال+','b_over_sub':'بلا حدود!','g_solo':'Yalnız','g_solo_sub':'Kendi hızımda','g_couple':'Çift','g_couple_sub':'İkimiz','g_family':'Aile','g_family_sub':'Hep birlikte','g_friends':'Arkadaşlar','g_friends_sub':'Grup','g_dad':'Babayla','g_dad_sub':'Çocuk gözüyle','g_mom':'Anneyle','g_mom_sub':'Çocuk gözüyle','m_refresh':'Tazelemek','m_sightseeing':'Turizm','m_hidden':'Gizli yerler','m_culture':'Kültür & Sanat','m_food':'Gastronomi','m_active':'Aktif','m_relax':'Rahatlamak','m_adventure':'Macera','m_event':'Etkinlikler','b_free':'Ücretsiz','b_free_sub':'0₺','b_2k':'200₺ altı','b_2k_sub':'Rahat','b_5k':'500₺ altı','b_5k_sub':'Tatmin edici','b_10k':'1000₺ altı','b_10k_sub':'Cömert','b_over':'1000₺+','b_over_sub':'Sınır yok!','g_solo':'คนเดียว','g_solo_sub':'จังหวะตัวเอง','g_couple':'คู่รัก','g_couple_sub':'สองคน','g_family':'ครอบครัว','g_family_sub':'ทุกคน','g_friends':'กลุ่มเพื่อน','g_friends_sub':'สนุกสนาน','g_dad':'กับพ่อ','g_dad_sub':'มุมมองเด็ก','g_mom':'กับแม่','g_mom_sub':'มุมมองเด็ก','m_refresh':'รีเฟรช','m_sightseeing':'ท่องเที่ยว','m_hidden':'สถานที่ลับ','m_culture':'วัฒนธรรม','m_food':'อาหาร','m_active':'กระฉับกระเฉง','m_relax':'ผ่อนคลาย','m_adventure':'ผจญภัย','m_event':'งานอีเวนต์','b_free':'ฟรี','b_free_sub':'0บาท','b_2k':'ไม่เกิน 500บาท','b_2k_sub':'เบาๆ','b_5k':'ไม่เกิน 1500บาท','b_5k_sub':'พอใจ','b_10k':'ไม่เกิน 3000บาท','b_10k_sub':'หรูหรา','b_over':'3000บาท+','b_over_sub':'ไม่จำกัด!','g_solo':'Một mình','g_solo_sub':'Tốc độ của tôi','g_couple':'Cặp đôi','g_couple_sub':'Hai người','g_family':'Gia đình','g_family_sub':'Cả nhà','g_friends':'Nhóm bạn','g_friends_sub':'Vui vẻ','g_dad':'Với bố','g_dad_sub':'Góc nhìn trẻ em','g_mom':'Với mẹ','g_mom_sub':'Góc nhìn trẻ em','m_refresh':'Thư giãn','m_sightseeing':'Tham quan','m_hidden':'Địa điểm ẩn','m_culture':'Văn hóa & Nghệ thuật','m_food':'Ẩm thực','m_active':'Năng động','m_relax':'Nhàn rỗi','m_adventure':'Phiêu lưu','m_event':'Sự kiện & Lễ hội','b_free':'Miễn phí','b_free_sub':'0đ','b_2k':'Dưới 50k','b_2k_sub':'Nhẹ nhàng','b_5k':'Dưới 150k','b_5k_sub':'Thoải mái','b_10k':'Dưới 300k','b_10k_sub':'Sang trọng','b_over':'300k+','b_over_sub':'Không giới hạn!','g_solo':'Sendiri','g_solo_sub':'Tempo saya','g_couple':'Pasangan','g_couple_sub':'Berdua','g_family':'Keluarga','g_family_sub':'Semua bersama','g_friends':'Teman','g_friends_sub':'Kelompok','g_dad':'Dengan Ayah','g_dad_sub':'Dari sudut anak','g_mom':'Dengan Ibu','g_mom_sub':'Dari sudut anak','m_refresh':'Menyegarkan','m_sightseeing':'Wisata','m_hidden':'Tempat tersembunyi','m_culture':'Budaya & Seni','m_food':'Kuliner','m_active':'Aktif','m_relax':'Santai','m_adventure':'Petualangan','m_event':'Event & Festival','b_free':'Gratis','b_free_sub':'Rp0','b_2k':'Di bawah Rp50k','b_2k_sub':'Santai','b_5k':'Di bawah Rp150k','b_5k_sub':'Puas','b_10k':'Di bawah Rp300k','b_10k_sub':'Mewah','b_over':'Rp300k+','b_over_sub':'Tanpa batas!','g_solo':'अकेले','g_solo_sub':'अपनी गति से','g_couple':'जोड़ा','g_couple_sub':'दो लोग','g_family':'परिवार','g_family_sub':'सब साथ','g_friends':'दोस्त','g_friends_sub':'समूह','g_dad':'पापा के साथ','g_dad_sub':'बच्चे की नज़र','g_mom':'मम्मी के साथ','g_mom_sub':'बच्चे की नज़र','m_refresh':'तरोताज़ा','m_sightseeing':'पर्यटन','m_hidden':'छुपी जगहें','m_culture':'संस्कृति & कला','m_food':'खानपान','m_active':'सक्रिय','m_relax':'आराम','m_adventure':'रोमांच','m_event':'कार्यक्रम','b_free':'मुफ़्त','b_free_sub':'₹0','b_2k':'₹500 तक','b_2k_sub':'हल्का','b_5k':'₹1500 तक','b_5k_sub':'संतोषजनक','b_10k':'₹3000 तक','b_10k_sub':'शानदार','b_over':'₹3000+','b_over_sub':'बिना सीमा!','g_solo':'Solo','g_solo_sub':'My own pace','g_couple':'Couple','g_couple_sub':'Just the two of us','g_family':'Family','g_family_sub':'Everyone together','g_friends':'Friends','g_friends_sub':'Fun group','g_dad':'With Dad','g_dad_sub':'Kid\'s perspective','g_mom':'With Mom','g_mom_sub':'Kid\'s perspective','m_refresh':'Refresh','m_sightseeing':'Sightseeing','m_hidden':'Hidden gems','m_culture':'Culture & Art','m_food':'Foodie','m_active':'Active','m_relax':'Relaxing','m_adventure':'Adventure','m_event':'Events & Festivals','b_free':'Free','b_free_sub':'$0','b_2k':'Under $20','b_2k_sub':'Casual','b_5k':'Under $50','b_5k_sub':'Satisfying','b_10k':'Under $100','b_10k_sub':'Splurge','b_over':'$100+','b_over_sub':'Go all out!','g_solo':'Sozinho/a','g_solo_sub':'No meu ritmo','g_couple':'Casal','g_couple_sub':'A dois','g_family':'Família','g_family_sub':'Todos juntos','g_friends':'Amigos','g_friends_sub':'Em grupo','g_dad':'Com papai','g_dad_sub':'Visão de criança','g_mom':'Com mamãe','g_mom_sub':'Visão de criança','m_refresh':'Recarregar','m_sightseeing':'Turismo','m_hidden':'Lugares escondidos','m_culture':'Cultura & Arte','m_food':'Gastronomia','m_active':'Ativo','m_relax':'Relaxar','m_adventure':'Aventura','m_event':'Eventos & Festivais','b_free':'Grátis','b_free_sub':'R$0','b_2k':'Até R$100','b_2k_sub':'Casual','b_5k':'Até R$250','b_5k_sub':'Satisfatório','b_10k':'Até R$500','b_10k_sub':'Generoso','b_over':'R$500+','b_over_sub':'Sem limites!','g_solo':'Solo/a','g_solo_sub':'A mi ritmo','g_couple':'Pareja','g_couple_sub':'De dos','g_family':'Familia','g_family_sub':'Todos juntos','g_friends':'Amigos','g_friends_sub':'En grupo','g_dad':'Con papá','g_dad_sub':'Perspectiva niño','g_mom':'Con mamá','g_mom_sub':'Perspectiva niño','m_refresh':'Recargar','m_sightseeing':'Turismo','m_hidden':'Lugares ocultos','m_culture':'Cultura & Arte','m_food':'Gastronomía','m_active':'Activo','m_relax':'Relajarse','m_adventure':'Aventura','m_event':'Eventos & Festivales','b_free':'Gratis','b_free_sub':'0€','b_2k':'Menos de 20€','b_2k_sub':'Casual','b_5k':'Menos de 50€','b_5k_sub':'Satisfecho','b_10k':'Menos de 100€','b_10k_sub':'Generoso','b_over':'100€+','b_over_sub':'Sin límite!','g_solo':'Solo/a','g_solo_sub':'A mi ritmo','g_couple':'Pareja','g_couple_sub':'De dos','g_family':'Familia','g_family_sub':'Todos juntos','g_friends':'Amigos','g_friends_sub':'En grupo','g_dad':'Con papá','g_dad_sub':'Perspectiva niño','g_mom':'Con mamá','g_mom_sub':'Perspectiva niño','m_refresh':'Recargar','m_sightseeing':'Turismo','m_hidden':'Lugares ocultos','m_culture':'Cultura & Arte','m_food':'Gastronomía','m_active':'Activo','m_relax':'Relajarse','m_adventure':'Aventura','m_event':'Eventos & Festivales','b_free':'Gratis','b_free_sub':'0€','b_2k':'Menos de 20€','b_2k_sub':'Casual','b_5k':'Menos de 50€','b_5k_sub':'Satisfecho','b_10k':'Menos de 100€','b_10k_sub':'Generoso','b_over':'100€+','b_over_sub':'Sin límite!'});
     g.appendChild(div);
   });
 }
@@ -997,6 +1007,19 @@ function applyLang(){
   p('modal-ta',t.questionPlaceholder);
   s('modal-send',t.questionSend);
   s('country-modal-title',t.countryModalTitle);
+
+  // Update all card labels
+  const cardIds = ['g_solo','g_solo_sub','g_couple','g_couple_sub','g_family','g_family_sub',
+    'g_friends','g_friends_sub','g_dad','g_dad_sub','g_mom','g_mom_sub',
+    'm_refresh','m_sightseeing','m_hidden','m_culture','m_food','m_active',
+    'm_relax','m_adventure','m_event',
+    'b_free','b_free_sub','b_2k','b_2k_sub','b_5k','b_5k_sub',
+    'b_10k','b_10k_sub','b_over','b_over_sub'];
+  cardIds.forEach(function(id){
+    const el=document.getElementById(id);
+    if(el && t[id]) el.textContent=t[id];
+  });
+
   document.documentElement.dir=(currentLang==='ar')?'rtl':'ltr';
 }
 </script>
