@@ -582,10 +582,10 @@ async function fetchSuggestions(){
     var raw=(data.content||[]).map(function(b){return b.type==='text'?b.text:'';}).join('');
     if(!raw)throw new Error('Empty response');
     var js=raw;
-    var f=raw.match(/```(?:json)?\s*([\s\S]*?)```/);if(f)js=f[1];
-    else{var a=raw.match(/\[[\s\S]*\]/);if(a)js=a[0];}
-    var list;try{list=JSON.parse(js.trim());}catch(e){throw new Error('Parse error: '+raw.slice(0,100));}
-    if(!Array.isArray(list)||!list.length)throw new Error('Empty list');
+    var f=raw.match(/```(?:json)?[\s\S]*?```/g);
+    if(f){var combined=f.map(function(b){return b.replace(/```json/g,"").replace(/```/g,"");}).join("");var aa=combined.match(/\[[\s\S]*\]/);if(aa)js=aa[0];}
+    else{var bb=raw.match(/\[[\s\S]*\]/);if(bb)js=bb[0];}
+    var list;try{list=JSON.parse(js.trim());}catch(e){throw new Error('Parse error: '+js.slice(0,100));}
     state.suggestions=list;
     renderResults(list);
   }catch(e){
