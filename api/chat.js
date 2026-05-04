@@ -16,6 +16,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 8000,
+        system: 'You are a JSON-only assistant. ALWAYS return raw JSON only. NEVER use markdown, NEVER use ```json, NEVER use ``` code blocks. Return only the raw JSON array or object, nothing else.',
         messages: messages,
       }),
     });
