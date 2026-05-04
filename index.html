@@ -563,12 +563,13 @@ async function fetchSuggestions(){
     ', season='+SEASON+', area='+areaStr+'\n'+
     'CRITICAL: '+T('promptOnly')+'\n'+
     'VARIETY: Make all 9 suggestions DIVERSE. Mix popular spots, hidden gems, bold/surprising choices, different categories (nature, food, culture, activity, etc). No similar places.\n'+
-    'TRAVEL RANGE based on budget:\n'+
-    '- Free / under $20 (無料/〜2,000円): within 10km of the area\n'+
-    '- Under $50 (〜5,000円): within 30km of the area\n'+
-    '- Under $100 (〜10,000円): within 50km of the area\n'+
-    '- Over $100 (10,000円以上): anywhere OK, travel/trip level distance\n'+
-    'Apply this range strictly. If user specifies an area, use that as center.\n'+
+    'TRAVEL RANGE - STRICTLY FOLLOW THIS:\n'+
+    '- Free (無料): walking distance only, within 3km\n'+
+    '- Under 2000yen (~$15): within 10km, same city/ward only\n'+
+    '- Under 5000yen (~$35): within 20km, same prefecture/region only. DO NOT suggest places in other prefectures.\n'+
+    '- Under 10000yen (~$70): within 50km, neighboring prefecture OK\n'+
+    '- Over 10000yen ($70+): travel OK, anywhere in Japan\n'+
+    'If user specifies an area (e.g. Osaka, Shinjuku), ALL suggestions must be within the travel range centered on that area. NEVER suggest places far outside this range.\n'+
     'If area is specified, suggest ONLY places in that area.\n'+
     'Consider weather: rainy=prefer indoor, sunny=outdoor OK.\n'+
     'Return ONLY valid JSON array, no markdown:\n'+
