@@ -474,10 +474,25 @@ function requestLocation(){
   btn.textContent='取得中…';btn.disabled=true;
   if(!navigator.geolocation){skipLocation();return;}
   navigator.geolocation.getCurrentPosition(
-    function(p){state.geo.lat=p.coords.latitude;state.geo.lon=p.coords.longitude;state.geo.name='現在地';
+    function(p){
+      state.geo.lat=p.coords.latitude;
+      state.geo.lon=p.coords.longitude;
+      state.geo.name='現在地';
       document.getElementById('loc-card').style.display='none';
       document.getElementById('wx-card').style.display='flex';
-      fetchWeather();},
+      // 逆ジオコーディングで地名取得
+      fetch('https://nominatim.openstreetmap.org/reverse?lat='+p.coords.latitude+'&lon='+p.coords.longitude+'&format=json&accept-language=ja')
+        .then(function(r){return r.json();})
+        .then(function(d){
+          var addr=d.address||{};
+          // 市区町村レベルの地名を取得
+          var name=addr.suburb||addr.neighbourhood||addr.city_district||addr.town||addr.city||addr.county||'現在地';
+          state.geo.name=name;
+          state.geo.fullAddr=addr;
+        })
+        .catch(function(){state.geo.name='現在地';})
+        .finally(function(){fetchWeather();});
+    },
     function(){skipLocation();},{timeout:8000}
   );
 }
@@ -562,7 +577,7 @@ async function fetchSuggestions(){
     ', mood='+state.mood+', time='+state.time+', budget='+state.budget+
     ', season='+SEASON+', area='+areaStr+'\n'+
     'CRITICAL: '+T('promptOnly')+'\n'+
-    'VARIETY: Make all 9 suggestions DIVERSE. Mix popular spots, hidden gems, bold/surprising choices, different categories (nature, food, culture, activity, etc). No similar places.\n'+
+    'VARIETY: Make all 9 suggestions DIVERSE. Prioritize local hidden gems and niche spots that only locals know. Mix: neighborhood favorites, unusual spots, local institutions, secret viewpoints, etc. Avoid famous tourist spots and chain restaurants unless budget allows.\n'+
     'TRAVEL RANGE - STRICTLY FOLLOW THIS:\n'+
     '- Free (無料): walking distance only, within 3km\n'+
     '- Under 2000yen (~$15): within 10km, same city/ward only\n'+
