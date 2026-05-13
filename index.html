@@ -150,9 +150,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .more-btn:hover{border-color:rgba(240,165,0,0.4);color:var(--acc);}
 .ad-banner{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--bg);border-top:1px solid var(--bor);display:none;flex-direction:column;align-items:center;padding:5px 0 8px;}
 .ad-banner.show{display:flex;}
-/* Navigation */
-.site-nav{display:flex;justify-content:center;gap:4px;flex-wrap:wrap;margin-bottom:14px;padding:8px 6px;background:var(--sur);border:1px solid var(--bor);border-radius:50px;}
-.site-nav a{padding:6px 12px;font-size:11px;color:var(--mut);text-decoration:none;border-radius:50px;transition:all 0.2s;white-space:nowrap;}
+/* Navigation - 4 items in 1 row (text only) */
+.site-nav{display:flex;justify-content:center;gap:2px;margin-bottom:14px;padding:6px;background:var(--sur);border:1px solid var(--bor);border-radius:50px;}
+.site-nav a{flex:1;text-align:center;padding:7px 4px;font-size:12px;color:var(--mut);text-decoration:none;border-radius:50px;transition:all 0.2s;white-space:nowrap;}
 .site-nav a:hover{color:var(--txt);background:rgba(255,255,255,0.04);}
 .site-nav a.current{color:var(--acc);background:rgba(240,165,0,0.1);}
 .ad-label{font-size:9px;color:var(--mut);letter-spacing:0.15em;margin-bottom:3px;}
@@ -172,10 +172,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
   <!-- Navigation -->
   <nav class="site-nav" aria-label="サイトナビゲーション">
-    <a href="/" class="current">🗺️ ホーム</a>
-    <a href="/how-to-use.html">📖 使い方</a>
-    <a href="/about.html">ℹ️ このアプリ</a>
-    <a href="/privacy.html">🔒 プライバシー</a>
+    <a href="/" class="current">ホーム</a>
+    <a href="/how-to-use.html">使い方</a>
+    <a href="/about.html">このアプリ</a>
+    <a href="/privacy.html">プライバシー</a>
   </nav>
 
   <!-- Language selector -->

@@ -44,41 +44,84 @@
     padding: 48px 24px 80px;
   }
 
-  /* Header */
-  .header {
+  /* Site header (全ページ共通) */
+  .site-header {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 14px;
   }
-  .header-icon { font-size: 40px; display: block; margin-bottom: 12px; }
-  .header h1 {
-    font-size: 13px;
+  .site-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .site-header-icon {
+    font-size: 30px;
+    animation: bob 3s ease-in-out infinite;
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  .site-header-title {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .site-header-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .site-header-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* Page sub-header (各ページの見出し) */
+  .page-subheader {
+    text-align: center;
+    margin: 24px 0 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+  .page-subheader-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .page-subheader h1 {
+    font-size: 11px;
     font-weight: 400;
     color: var(--muted);
     letter-spacing: 0.2em;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
-  .header h2 {
-    font-size: 22px;
+  .page-subheader h2 {
+    font-size: 18px;
     font-weight: 900;
     color: var(--accent);
     letter-spacing: 0.05em;
   }
 
-  /* Navigation */
+  /* Navigation - 4 items in 1 row (text only) */
   .site-nav {
     display: flex;
     justify-content: center;
-    gap: 4px;
-    flex-wrap: wrap;
-    margin: 0 auto 32px;
-    padding: 8px 6px;
+    gap: 2px;
+    margin: 0 auto;
+    padding: 6px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 50px;
-    max-width: 480px;
+    max-width: 100%;
   }
   .site-nav a {
-    padding: 7px 14px;
+    flex: 1;
+    text-align: center;
+    padding: 7px 4px;
     font-size: 12px;
     color: var(--muted);
     text-decoration: none;
@@ -250,18 +293,29 @@
 <body>
 <div class="wrap">
 
-  <div class="header">
-    <span class="header-icon">🗺️</span>
+  <!-- 全ページ共通: サイトヘッダー -->
+  <div class="site-header">
+    <div class="site-header-top">
+      <span class="site-header-icon">🗺️</span>
+      <div class="site-header-title"><a href="/">今日、明日、どこいこう？</a></div>
+    </div>
+    <p class="site-header-sub">暇だけどやることない…を解決するアプリ</p>
+  </div>
+
+  <!-- 全ページ共通: ナビゲーション -->
+  <nav class="site-nav" aria-label="サイトナビゲーション">
+    <a href="/">ホーム</a>
+    <a href="/how-to-use.html">使い方</a>
+    <a href="/about.html" class="current">このアプリ</a>
+    <a href="/privacy.html">プライバシー</a>
+  </nav>
+
+  <!-- このページの見出し -->
+  <div class="page-subheader">
+    <span class="page-subheader-icon">ℹ️</span>
     <h1>ABOUT</h1>
     <h2>このアプリについて</h2>
   </div>
-
-  <nav class="site-nav" aria-label="サイトナビゲーション">
-    <a href="/">🗺️ ホーム</a>
-    <a href="/how-to-use.html">📖 使い方</a>
-    <a href="/about.html" class="current">ℹ️ このアプリ</a>
-    <a href="/privacy.html">🔒 プライバシー</a>
-  </nav>
 
   <div class="hero">
     <p>「暇だけど、やることない…」<br>そんな時間を、ちょっと楽しい時間に。</p>
