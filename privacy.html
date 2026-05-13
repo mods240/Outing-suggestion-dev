@@ -45,9 +45,7 @@
   /* Header */
   .header {
     text-align: center;
-    margin-bottom: 48px;
-    padding-bottom: 32px;
-    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
   }
   .header-icon { font-size: 40px; display: block; margin-bottom: 12px; }
   .header h1 {
@@ -164,6 +162,37 @@
     text-decoration: none;
   }
   .contact-link:hover { text-decoration: underline; }
+
+  /* Navigation */
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin: 0 auto 32px;
+    padding: 8px 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    max-width: 480px;
+  }
+  .site-nav a {
+    padding: 7px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .site-nav a:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.04);
+  }
+  .site-nav a.current {
+    color: var(--accent);
+    background: rgba(240,165,0,0.1);
+  }
 </style>
 </head>
 <body>
@@ -175,6 +204,13 @@
     <h2>プライバシーポリシー</h2>
     <div class="date">制定日：2026年5月　今日、明日、どこいこう？</div>
   </div>
+
+  <nav class="site-nav" aria-label="サイトナビゲーション">
+    <a href="/">🗺️ ホーム</a>
+    <a href="/how-to-use.html">📖 使い方</a>
+    <a href="/about.html">ℹ️ このアプリ</a>
+    <a href="/privacy.html" class="current">🔒 プライバシー</a>
+  </nav>
 
   <div class="section">
     <h3>はじめに</h3>

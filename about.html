@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>このアプリについて | 今日、明日、どこいこう？</title>
+<meta name="description" content="「今日、明日、どこいこう？」は、AIがあなたの気分や予定にあわせておでかけ先を提案するWebアプリです。開発の背景、目的、こだわりについて紹介します。">
+<link rel="canonical" href="https://outing-suggestion.vercel.app/about.html">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.09);
+    --accent: #f0a500;
+    --accent2: #ff6b35;
+    --text: #f0ece4;
+    --muted: #8a8070;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    min-height: 100vh;
+    line-height: 1.8;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(240,165,0,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(240,165,0,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .header-icon { font-size: 40px; display: block; margin-bottom: 12px; }
+  .header h1 {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+  .header h2 {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* Navigation */
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin: 0 auto 32px;
+    padding: 8px 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    max-width: 480px;
+  }
+  .site-nav a {
+    padding: 7px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .site-nav a:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.04);
+  }
+  .site-nav a.current {
+    color: var(--accent);
+    background: rgba(240,165,0,0.1);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, rgba(240,165,0,0.08), rgba(255,107,53,0.05));
+    border: 1px solid rgba(240,165,0,0.25);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .hero p {
+    font-size: 15px;
+    color: #d4b060;
+    line-height: 1.9;
+    font-weight: 700;
+  }
+
+  /* Section */
+  .section { margin-bottom: 40px; }
+  .section h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 14px;
+    padding-left: 12px;
+    border-left: 3px solid var(--accent);
+  }
+  .section p {
+    font-size: 14px;
+    color: #b0a898;
+    line-height: 1.9;
+    margin-bottom: 12px;
+  }
+  .section ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 8px;
+  }
+  .section ul li {
+    font-size: 14px;
+    color: #b0a898;
+    padding: 7px 0 7px 22px;
+    position: relative;
+    line-height: 1.7;
+  }
+  .section ul li::before {
+    content: '·';
+    position: absolute;
+    left: 8px;
+    color: var(--accent);
+    font-weight: 900;
+  }
+  .section strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  /* Feature grid */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 520px) {
+    .feature-grid { grid-template-columns: 1fr; }
+  }
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .feature-card .emoji {
+    font-size: 24px;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .feature-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .feature-card p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* Info / highlight box */
+  .info-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .info-box p { margin-bottom: 0; }
+
+  /* CTA */
+  .cta-section {
+    text-align: center;
+    margin-top: 40px;
+    padding: 32px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+  .cta-section h3 {
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 12px;
+    border: none;
+    padding: 0;
+  }
+  .cta-section p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 50px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .cta-btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 24px rgba(240,165,0,0.35);
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .footer p {
+    font-size: 12px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <span class="header-icon">🗺️</span>
+    <h1>ABOUT</h1>
+    <h2>このアプリについて</h2>
+  </div>
+
+  <nav class="site-nav" aria-label="サイトナビゲーション">
+    <a href="/">🗺️ ホーム</a>
+    <a href="/how-to-use.html">📖 使い方</a>
+    <a href="/about.html" class="current">ℹ️ このアプリ</a>
+    <a href="/privacy.html">🔒 プライバシー</a>
+  </nav>
+
+  <div class="hero">
+    <p>「暇だけど、やることない…」<br>そんな時間を、ちょっと楽しい時間に。</p>
+  </div>
+
+  <div class="section">
+    <h3>このアプリでできること</h3>
+    <p>「今日、明日、どこいこう？」は、<strong>5つの質問に答えるだけで、AIがあなたにぴったりのおでかけ先を提案してくれる</strong>Webアプリです。</p>
+    <p>「いつ行くか」「だれと行くか」「どんな気分か」「時間帯」「予算」を選ぶだけで、その日の天気や季節も考慮した提案が届きます。会員登録は不要。スマホでもパソコンでもブラウザがあればすぐ使えます。</p>
+  </div>
+
+  <div class="section">
+    <h3>つくった理由</h3>
+    <p>休日に「どこかに行きたいけど、思いつかない」という瞬間は誰にでもあります。検索すれば情報は山ほど出てきますが、選択肢が多すぎて逆に決められなくなる、ということもよくあります。</p>
+    <p>このアプリは、<strong>「決められない時間」をなくして、「楽しむ時間」を増やす</strong>ためにつくりました。条件を選ぶだけで提案が3つ出てくるので、その中から気になるものを選んで出かけるだけ。考える手間を最小限にすることを大切にしています。</p>
+  </div>
+
+  <div class="section">
+    <h3>こだわっているところ</h3>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <span class="emoji">🌤️</span>
+        <h4>天気を考慮した提案</h4>
+        <p>位置情報を許可すれば、現在地のリアルタイムの天気をふまえた提案が届きます。雨の日には屋内の選択肢が増えます。</p>
+      </div>
+      <div class="feature-card">
+        <span class="emoji">👥</span>
+        <h4>同行者にあわせた提案</h4>
+        <p>ひとり、カップル、家族、友達グループなど、誰と行くかで提案の方向性が変わります。</p>
+      </div>
+      <div class="feature-card">
+        <span class="emoji">💰</span>
+        <h4>予算で選べる</h4>
+        <p>無料〜高めまで5段階で予算を選べます。財布と相談して気軽に決められます。</p>
+      </div>
+      <div class="feature-card">
+        <span class="emoji">🌏</span>
+        <h4>多言語対応</h4>
+        <p>日本語・English・中文・한국어など、複数の言語で使えます。海外の方とのおでかけ計画にも。</p>
+      </div>
+      <div class="feature-card">
+        <span class="emoji">❓</span>
+        <h4>提案に質問できる</h4>
+        <p>「雨でも楽しめる?」「子連れでも大丈夫?」など、気になることをAIに直接聞けます。</p>
+      </div>
+      <div class="feature-card">
+        <span class="emoji">📣</span>
+        <h4>シェア機能</h4>
+        <p>気になった提案や行ってきた場所を、X・LINE・Facebookでかんたんにシェアできます。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>こんな方におすすめ</h3>
+    <ul>
+      <li>休日の予定が決められず、ダラダラ過ごしてしまうことが多い方</li>
+      <li>家族や恋人とのおでかけ先で毎回悩んでいる方</li>
+      <li>引っ越したばかりで、近所のおでかけスポットを知らない方</li>
+      <li>旅行先で「明日どこ行こう?」とプランに困った方</li>
+      <li>定番じゃない、ちょっと変わった場所を見つけたい方</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>使っている技術</h3>
+    <p>このアプリは、軽量で誰でも使いやすいことを目指してつくられています。</p>
+    <ul>
+      <li><strong>フロントエンド</strong>：素のHTML / CSS / JavaScript。フレームワークなしで軽量に動きます</li>
+      <li><strong>AI</strong>：おでかけ提案の生成にAIモデルを使用しています</li>
+      <li><strong>天気情報</strong>：Open-Meteo APIから無料で天気データを取得</li>
+      <li><strong>ホスティング</strong>：Vercelで無料公開</li>
+    </ul>
+    <div class="info-box">
+      <p style="font-size:13px;color:#b0a898;">個人開発のWebアプリです。広告(Google AdSense)を通じて運営費用をまかなっています。ご利用いただくこと自体が応援になります。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>これから</h3>
+    <p>このアプリは、使ってくれる方の声を聞きながら少しずつ改善していく予定です。気になる機能やバグの報告は、GitHubのIssueから歓迎しています。</p>
+    <div class="info-box">
+      <p>🔗 <a href="https://github.com/mods240/Outing-suggestion/issues" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;">github.com/mods240/Outing-suggestion/issues</a></p>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <h3>使ってみる準備はできましたか?</h3>
+    <p>登録不要・完全無料・スマホからもPCからも</p>
+    <a href="/" class="cta-btn">🗺️ おでかけ先を提案してもらう</a>
+  </div>
+
+  <div class="footer">
+    <p>© 2026 今日、明日、どこいこう？ All rights reserved.</p>
+  </div>
+
+</div>
+</body>
+</html>

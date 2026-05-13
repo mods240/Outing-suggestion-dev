@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>使い方 | 今日、明日、どこいこう？</title>
+<meta name="description" content="「今日、明日、どこいこう？」の使い方を、5つのステップと便利な機能の解説とあわせて紹介します。会員登録不要、スマホ・PCで使えます。">
+<link rel="canonical" href="https://outing-suggestion.vercel.app/how-to-use.html">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.09);
+    --accent: #f0a500;
+    --accent2: #ff6b35;
+    --text: #f0ece4;
+    --muted: #8a8070;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    min-height: 100vh;
+    line-height: 1.8;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(240,165,0,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(240,165,0,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .header-icon { font-size: 40px; display: block; margin-bottom: 12px; }
+  .header h1 {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+  .header h2 {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* Navigation */
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin: 0 auto 32px;
+    padding: 8px 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    max-width: 480px;
+  }
+  .site-nav a {
+    padding: 7px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .site-nav a:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.04);
+  }
+  .site-nav a.current {
+    color: var(--accent);
+    background: rgba(240,165,0,0.1);
+  }
+
+  /* Intro */
+  .intro {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 36px;
+  }
+  .intro p {
+    font-size: 14px;
+    color: #b0a898;
+    line-height: 1.9;
+  }
+  .intro p:not(:last-child) { margin-bottom: 8px; }
+
+  /* Section title */
+  .section-title {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--accent);
+    margin: 40px 0 20px;
+    text-align: center;
+  }
+
+  /* Step block */
+  .step-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 50%;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 900;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  .step-block h3 {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    vertical-align: middle;
+    margin-bottom: 0;
+  }
+  .step-block p {
+    font-size: 13px;
+    color: #b0a898;
+    line-height: 1.9;
+    margin-top: 10px;
+  }
+  .step-block .example {
+    background: rgba(240,165,0,0.05);
+    border-left: 3px solid var(--accent);
+    padding: 10px 14px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #d4b060;
+    border-radius: 0 6px 6px 0;
+  }
+  .step-block .example strong {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* Feature block */
+  .feature-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .feature-block h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .feature-block h4 .emoji {
+    font-size: 20px;
+  }
+  .feature-block p {
+    font-size: 13px;
+    color: #b0a898;
+    line-height: 1.85;
+    margin: 0;
+  }
+
+  /* Tip box */
+  .tip-box {
+    background: linear-gradient(135deg, rgba(240,165,0,0.08), rgba(255,107,53,0.05));
+    border: 1px solid rgba(240,165,0,0.25);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 20px;
+  }
+  .tip-box .tip-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #d4b060;
+    margin-bottom: 8px;
+  }
+  .tip-box p {
+    font-size: 13px;
+    color: #b0a898;
+    line-height: 1.85;
+    margin: 0;
+  }
+
+  /* FAQ */
+  .faq-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+  .faq-q {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .faq-q::before {
+    content: 'Q. ';
+    color: var(--accent);
+  }
+  .faq-a {
+    font-size: 13px;
+    color: #b0a898;
+    line-height: 1.85;
+  }
+  .faq-a::before {
+    content: 'A. ';
+    color: var(--accent2);
+    font-weight: 700;
+  }
+
+  /* CTA */
+  .cta-section {
+    text-align: center;
+    margin-top: 40px;
+    padding: 28px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+  .cta-section h3 {
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 50px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .cta-btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 24px rgba(240,165,0,0.35);
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .footer p {
+    font-size: 12px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <span class="header-icon">📖</span>
+    <h1>HOW TO USE</h1>
+    <h2>使い方</h2>
+  </div>
+
+  <nav class="site-nav" aria-label="サイトナビゲーション">
+    <a href="/">🗺️ ホーム</a>
+    <a href="/how-to-use.html" class="current">📖 使い方</a>
+    <a href="/about.html">ℹ️ このアプリ</a>
+    <a href="/privacy.html">🔒 プライバシー</a>
+  </nav>
+
+  <div class="intro">
+    <p>「今日、明日、どこいこう？」は、<strong style="color:var(--text)">5つの質問に答えるだけ</strong>でAIがおでかけ先を提案してくれるWebアプリです。会員登録もアプリのインストールも不要、ブラウザを開いた瞬間から使えます。</p>
+    <p>このページでは、基本の使い方と便利な機能を順番に紹介します。</p>
+  </div>
+
+  <h3 class="section-title">5つのステップ</h3>
+
+  <div class="step-block">
+    <span class="step-num">1</span>
+    <h3>いつ行くかを選ぶ</h3>
+    <p>「今日」「明日」「今週末」の3つから選択します。位置情報を許可すると、その日の天気予報が一緒に表示されるので、雨か晴れかをチェックしてから選べます。</p>
+    <div class="example"><strong>ポイント:</strong> 天気がパッと見えるので、雨なら屋内、晴れなら屋外…と、選び方の参考になります。</div>
+  </div>
+
+  <div class="step-block">
+    <span class="step-num">2</span>
+    <h3>だれと行くかを選ぶ</h3>
+    <p>「ひとりで」「カップル」「家族・子連れ」「友達グループ」「お父さんと」「お母さんと」の6つから選びます。同行者によって提案の方向性が変わります。</p>
+    <div class="example"><strong>例:</strong> 「家族・子連れ」を選ぶと、ベビーカーが入れる場所やキッズスペースのあるスポットが優先されます。「ひとりで」だと静かに過ごせる場所が中心に。</div>
+  </div>
+
+  <div class="step-block">
+    <span class="step-num">3</span>
+    <h3>どんなおでかけがしたいか</h3>
+    <p>「リフレッシュ」「観光・名所」「人が少ない穴場」「文化・芸術」「グルメ」「アクティブ」などから、その日の気分を選びます。</p>
+    <div class="example"><strong>ポイント:</strong> 「穴場」を選ぶと定番じゃない場所、「観光・名所」を選ぶと有名スポットが提案されます。気分に正直に選ぶのがおすすめ。</div>
+  </div>
+
+  <div class="step-block">
+    <span class="step-num">4</span>
+    <h3>時間帯を選ぶ</h3>
+    <p>「午前」「昼〜午後」「夕方」「夜」「一日中」から、おでかけしたい時間帯を選びます。時間帯によって営業しているお店や雰囲気が違うので、提案の内容も変わります。</p>
+  </div>
+
+  <div class="step-block">
+    <span class="step-num">5</span>
+    <h3>予算とエリアを入れる</h3>
+    <p>予算は「無料〜500円」「〜2,000円」「〜5,000円」「〜10,000円」「気にしない」の5段階。エリアは任意で「大阪」「渋谷」「海の近く」など、ヒントになる言葉を入れてもOKです。</p>
+    <p>「提案してもらう ✨」ボタンを押すと、AIが数秒で3つの提案を出してくれます。</p>
+    <div class="example"><strong>エリア欄の使い方:</strong> 空欄でもOK。地名でも「自然がある場所」「商店街」のようなふんわりした条件でも大丈夫です。</div>
+  </div>
+
+  <h3 class="section-title">便利な機能</h3>
+
+  <div class="feature-block">
+    <h4><span class="emoji">❓</span>提案に質問する</h4>
+    <p>各提案カードの「質問する」ボタンから、その場所について気になることをAIに直接聞けます。「雨でも楽しめますか?」「駐車場はありますか?」「子連れでも大丈夫?」など、自由に質問できます。</p>
+  </div>
+
+  <div class="feature-block">
+    <h4><span class="emoji">❤️</span>気になる場所を保存</h4>
+    <p>気に入った提案はハートマークで保存できます。複数の提案を比較したいときに便利です。ページを閉じてもブラウザ内に残ります(端末を変えると消えます)。</p>
+  </div>
+
+  <div class="feature-block">
+    <h4><span class="emoji">🗺️</span>Googleマップでひらく</h4>
+    <p>各提案にGoogleマップへのリンクがついています。場所の詳細や行き方をすぐ確認できます。</p>
+  </div>
+
+  <div class="feature-block">
+    <h4><span class="emoji">📣</span>シェアする</h4>
+    <p>結果ページの下部から、X(旧Twitter)・LINE・Facebookでおでかけ先をシェアできます。コピーボタンで本文だけコピーすることも可能です。</p>
+  </div>
+
+  <div class="feature-block">
+    <h4><span class="emoji">🌏</span>言語を切り替える</h4>
+    <p>画面上部の「🇯🇵 日本語 ▼」ボタンから、英語・中国語・韓国語などに切り替えられます。海外の方とのおでかけ計画にも使えます。</p>
+  </div>
+
+  <div class="feature-block">
+    <h4><span class="emoji">🔄</span>もう一度探す</h4>
+    <p>提案が気に入らなかった場合は、「もう一度探す」ボタンで条件を選び直して再提案できます。同じ条件でも、AIが毎回違う提案をしてくれます。</p>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-title">💡 もっと使いこなすコツ</div>
+    <p>提案がしっくりこないときは、エリア欄に少し具体的なヒントを入れるのがおすすめです。「商店街がある場所」「自然のあるところ」「駅から近い」のようなふんわりした条件でも、提案の方向性がぐっと絞れます。</p>
+  </div>
+
+  <h3 class="section-title">よくある質問</h3>
+
+  <div class="faq-item">
+    <div class="faq-q">無料で使えますか?</div>
+    <div class="faq-a">はい、完全無料です。会員登録もありません。広告(Google AdSense)で運営費用をまかなっています。</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">スマホでも使えますか?</div>
+    <div class="faq-a">使えます。スマホのブラウザを開いてアクセスするだけ。アプリのインストールも不要です。</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">位置情報は許可した方がいいですか?</div>
+    <div class="faq-a">許可するとリアルタイムの天気が表示されるので便利ですが、許可しなくても利用できます。位置情報はサーバーに保存されず、天気取得のみに使用します。</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">提案の場所は本当に存在しますか?</div>
+    <div class="faq-a">AIが提案しているため、まれに情報が古かったり、閉店している場合があります。実際に出かける前にGoogleマップなどで営業状況をご確認ください。</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">日本以外でも使えますか?</div>
+    <div class="faq-a">使えます。エリア欄に都市名(例: Paris, Seoul, Bangkok)を入れれば、世界中のおでかけ先を提案してもらえます。</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">何回でも使えますか?</div>
+    <div class="faq-a">何度でも使えます。「もう一度探す」ボタンで条件を変えて何度でも提案を受け取れます。</div>
+  </div>
+
+  <div class="cta-section">
+    <h3>さっそく使ってみる</h3>
+    <a href="/" class="cta-btn">🗺️ おでかけ先を提案してもらう</a>
+  </div>
+
+  <div class="footer">
+    <p>© 2026 今日、明日、どこいこう？ All rights reserved.</p>
+  </div>
+
+</div>
+</body>
+</html>
